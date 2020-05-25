@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSFactorwDao">
+    
+	<sql id="ddsSFactorColumns">
+		a.con_id AS "conId",
+		a.fact_id AS "factId",
+		a.score_max AS "scoreMax",
+		a.score_min AS "scoreMin",
+		a.weight AS "weight",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsSFactorJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSFactorw">
+		SELECT 
+			<include refid="ddsSFactorColumns"/>
+		FROM dds_s_factorw a
+		<include refid="ddsSFactorJoins"/>
+		WHERE a.con_id = #{conId} and a.fact_id = #{factId}
+	</select>
+	
+	<select id="list" resultType="DdsSFactorw">
+		SELECT 
+			<include refid="ddsSFactorColumns"/>
+		FROM dds_s_factorw a
+		<include refid="ddsSFactorJoins"/>
+		<where>
+			<if test="conId != null and conId != '' ">
+				a.con_id= #{conId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.fact_id asc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_factorw(
+			con_id,
+			fact_id,
+			score_max,
+			weight,
+			score_min,
+			river
+		) VALUES (
+			#{conId},
+			#{factId},
+			#{scoreMax},
+			#{weight},
+			#{scoreMin},
+			#{river}
+		)
+	</insert>
+	
+	<update id="updateScoreMax">
+		UPDATE dds_s_factorw SET 	
+			score_max = #{scoreMax}
+		WHERE con_id = #{conId} and fact_id = #{factId}
+	</update>
+	
+	<update id="updateWeight">
+		UPDATE dds_s_factorw SET 	
+			weight = #{weight}
+		WHERE con_id = #{conId} and fact_id = #{factId}
+	</update>
+	
+	<update id="updateScoreMin">
+		UPDATE dds_s_factorw SET 	
+			score_min = #{scoreMin}
+		WHERE con_id = #{conId} and fact_id = #{factId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_factorw
+		WHERE con_id = #{conId} and fact_id = #{factId}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_s_factorw
+		WHERE con_id = #{conId} 
+	</update>
+	
+</mapper>

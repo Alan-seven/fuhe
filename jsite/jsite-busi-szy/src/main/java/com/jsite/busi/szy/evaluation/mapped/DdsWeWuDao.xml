@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeWuDao">
+    
+	<sql id="ddsWeWuColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.aw_ww AS "awWw",
+		a.ad_ww AS "adWw",
+		a.av_ww AS "avWw",
+		a.irr_gw_ww AS "irrGwWw",
+		a.fi_ww AS "fiWw",
+		a.ai_ww AS "aiWw",
+		a.fish_wu AS "fishWu",
+		a.rh_ww AS "rhWw",
+		a.ff_gw_ww AS "ffGwWw",
+		a.ie_ww AS "ieWw",
+		a.ixe_ww AS "ixeWw",
+		a.io_ww AS "ioWw",
+		a.ic_ww AS "icWw",
+		a.ind_gw_ww AS "indGwWw",
+		a.pbld_ww AS "pbldWw",
+		a.psrv_ww AS "psrvWw",
+		a.p_gw_ww AS "pGwWw",
+		a.du_ww AS "duWw",
+		a.dr_ww AS "drWw",
+		a.d_gw_ww AS "dGwWw",
+		a.eu_ww AS "euWw",
+		a.er_ww AS "erWw",
+		a.e_gw_ww AS "eGwWw",
+		a.dt AS "dt",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeWuJoins">
+	</sql>
+
+	<select id="listAllToMap" resultType="map">
+		SELECT
+		<include refid="ddsWeWuColumns"/>
+		,b.reg_nm AS "regNm",
+        IRR_GW_WW + FF_GW_WW + IND_GW_WW + P_GW_WW + D_GW_WW + E_GW_WW AS "totW"
+		FROM dds_we_wu a,dds_we_wrcs b
+        WHERE b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+    
+	<select id="get" resultType="DdsWeWu">
+		SELECT 
+			<include refid="ddsWeWuColumns"/>
+		FROM dds_we_wu a
+		<include refid="ddsWeWuJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeWu">
+		SELECT 
+			<include refid="ddsWeWuColumns"/>
+		FROM dds_we_wu a
+		<include refid="ddsWeWuJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_wu(
+			yr,
+			reg_cd,
+			reg_type,
+			aw_ww,
+			ad_ww,
+			av_ww,
+			irr_gw_ww,
+			fi_ww,
+			ai_ww,
+			fish_wu,
+			rh_ww,
+			ff_gw_ww,
+			ie_ww,
+			ixe_ww,
+			io_ww,
+			ic_ww,
+			ind_gw_ww,
+			pbld_ww,
+			psrv_ww,
+			p_gw_ww,
+			du_ww,
+			dr_ww,
+			d_gw_ww,
+			eu_ww,
+			er_ww,
+			e_gw_ww,
+			tot_w,
+			dt,
+			nt
+		) VALUES (
+			#{yr},
+			#{regCd},
+			#{regType},
+			#{awWw},
+			#{adWw},
+			#{avWw},
+			#{irrGwWw},
+			#{fiWw},
+			#{aiWw},
+			#{fishWu},
+			#{rhWw},
+			#{ffGwWw},
+			#{ieWw},
+			#{ixeWw},
+			#{ioWw},
+			#{icWw},
+			#{indGwWw},
+			#{pbldWw},
+			#{psrvWw},
+			#{pGwWw},
+			#{duWw},
+			#{drWw},
+			#{dGwWw},
+			#{euWw},
+			#{erWw},
+			#{eGwWw},
+			#{totW},
+			#{dt},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_wu SET 	
+			yr = #{yr},
+			reg_cd = #{regCd},
+			reg_type = #{regType},
+			aw_ww = #{awWw},
+			ad_ww = #{adWw},
+			av_ww = #{avWw},
+			irr_gw_ww = #{irrGwWw},
+			fi_ww = #{fiWw},
+			ai_ww = #{aiWw},
+			fish_wu = #{fishWu},
+			rh_ww = #{rhWw},
+			ff_gw_ww = #{ffGwWw},
+			ie_ww = #{ieWw},
+			ixe_ww = #{ixeWw},
+			io_ww = #{ioWw},
+			ic_ww = #{icWw},
+			ind_gw_ww = #{indGwWw},
+			pbld_ww = #{pbldWw},
+			psrv_ww = #{psrvWw},
+			p_gw_ww = #{pGwWw},
+			du_ww = #{duWw},
+			dr_ww = #{drWw},
+			d_gw_ww = #{dGwWw},
+			eu_ww = #{euWw},
+			er_ww = #{erWw},
+			e_gw_ww = #{eGwWw},
+			tot_w = #{totW},
+			dt = #{dt},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_wu
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdPrdarDao">
+    
+	<sql id="ddsEdPrdarColumns">
+		a.pro_cd AS "proCd",
+		a.wce_cd AS "wceCd",
+		a.tm AS "tm",
+		a.max_z AS "maxZ",
+		a.min_z AS "minZ",
+		a.max_n AS "maxN",
+		a.min_n AS "minN",
+		a.max_q AS "maxQ",
+		a.min_q AS "minQ",
+		a.qin AS "qin",
+		a.qout AS "qout",
+		a.c AS "c"
+	</sql>
+	
+	<sql id="ddsEdPrdarJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdPrdar">
+		SELECT 
+			<include refid="ddsEdPrdarColumns"/>
+		FROM dds_ed_prdar a
+		<include refid="ddsEdPrdarJoins"/>
+		WHERE a.pro_cd = #{proCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdPrdar">
+		SELECT 
+			<include refid="ddsEdPrdarColumns"/>
+		FROM dds_ed_prdar a
+		<include refid="ddsEdPrdarJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_prdar(
+			pro_cd,
+			wce_cd,
+			tm,
+			max_z,
+			min_z,
+			max_n,
+			min_n,
+			max_q,
+			min_q,
+			qin,
+			qout,
+			c
+		) VALUES (
+			#{proCd},
+			#{wceCd},
+			#{tm},
+			#{maxZ},
+			#{minZ},
+			#{maxN},
+			#{minN},
+			#{maxQ},
+			#{minQ},
+			#{qin},
+			#{qout},
+			#{c}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_prdar SET 	
+			wce_cd = #{wceCd},
+			tm = #{tm},
+			max_z = #{maxZ},
+			min_z = #{minZ},
+			max_n = #{maxN},
+			min_n = #{minN},
+			max_q = #{maxQ},
+			min_q = #{minQ},
+			qin = #{qin},
+			qout = #{qout},
+			c = #{c}
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_prdar
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

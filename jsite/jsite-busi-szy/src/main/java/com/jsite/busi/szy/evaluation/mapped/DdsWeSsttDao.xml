@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeSsttDao">
+    
+	<sql id="ddsWeSsttColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.aw_wu_r AS "awWuR",
+		a.aw_wu_w AS "awWuW",
+		a.ad_wu_r AS "adWuR",
+		a.ad_wu_w AS "adWuW",
+		a.av_wu_r AS "avWuR",
+		a.av_wu_w AS "avWuW",
+		a.ff_wu_r AS "ffWuR",
+		a.ff_wu_w AS "ffWuW",
+		a.hd_wu_r AS "hdWuR",
+		a.hd_wu_w AS "hdWuW",
+		a.ie_wu_r AS "ieWuR",
+		a.ie_wu_w AS "ieWuW",
+		a.ixe_wu_r AS "ixeWuR",
+		a.ixe_wu_w AS "ixeWuW",
+		a.io_wu_r AS "ioWuR",
+		a.io_wu_w AS "ioWuW",
+		a.bld_wu_r AS "bldWuR",
+		a.bld_wu_w AS "bldWuW",
+		a.srv_wu_r AS "srvWuR",
+		a.srv_wu_w AS "srvWuW",
+		a.d_wu_r AS "dWuR",
+		a.d_wu_w AS "dWuW",
+		a.r_wu_r AS "rWuR",
+		a.r_wu_w AS "rWuW",
+		a.de_wu_r AS "deWuR",
+		a.de_wu_w AS "deWuW",
+		a.re_wu_r AS "reWuR",
+		a.re_wu_w AS "reWuW",
+		a.tot_wc_r AS "totWcR",
+		a.tot_wc AS "totWc",
+		a.dt AS "dt",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeSsttJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeSstt">
+		SELECT 
+			<include refid="ddsWeSsttColumns"/>
+		FROM dds_we_sstt a
+		<include refid="ddsWeSsttJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeSstt">
+		SELECT 
+			<include refid="ddsWeSsttColumns"/>
+		FROM dds_we_sstt a
+		<include refid="ddsWeSsttJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_sstt(
+			yr,
+			reg_cd,
+			reg_type,
+			aw_wu_r,
+			aw_wu_w,
+			ad_wu_r,
+			ad_wu_w,
+			av_wu_r,
+			av_wu_w,
+			ff_wu_r,
+			ff_wu_w,
+			hd_wu_r,
+			hd_wu_w,
+			ie_wu_r,
+			ie_wu_w,
+			ixe_wu_r,
+			ixe_wu_w,
+			io_wu_r,
+			io_wu_w,
+			bld_wu_r,
+			bld_wu_w,
+			srv_wu_r,
+			srv_wu_w,
+			d_wu_r,
+			d_wu_w,
+			r_wu_r,
+			r_wu_w,
+			de_wu_r,
+			de_wu_w,
+			re_wu_r,
+			re_wu_w,
+			tot_wc_r,
+			tot_wc,
+			dt,
+			nt
+		) VALUES (
+			#{yr},
+			#{adCd},
+			#{regType},
+			#{awWuR},
+			#{awWuW},
+			#{adWuR},
+			#{adWuW},
+			#{avWuR},
+			#{avWuW},
+			#{ffWuR},
+			#{ffWuW},
+			#{hdWuR},
+			#{hdWuW},
+			#{ieWuR},
+			#{ieWuW},
+			#{ixeWuR},
+			#{ixeWuW},
+			#{ioWuR},
+			#{ioWuW},
+			#{bldWuR},
+			#{bldWuW},
+			#{srvWuR},
+			#{srvWuW},
+			#{dWuR},
+			#{dWuW},
+			#{rWuR},
+			#{rWuW},
+			#{deWuR},
+			#{deWuW},
+			#{reWuR},
+			#{reWuW},
+			#{totWcR},
+			#{totWc},
+			#{dt},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_sstt SET 	
+			reg_type = #{regType},
+			aw_wu_r = #{awWuR},
+			aw_wu_w = #{awWuW},
+			ad_wu_r = #{adWuR},
+			ad_wu_w = #{adWuW},
+			av_wu_r = #{avWuR},
+			av_wu_w = #{avWuW},
+			ff_wu_r = #{ffWuR},
+			ff_wu_w = #{ffWuW},
+			hd_wu_r = #{hdWuR},
+			hd_wu_w = #{hdWuW},
+			ie_wu_r = #{ieWuR},
+			ie_wu_w = #{ieWuW},
+			ixe_wu_r = #{ixeWuR},
+			ixe_wu_w = #{ixeWuW},
+			io_wu_r = #{ioWuR},
+			io_wu_w = #{ioWuW},
+			bld_wu_r = #{bldWuR},
+			bld_wu_w = #{bldWuW},
+			srv_wu_r = #{srvWuR},
+			srv_wu_w = #{srvWuW},
+			d_wu_r = #{dWuR},
+			d_wu_w = #{dWuW},
+			r_wu_r = #{rWuR},
+			r_wu_w = #{rWuW},
+			de_wu_r = #{deWuR},
+			de_wu_w = #{deWuW},
+			re_wu_r = #{reWuR},
+			re_wu_w = #{reWuW},
+			tot_wc_r = #{totWcR},
+			tot_wc = #{totWc},
+			dt = #{dt},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_sstt
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+</mapper>

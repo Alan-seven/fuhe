@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDStzDao">
+    
+	<sql id="ddsDStzColumns">
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.z AS "z",
+		a.spe_reg_data AS "speRegData",
+		a.ts AS "ts"
+	</sql>
+	
+	<sql id="ddsDStzJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDStz">
+		SELECT 
+			<include refid="ddsDStzColumns"/>
+		FROM dds_d_stz a
+		<include refid="ddsDStzJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsDStz">
+		SELECT b.st_nm AS "stNm",a.stcd,a.tm,a.z
+		FROM dds_b_stat b LEFT JOIN 
+			( SELECT stz.stcd,stz.tm,stz.z
+				from dds_d_stz stz 
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+						<where>
+							stz.tm between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(tm) tm from dds_d_stz group by stcd ) stzz
+						<where>
+							stz.stcd = stzz.stcd and stz.tm = stzz.tm
+						</where>
+					</otherwise>
+				</choose>
+			 ) a ON b.stcd = a.stcd
+		<where>
+			1=1
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like 
+				<if test="dbName == 'oracle'">'%'||#{stNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{stNm},'%')</if>
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listByStcd" resultType="DdsDStz">
+		SELECT a.stcd,a.dt AS tm,a.avz as z
+		FROM dds_d_dayz a 
+		<where>
+		 	1=1
+		 	<if test=" stcd != null and stcd != '' ">
+					and a.stcd  = #{stcd}
+			</if>
+			<if test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+					and a.dt between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+			</if>
+	 	</where>
+	 	ORDER BY A.DT ASC
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_d_stz(
+			stcd,
+			tm,
+			z,
+			spe_reg_data,
+			ts
+		) VALUES (
+			#{stcd},
+			#{tm},
+			#{z},
+			#{speRegData},
+			#{ts}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_d_stz SET 	
+			stcd = #{stcd},
+			tm = #{tm},
+			z = #{z},
+			spe_reg_data = #{speRegData},
+			ts = #{ts}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_d_stz
+		WHERE id = #{id}
+	</update>
+	
+	<select id="listDayZ" resultType="DdsDStz">
+		SELECT b.st_nm AS "stNm",a.stcd,a.tm,a.z
+		FROM 
+			( SELECT stz.stcd,stz.dt AS tm,stz.avz as z
+				from dds_d_dayz stz 
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+						<where>
+							stz.dt between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(dt) tm from dds_d_dayz group by stcd ) stzz
+						<where>
+							stz.stcd = stzz.stcd and stz.dt = stzz.tm
+						</where>
+					</otherwise>
+				</choose>
+			 ) a LEFT JOIN  dds_b_stat b ON a.stcd = b.stcd
+		<where>
+			1=1
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like CONCAT(CONCAT('%', #{stNm}),'%')
+			</if>
+			<if test=" stcd != null and stcd != '' ">
+				and b.stcd = #{stcd}
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

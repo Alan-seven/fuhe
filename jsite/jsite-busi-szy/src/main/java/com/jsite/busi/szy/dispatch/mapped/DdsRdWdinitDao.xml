@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdinitDao">
+    
+	<sql id="ddsRdWdinitColumns">
+		a.pro_cd AS "proCd",
+		a.wce_id AS "wceId",
+		a.wce_tp AS "wceTp",
+		a.bgz AS "bgz",
+		a.edz AS "edz",
+		a.inq AS "inq",
+		a.bq AS "bq",
+		a.mnq AS "mnq",
+		a.mxq AS "mxq",
+		a.eg AS "eg"
+	</sql>
+	
+	<sql id="ddsRdWdinitJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdinit">
+		SELECT 
+			<include refid="ddsRdWdinitColumns"/>
+		FROM dds_rd_wdinit a
+		<include refid="ddsRdWdinitJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.wce_id = #{wceId}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdinit">
+		SELECT 
+			<include refid="ddsRdWdinitColumns"/>
+		FROM dds_rd_wdinit a
+		<include refid="ddsRdWdinitJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test="wceId != null and wceId != ''">
+				and a.wce_id = #{wceId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wdinit(
+			pro_cd,
+			wce_id,
+			wce_tp,
+			bgz,
+			edz,
+			inq,
+			bq,
+			mnq,
+			mxq,
+			eg
+		) VALUES (
+			#{proCd},
+			#{wceId},
+			#{wceTp},
+			#{bgz},
+			#{edz},
+			#{inq},
+			#{bq},
+			#{mnq},
+			#{mxq},
+			#{eg}
+		)
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+	    INSERT ALL
+	    <foreach collection="list" item="item" index="index">
+	    INTO dds_rd_wdinit 
+	    (
+			pro_cd,
+			wce_id,
+			wce_tp,
+			bgz,
+			edz,
+			inq,
+			bq,
+			mnq,
+			mxq,
+			eg
+		) VALUES
+	    (
+	     		#{item.proCd},
+				#{item.wceId},
+				#{item.wceTp},
+				#{item.bgz},
+				#{item.edz},
+				#{item.inq},
+				#{item.bq},
+				#{item.mnq},
+				#{item.mxq},
+				#{item.eg}	
+	    )
+	    </foreach>
+	    SELECT 1 FROM DUAL
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wdinit SET 	
+			wce_tp = #{wceTp},
+			bgz = #{bgz},
+			edz = #{edz},
+			inq = #{inq},
+			bq = #{bq},
+			mnq = #{mnq},
+			mxq = #{mxq},
+			eg = #{eg}
+		WHERE pro_cd = #{proCd} and wce_id = #{wceId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wdinit
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

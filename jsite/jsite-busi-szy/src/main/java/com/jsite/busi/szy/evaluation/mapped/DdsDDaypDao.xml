@@ -1,0 +1,1049 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsDDaypDao">
+
+
+	<select id="getAvgToMonth" resultType="map">
+		SELECT
+			"AVG"(D.AVQ) "AVQ",D.Dmonth "month",D.Dyear "year"
+		FROM
+			DDS_B_STAT c,
+			(SELECT D .STCD,d.AVQ,"TO_CHAR"(D.DT,'yyyy') Dyear,"TO_CHAR"(D.DT,'mm') Dmonth FROM DDS_D_DAYQ D) D
+		WHERE
+			c.STCD = D .STCD
+			AND D.STCD =
+				(
+					CASE
+					WHEN '沙子岭'= #{0} THEN '62405200'
+					WHEN '廖家湾'= #{0}  THEN '62401800'
+					WHEN '娄家村'= #{0}  THEN '62406600'
+					WHEN '李家渡'= #{0}  THEN '62402400'
+					WHEN '南丰'=  #{0}  THEN '62405400'
+					WHEN '洪门'=  #{0}  THEN '62403200'
+					WHEN '茅洲'=  #{0}  THEN '62310700'
+					END
+				)
+		GROUP BY D.Dmonth,D.Dyear ORDER BY D.Dyear
+	</select>
+
+	<select id="getAvg" resultType="map">
+		SELECT
+			"AVG"(D.AVQ) "AVQ",D.Dmonth "month"
+		FROM
+			DDS_B_STAT c,
+			(SELECT D .STCD,d.AVQ,"TO_CHAR"(D.DT,'mm') Dmonth FROM DDS_D_DAYQ D ) D
+		WHERE
+			c.STCD = D .STCD
+		GROUP BY D.Dmonth ORDER BY D.Dmonth ASC
+	</select>
+	<select id="getAvgToYear" resultType="map">
+		SELECT
+			"AVG"(D.AVQ) "AVQ",D.Dmonth "YEAR"
+		FROM
+			DDS_B_STAT c,
+			(SELECT D .STCD,d.AVQ,"TO_CHAR"(D.DT,'yyyy') Dmonth FROM DDS_D_DAYQ D ) D
+		WHERE
+			c.STCD = D .STCD
+			AND D.STCD =
+				(
+					CASE
+					WHEN '沙子岭'= #{0} THEN '62405200'
+					WHEN '廖家湾'= #{0}  THEN '62401800'
+					WHEN '娄家村'= #{0}  THEN '62406600'
+					WHEN '李家渡'= #{0}  THEN '62402400'
+					WHEN '南丰'=  #{0}  THEN '62405400'
+					WHEN '洪门'=  #{0}  THEN '62403200'
+					WHEN '茅洲'=  #{0}  THEN '62310700'
+					END
+				)
+		GROUP BY D.Dmonth ORDER BY D.Dmonth ASC
+	</select>
+
+	<select id="getStationInfo" resultType="map">
+		SELECT
+			T1.ST_NM "stationName",
+			T1.STCD "stationNum",t2.minYear "startTime",T2.maxYear "endTime" FROM
+			DDS_B_STAT T1, (select STCD,"TO_CHAR"(max(DT),'yyyy') maxYear,"TO_CHAR"("MIN"(DT),'yyyy') minYear from DDS_D_DAYQ group by STCD) t2
+		WHERE
+			T1.STCD = T2.STCD AND T1.ST_NM IN ('廖家湾','沙子岭','南丰','黎川','娄家村(二)','李家渡')
+	</select>
+	<select id="getSecCd" resultType="string">
+		SELECT SEC_CD "SecCd" FROM DDS_M_SEC  WHERE SEC_NM=#{0}
+	</select>
+
+	<select id="getForcastToMonth" parameterType="map" resultType="map">
+		SELECT * FROM (
+		SELECT
+		(CASE WHEN f1. Q>=0 THEN f1. Q ELSE 0 END) Q,
+		(CASE WHEN f2. U>=0 THEN f2. U ELSE 0 END) U
+		,(CASE WHEN f1.M IS NULL THEN f2.M ELSE  f1.M END) mon
+		FROM
+		(SELECT
+		"AVG"(D.AVQ) "Q",D.Dmonth "M"
+		FROM
+		(SELECT D .STCD,CASE
+		WHEN D."AVQ" >= 0 THEN
+		D."AVQ"
+		ELSE
+		NULL
+		END  AVQ,"TO_CHAR"(D.DT,'yyyy-mm') Dmonth FROM DDS_D_DAYQ D WHERE
+		D .STCD IN
+		<foreach open="(" close=")" collection="Q" item="item" index="index" separator=",">
+			#{item}
+		</foreach>
+		) D
+
+		GROUP BY D.Dmonth,D.stcd ORDER BY D.Dmonth) f1
+		full join
+		(SELECT
+		"AVG" (t1. SUM) U,t1.bmonth M
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM,b.bmonth
+		FROM
+		(SELECT STCD,
+		CASE
+		WHEN b."P" >= 0 THEN
+		b."P"
+		ELSE
+		NULL
+		END  P,"TO_CHAR"(b.DT,'yyyy-mm') bmonth
+		FROM
+		DDS_D_DAYP b  WHERE b.STCD IN
+		<foreach open="(" close=")" collection="U" item="item" index="index" separator=",">
+			#{item}
+		</foreach>
+		) b
+		GROUP BY
+		b.bmonth ORDER BY b.bmonth) t1
+		GROUP BY
+		t1.bmonth ORDER BY t1.bmonth) f2 ON f1.M=f2.M ORDER BY mon
+		) f3 WHERE F3.mon BETWEEN #{startDate} AND #{endDate}
+
+	</select>
+
+
+
+
+
+	<select id="getForcast_ljw" resultType="map">
+		<![CDATA[
+
+
+		SELECT
+		(CASE WHEN f1. U>=0 THEN f1. U ELSE 0 END) U,
+	(CASE WHEN f2. q>=0 THEN f2. q ELSE 0 END) q
+		FROM
+		(
+		SELECT
+		t2. U,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (t1. SUM) U
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM
+		FROM
+		DDS_B_STAT A,
+		(SELECT STCD,
+								CASE
+							WHEN b."P" >= 0 THEN
+								b."P"
+							ELSE
+								NULL
+							END  P
+							FROM
+								DDS_D_DAYP b
+							WHERE
+								b.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND b.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) b
+		WHERE
+		A .STCD = b.STCD
+		AND A .ST_NM IN (
+		'南丰',
+		'南城',
+		'黎川',
+		'洪门(二)',
+		'沙子岭'
+		)
+		GROUP BY
+		A .ST_NM
+		) t1
+		) t2
+		) f1
+		FULL JOIN (
+		SELECT
+		t1.Q,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (D .AVQ) Q
+		FROM
+		DDS_B_STAT c,
+		(SELECT STCD,
+								CASE
+							WHEN D."AVQ" >= 0 THEN
+								D."AVQ"
+							ELSE
+								NULL
+							END  AVQ
+							FROM
+								DDS_D_DAYQ D
+							WHERE
+								D.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND D.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) D
+		WHERE
+		c.STCD = D .STCD
+		AND c.ST_NM = '廖家湾'
+		GROUP BY
+		c.ST_NM
+		) t1
+		) f2 ON f1.rn = f2.rn
+
+        ]]>
+	</select>
+
+	<select id="getForcast_ljd" resultType="map">
+		<![CDATA[
+
+
+		SELECT
+		(CASE WHEN f1. U>=0 THEN f1. U ELSE 0 END) U,
+	(CASE WHEN f2. q>=0 THEN f2. q ELSE 0 END) q
+		FROM
+		(
+		SELECT
+		t2. U,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (t1. SUM) U
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM
+		FROM
+		DDS_B_STAT A,
+		(SELECT STCD,
+								CASE
+							WHEN b."P" >= 0 THEN
+								b."P"
+							ELSE
+								NULL
+							END  P
+							FROM
+								DDS_D_DAYP b
+							WHERE
+								b.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND b.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) b
+		WHERE
+		A .STCD = b.STCD
+		AND A .ST_NM IN (
+		'驿前',
+		'沙子岭',
+		'南丰',
+		'黎川',
+		'廖家湾',
+		'娄家村(二)',
+		'洪门(二)',
+		'南城'
+		)
+		GROUP BY
+		A .ST_NM
+		) t1
+		) t2
+		) f1
+		FULL JOIN (
+		SELECT
+		t1.Q,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (D .AVQ) Q
+		FROM
+		DDS_B_STAT c,
+		(SELECT STCD,
+								CASE
+							WHEN D."AVQ" >= 0 THEN
+								D."AVQ"
+							ELSE
+								NULL
+							END  AVQ
+							FROM
+								DDS_D_DAYQ D
+							WHERE
+								D.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND D.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) D
+		WHERE
+		c.STCD = D .STCD
+		AND c.ST_NM = '李家渡'
+		GROUP BY
+		c.ST_NM
+		) t1
+		) f2 ON f1.rn = f2.rn
+
+        ]]>
+	</select>
+
+	<select id="getForcast_szl" resultType="map">
+		<![CDATA[
+
+
+		SELECT
+		(CASE WHEN f1. U>=0 THEN f1. U ELSE 0 END) U,
+	(CASE WHEN f2. q>=0 THEN f2. q ELSE 0 END) q
+		FROM
+		(
+		SELECT
+		t2. U,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (t1. SUM) U
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM
+		FROM
+		DDS_B_STAT A,
+		(SELECT STCD,
+								CASE
+							WHEN b."P" >= 0 THEN
+								b."P"
+							ELSE
+								NULL
+							END  P
+							FROM
+								DDS_D_DAYP b
+							WHERE
+								b.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND b.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) b
+		WHERE
+		A .STCD = b.STCD
+		AND A .ST_NM IN (
+		'沙子岭'
+		)
+		GROUP BY
+		A .ST_NM
+		) t1
+		) t2
+		) f1
+		FULL JOIN (
+		SELECT
+		t1.Q,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (D .AVQ) Q
+		FROM
+		DDS_B_STAT c,
+		(SELECT STCD,
+								CASE
+							WHEN D."AVQ" >= 0 THEN
+								D."AVQ"
+							ELSE
+								NULL
+							END  AVQ
+							FROM
+								DDS_D_DAYQ D
+							WHERE
+								D.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND D.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) D
+		WHERE
+		c.STCD = D .STCD
+		AND c.ST_NM = '沙子岭'
+		GROUP BY
+		c.ST_NM
+		) t1
+		) f2 ON f1.rn = f2.rn
+
+        ]]>
+	</select>
+
+	<select id="getForcast_ljc" resultType="map">
+		<![CDATA[
+
+
+		SELECT
+		(CASE WHEN f1. U>=0 THEN f1. U ELSE 0 END) U,
+	(CASE WHEN f2. q>=0 THEN f2. q ELSE 0 END) q
+		FROM
+		(
+		SELECT
+		t2. U,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (t1. SUM) U
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM
+		FROM
+		DDS_B_STAT A,
+		(SELECT STCD,
+								CASE
+							WHEN b."P" >= 0 THEN
+								b."P"
+							ELSE
+								NULL
+							END  P
+							FROM
+								DDS_D_DAYP b
+							WHERE
+								b.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND b.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) b
+		WHERE
+		A .STCD = b.STCD
+		AND A .ST_NM IN (
+		'娄家村(二)'
+		)
+		GROUP BY
+		A .ST_NM
+		) t1
+		) t2
+		) f1
+		FULL JOIN (
+		SELECT
+		t1.Q,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (D .AVQ) Q
+		FROM
+		DDS_B_STAT c,
+		(SELECT STCD,
+								CASE
+							WHEN D."AVQ" >= 0 THEN
+								D."AVQ"
+							ELSE
+								NULL
+							END  AVQ
+							FROM
+								DDS_D_DAYQ D
+							WHERE
+								D.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+							AND D.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) D
+		WHERE
+		c.STCD = D .STCD
+		AND c.ST_NM = '娄家村'
+		GROUP BY
+		c.ST_NM
+		) t1
+		) f2 ON f1.rn = f2.rn
+
+        ]]>
+	</select>
+
+	<select id="getForcast_nf_year" resultType="map">
+		select "TO_CHAR"(D.DT,'yyyy')YEAR,
+		sum(decode(sign(D.p-0)-1,0,D.p))P
+		from DDS_D_DAYP D
+		WHERE d.STCD = '62424900'
+		and "TO_CHAR"(D.DT,'yyyy') = #{0}
+		GROUP BY "TO_CHAR"(D.DT,'yyyy')
+		ORDER BY "TO_CHAR"(D.DT,'yyyy')
+	</select>
+
+	<select id="getForcast_nf_xun" resultType="map">
+		select
+		SUM(decode(sign(D.p-0)-1,0,D.p))P_XUN
+		from DDS_D_DAYP D ,DDS_B_STAT A
+		WHERE A.STCD = D.STCD AND D.STCD ='62424900'
+		and "TO_CHAR"(D.DT,'yyyy-MM-dd') > #{0}
+		and "TO_CHAR"(D.DT,'yyyy-MM-dd') &lt;= #{1}
+	</select>
+
+	<select id="getXunAvg" resultType="Map">
+
+		SELECT E.STCD,avg(E.P_XUN)PXUN FROM
+			(
+				SELECT D.STCD,"TO_CHAR"(D.DT,'MM-dd') XUN,
+							  AVG(decode(sign(D.AVQ-0)-1,0,D.AVQ))P_XUN
+				FROM DDS_D_DAYQ D
+				WHERE
+					"TO_CHAR"(D.DT,'MM-dd') > #{0}
+					AND "TO_CHAR"(D.DT,'MM-dd') &lt;= #{1}
+					AND  D.STCD =
+						 (
+							 CASE
+							 WHEN '沙子岭'= #{2} THEN '62405200'
+							 WHEN '廖家湾'= #{2}  THEN '62401800'
+							 WHEN '娄家村'= #{2}  THEN '62406600'
+							 WHEN '李家渡'= #{2}  THEN '62402400'
+							 WHEN '南丰'=  #{2}  THEN '62405400'
+							 WHEN '洪门'=  #{2}  THEN '62403200'
+							 WHEN '茅洲'=  #{2}  THEN '62310700'
+							 END
+						 )
+				group by
+					D.STCD, "TO_CHAR"(D.DT,'MM-dd')
+			)E
+		group by E.STCD
+
+
+	</select>
+
+	<select id="getXunAvgYear" resultType="Map">
+
+		SELECT E.STCD,avg(E.P_XUN)PXUN FROM
+		(
+		SELECT D.STCD,"TO_CHAR"(D.DT,'MM-dd') XUN,
+		AVG(decode(sign(D.AVQ-0)-1,0,D.AVQ))P_XUN
+		FROM DDS_D_DAYQ D
+		WHERE
+			"TO_CHAR"(D.DT,'MM-dd') > #{0}
+		AND "TO_CHAR"(D.DT,'MM-dd') &lt;= #{1}
+
+		  AND  D.STCD =
+			   (
+				   CASE
+				   WHEN '沙子岭'= #{2} THEN '62405200'
+				   WHEN '廖家湾'= #{2}  THEN '62401800'
+				   WHEN '娄家村'= #{2}  THEN '62406600'
+				   WHEN '李家渡'= #{2}  THEN '62402400'
+				   WHEN '南丰'=  #{2}  THEN '62405400'
+				   WHEN '洪门'=  #{2}  THEN '62403200'
+				   WHEN '茅洲'=  #{2}  THEN '62310700'
+				   END
+			   )
+
+		AND "TO_CHAR"(D.DT,'yy') = #{3}
+		group by
+		D.STCD, "TO_CHAR"(D.DT,'MM-dd')
+		)E
+		group by E.STCD
+
+	</select>
+
+
+
+
+	<select id="getForcastToDay" resultType="map">
+		<![CDATA[
+		select B.DDAY ,B.Q,A.U from
+			(select "TO_CHAR"(S.DT,'yyyy-mm-dd') dday,
+					case
+					when   avg(decode(sign(S.avq-0)-1,0,S.avq))  is null then 0
+					else 	 avg(decode(sign(S.avq-0)-1,0,S.avq))
+					END Q
+			 from DDS_D_DAYQ S
+			 WHERE
+				 S.STCD =
+				 (
+					 CASE
+					 WHEN '沙子岭'= #{2} THEN '62405200'
+					 WHEN '廖家湾'= #{2}  THEN '62401800'
+					 WHEN '娄家村'= #{2}  THEN '62406600'
+					 WHEN '李家渡'= #{2}  THEN '62402400'
+					 WHEN '南丰'=  #{2}  THEN '62405400'
+					 WHEN '洪门'=  #{2}  THEN '62403200'
+					 WHEN '茅洲'= #{2}  THEN '62310700'
+					 END
+				 )
+				 and "TO_CHAR"(s.DT,'yyyy-mm-dd') >=#{0}
+				 and "TO_CHAR"(s.DT,'yyyy-mm-dd') <=#{1}
+			 GROUP BY "TO_CHAR"(S.DT,'yyyy-mm-dd')
+			 ORDER BY "TO_CHAR"(S.DT,'yyyy-mm-dd')
+			)B
+			INNER JOIN
+			(select "TO_CHAR"(D.DT,'yyyy-mm-dd') dday,
+					case
+					when
+						sum(decode(sign(D.p-0)-1,0,D.p)) is null then 0
+					else sum(decode(sign(D.p-0)-1,0,D.p))
+					END U
+			 from DDS_D_DAYP D
+			 WHERE
+				 D.STCD =
+				 (
+					 CASE
+					 WHEN '沙子岭'= #{2} THEN '62423400'
+					 WHEN '娄家村'= #{2} THEN '62436700'
+					 WHEN '南丰'= #{2} THEN '62424900'
+					 WHEN '洪门'= #{2} THEN '62426900'
+					 WHEN '茅洲'= #{2} THEN '62337420'
+					 END
+				 )
+				 and "TO_CHAR"(D.DT,'yyyy-mm-dd') >=#{0}
+				 and "TO_CHAR"(D.DT,'yyyy-mm-dd') <=#{1}
+			 GROUP BY "TO_CHAR"(D.DT,'yyyy-mm-dd')
+			 ORDER BY "TO_CHAR"(D.DT,'yyyy-mm-dd')
+			)A
+				ON B.dday = A.dday
+		]]>
+	</select>
+
+	<select id="getAvgP" resultType="map">
+		SELECT	AVG(E.P) P	FROM
+		( SELECT
+		SUM(D.P) P,D.YEAR "YEAR"
+		FROM
+		(SELECT D.STCD,
+		decode(sign(D.p-0)-1,0,D.p)p,
+		"TO_CHAR"(D.DT,'yyyy') YEAR FROM DDS_D_DAYP D ) D
+		WHERE
+		D.STCD ='62423400'
+		GROUP BY D.YEAR ORDER BY D.YEAR ASC) E
+	</select>
+
+	<select id="getsw_month" resultType="map">
+		<![CDATA[
+		SELECT "TO_CHAR"(D.DT,'yyyy-mm') month,SUM(decode(sign(D.P-0)-1,0,D.P))P
+		FROM
+
+		DDS_D_DAYP D
+		WHERE
+		D.STCD =
+		(
+			CASE
+			WHEN '沙子岭'=#{3}  THEN '62423400'
+			WHEN '娄家村'=#{3}  THEN '62436700'
+			WHEN '南丰'= #{3} THEN '62424900'
+			WHEN '洪门'= #{3} THEN '62426900'
+			WHEN '茅洲'= #{3} THEN '62337420'
+			END
+		)
+
+
+		and "TO_CHAR"(D.DT,'yyyy') >= #{0}
+		and "TO_CHAR"(D.DT,'yyyy') < #{1}
+		and "TO_CHAR"(D.DT,'mm') = #{2}
+    group by "TO_CHAR"(D.DT,'yyyy-mm')
+		]]>
+	</select>
+
+	<select id="getsw_monthAll" resultType="map">
+		<![CDATA[
+		SELECT "TO_CHAR"(D.DT,'yyyy-mm') month,
+			   SUM(decode(sign(D.P-0)-1,0,D.P))P
+		FROM
+			DDS_D_DAYP D
+		WHERE
+			D.STCD =
+			(
+				CASE
+				WHEN '沙子岭'= #{2} THEN '62423400'
+				WHEN '娄家村'= #{2} THEN '62436700'
+				WHEN '南丰'= #{2} THEN '62424900'
+				WHEN '洪门'= #{2} THEN '62426900'
+				WHEN '茅洲'= #{2} THEN '62337420'
+				END
+			)
+			   and "TO_CHAR"(D.DT,'yyyy-mm') >= #{0}
+			   and "TO_CHAR"(D.DT,'yyyy-mm') < #{1}
+		group by "TO_CHAR"(D.DT,'yyyy-mm')
+		order by "TO_CHAR"(D.DT,'yyyy-mm')
+		]]>
+	</select>
+
+	<select id="getsw_monthljw" resultType="map">
+		<![CDATA[
+		SELECT E.month ,avg(decode(sign(D.AVQ-0)-1,0,D.AVQ))Q,E.P
+		FROM
+		(select "TO_CHAR"(b.DT,'yyyy-mm') month,
+		SUM(decode(sign(B.P-0)-1,0,(B.P/4)))P
+		from
+		DDS_B_STAT A,
+		DDS_D_DAYP B
+		WHERE  B.STCD = A.STCD
+		AND A.ST_NM in ('沙子岭','南丰','黎川','南城')
+			   and "TO_CHAR"(b.DT,'yyyy') >= #{0}
+			   and "TO_CHAR"(b.DT,'yyyy') < #{1}
+			   and "TO_CHAR"(b.DT,'mm') = #{2}
+		GROUP BY "TO_CHAR"(b.DT,'yyyy-mm')
+		ORDER BY "TO_CHAR"(b.DT,'yyyy-mm')
+		)E ,DDS_D_DAYQ D
+		WHERE
+		E.month = "TO_CHAR"(D.DT,'yyyy-mm')
+		group by E.month, E.P
+		ORDER BY E.MONTH
+		]]>
+	</select>
+
+
+	<select id="getYearAllQ" resultType="map">
+		<![CDATA[
+		select "TO_CHAR"(b.DT,'mm') MONTH,
+			   AVG(decode(sign(B.AVQ-0)-1,0,B.AVQ))Q
+		from
+			DDS_D_DAYQ B
+		WHERE
+
+		 B.STCD =
+				   (
+					   CASE
+					   WHEN '沙子岭'= #{2} THEN '62405200'
+					   WHEN '廖家湾'= #{2} THEN '62401800'
+					   WHEN '娄家村'= #{2} THEN '62406600'
+					   WHEN '李家渡'= #{2} THEN '62402400'
+					   WHEN '南丰'= #{2} THEN '62405400'
+					   WHEN '洪门'= #{2} THEN '62403200'
+					   WHEN '茅洲'=  #{2}  THEN '62310700'
+					   END
+				   )
+			   and "TO_CHAR"(b.DT,'yyyy-mm') >= #{0}
+			   and "TO_CHAR"(b.DT,'yyyy-mm') < #{1}
+		GROUP BY "TO_CHAR"(b.DT,'mm')
+		ORDER BY "TO_CHAR"(b.DT,'mm')
+		]]>
+	</select>
+
+	<select id="getYearLFAllQ" resultType="map">
+		<![CDATA[
+		select "TO_CHAR"(b.DT,'mm') MONTH,
+			   AVG(decode(sign(B.AVQ-0)-1,0,B.AVQ))Q
+		from
+			DDS_D_DAYQ B
+		WHERE
+			   B.STCD in ('62403200','62405400')
+			   and "TO_CHAR"(b.DT,'yyyy-mm') >= #{0}
+			   and "TO_CHAR"(b.DT,'yyyy-mm') < #{1}
+		GROUP BY "TO_CHAR"(b.DT,'mm')
+		ORDER BY "TO_CHAR"(b.DT,'mm')
+		]]>
+	</select>
+
+	<select id="getMonthAllQ" resultType="map">
+		<![CDATA[
+		select "TO_CHAR"(b.DT,'mm') month,
+		avg(decode(sign(B.AVQ-0)-1,0,B.AVQ))Q
+		from
+		DDS_D_DAYQ B
+		WHERE
+			     B.STCD =
+					(
+						CASE
+						WHEN '沙子岭'= #{3} THEN '62405200'
+						WHEN '廖家湾'= #{3}  THEN '62401800'
+						WHEN '娄家村'= #{3}  THEN '62406600'
+						WHEN '李家渡'= #{3}  THEN '62402400'
+						WHEN '南丰'=  #{3}  THEN '62405400'
+						WHEN '洪门'=  #{3}  THEN '62403200'
+						WHEN '茅洲'=  #{3}  THEN '62310700'
+						END
+					)
+		and "TO_CHAR"(b.DT,'yyyy') >= #{0}
+		and "TO_CHAR"(b.DT,'yyyy') < #{1}
+		and "TO_CHAR"(b.DT,'mm') = #{2}
+		group by "TO_CHAR"(b.DT,'mm')
+		]]>
+	</select>
+
+
+	<select id="getsw_monthAllLJW" resultType="map">
+		<![CDATA[
+		SELECT "TO_CHAR"(D.DT,'yyyy-mm') month,
+			   SUM(decode(sign(D.P-0)-1,0,D.P/3))P
+		FROM
+			DDS_D_DAYP D
+		WHERE  D.STCD  in ('62423400','62424900','62426900')
+			   and "TO_CHAR"(D.DT,'yyyy-mm') >= #{0}
+			   and "TO_CHAR"(D.DT,'yyyy-mm') < #{1}
+		group by "TO_CHAR"(D.DT,'yyyy-mm')
+		order by "TO_CHAR"(D.DT,'yyyy-mm')
+		]]>
+	</select>
+
+	<select id="getRunInfoLast" resultType="map">
+		SELECT D.BGTM TIME,D.FOR_W P1,D.LY_W P2,D.LY_RT P3,D.ANN_W P4,D.ANO_V P5,D.CONCL
+		FROM
+		DDS_M_SEC A,
+		DDS_RD_IFRES D
+		WHERE
+		D.SEC_CD = A.SEC_CD
+		AND trim(D.PRO_CD) = #{1}
+		AND A.SEC_NM = #{0}
+	</select>
+
+	<select id="getForcastToDayljc" resultType="map">
+		<![CDATA[
+		SELECT * FROM (
+		SELECT
+		(CASE WHEN f1. Q>=0 THEN f1. Q ELSE 0 END) Q,
+		(CASE WHEN f2. U>=0 THEN f2. U ELSE 0 END) U
+		,(CASE WHEN f1.M IS NULL THEN f2.M ELSE  f1.M END) dday
+
+		FROM
+		(SELECT
+		"AVG"(D.AVQ) "Q",D.Dmonth "M"
+		FROM
+		(SELECT D .STCD, CASE
+		WHEN D."AVQ" >= 0 THEN
+		D."AVQ"
+		ELSE
+		NULL
+		END  AVQ,"TO_CHAR"(D.DT,'yyyy-mm-dd') Dmonth
+		FROM DDS_D_DAYQ D, DDS_B_STAT A
+		WHERE
+		D .STCD = A.STCD
+		AND
+		A.ST_NM = '娄家村'
+		) D
+
+		GROUP BY D.Dmonth,D.stcd ORDER BY D.Dmonth) f1
+		full join
+		(SELECT
+		"AVG" (t1. SUM) U,t1.bmonth M
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM,b.bmonth
+		FROM
+		(SELECT b.STCD,
+		CASE
+		WHEN b."P" >= 0 THEN
+		b."P"
+		ELSE
+		NULL
+		END  P,"TO_CHAR"(b.DT,'yyyy-mm-dd') bmonth
+		FROM
+		DDS_D_DAYP b , DDS_B_STAT A
+		WHERE b.STCD = A.STCD
+		AND A.ST_NM = '娄家村(二)'
+		) b
+		GROUP BY
+		b.bmonth ORDER BY b.bmonth) t1
+		GROUP BY
+		t1.bmonth ORDER BY t1.bmonth) f2 ON f1.M=f2.M ORDER BY dday
+		) f3
+		WHERE
+		F3.dday >= #{0}
+		AND
+		F3.dday <= #{1}
+		]]>
+	</select>
+
+	<select id="getForcast_mz" resultType="map">
+		<![CDATA[
+		SELECT
+		(CASE WHEN f1. U>=0 THEN f1. U ELSE 0 END) U,
+		(CASE WHEN f2. q>=0 THEN f2. q ELSE 0 END) q
+		FROM
+		(
+		SELECT
+		t2. U,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (t1. SUM) U
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM
+		FROM
+		DDS_B_STAT A,
+		(SELECT STCD,
+		CASE
+		WHEN b."P" >= 0 THEN
+		b."P"
+		ELSE
+		NULL
+		END  P
+		FROM
+		DDS_D_DAYP b
+		WHERE
+		b.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+		AND b.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) b
+		WHERE
+		A .STCD = b.STCD
+		AND A .ST_NM IN (
+		'分宜'
+		)
+		GROUP BY
+		A .ST_NM
+		) t1
+		) t2
+		) f1
+		FULL JOIN (
+		SELECT
+		t1.Q,
+		ROWNUM rn
+		FROM
+		(
+		SELECT
+		"AVG" (D .AVQ) Q
+		FROM
+		DDS_B_STAT c,
+		(SELECT STCD,
+		CASE
+		WHEN D."AVQ" >= 0 THEN
+		D."AVQ"
+		ELSE
+		NULL
+		END  AVQ
+		FROM
+		DDS_D_DAYQ D
+		WHERE
+		D.DT >= TO_DATE (#{0}, 'yyyy-MM-dd')
+		AND D.DT <= TO_DATE (#{1}, 'yyyy-MM-dd')) D
+		WHERE
+		c.STCD = D .STCD
+		AND c.ST_NM = '芦溪'
+		GROUP BY
+		c.ST_NM
+		) t1
+		) f2 ON f1.rn = f2.rn
+		]]>
+	</select>
+
+
+	<select id="getForcastToDayMap" parameterType="map" resultType="map">
+		SELECT * FROM (
+		SELECT
+		(CASE WHEN f1. Q>=0 THEN f1. Q ELSE 0 END) Q,
+		(CASE WHEN f2. U>=0 THEN f2. U ELSE 0 END) U
+		,(CASE WHEN f1.M IS NULL THEN f2.M ELSE  f1.M END) mon
+
+		FROM
+		(SELECT
+		"AVG"(D.AVQ) "Q",D.Dmonth "M"
+		FROM
+		(SELECT D .STCD,CASE
+		WHEN D."AVQ" >= 0 THEN
+		D."AVQ"
+		ELSE
+		NULL
+		END  AVQ,"TO_CHAR"(D.DT,'yyyy-mm-dd') Dmonth FROM DDS_D_DAYQ D WHERE
+		D .STCD IN
+		<foreach open="(" close=")" collection="Q" item="item" index="index" separator=",">
+			#{item}
+		</foreach>
+		) D
+
+		GROUP BY D.Dmonth,D.stcd ORDER BY D.Dmonth) f1
+		full join
+		(SELECT
+		"AVG" (t1. SUM) U,t1.bmonth M
+		FROM
+		(
+		SELECT
+		"SUM" (b. P) SUM,b.bmonth
+		FROM
+		(SELECT STCD,
+		CASE
+		WHEN b."P" >= 0 THEN
+		b."P"
+		ELSE
+		NULL
+		END  P,"TO_CHAR"(b.DT,'yyyy-mm-dd') bmonth
+		FROM
+		DDS_D_DAYP b  WHERE b.STCD IN
+		<foreach open="(" close=")" collection="U" item="item" index="index" separator=",">
+			#{item}
+		</foreach>
+		) b
+		GROUP BY
+		b.bmonth ORDER BY b.bmonth) t1
+		GROUP BY
+		t1.bmonth ORDER BY t1.bmonth) f2 ON f1.M=f2.M ORDER BY mon
+		) f3 WHERE F3.MON BETWEEN #{startDate} AND #{endDate}
+
+	</select>
+
+
+	<select id="getYearBySTCD" resultType="map">
+		select B.Q,A.U from
+			(select "TO_CHAR"(S.DT,'yyyy')YEAR,
+					avg(decode(sign(S.avq-0)-1,0,S.avq))Q
+			 from DDS_D_DAYQ S
+			 WHERE S.STCD = #{0}
+				   and "TO_CHAR"(S.DT,'yyyy') = #{2}
+			 GROUP BY "TO_CHAR"(S.DT,'yyyy')
+			 ORDER BY "TO_CHAR"(S.DT,'yyyy')
+			)B
+			FULL JOIN
+			(select "TO_CHAR"(D.DT,'yyyy')YEAR,
+					sum(decode(sign(D.p-0)-1,0,D.p))U
+			 from DDS_D_DAYP D
+			 WHERE d.STCD = #{1}
+				   and "TO_CHAR"(D.DT,'yyyy') = #{2}
+			 GROUP BY "TO_CHAR"(D.DT,'yyyy')
+			 ORDER BY "TO_CHAR"(D.DT,'yyyy')
+			)A
+		ON B.YEAR = A.YEAR
+	</select>
+
+	<select id="getOneXunU" resultType="BigDecimal">
+		<![CDATA[
+		SELECT SUM(decode(sign(D.P-0)-1,0,D.P))P
+		FROM
+
+			DDS_D_DAYP D
+		WHERE
+			D.STCD =
+			(
+				CASE
+				WHEN '沙子岭'=#{2}  THEN '62423400'
+				WHEN '娄家村'=#{2}  THEN '62436700'
+				WHEN '南丰'= #{2} THEN '62424900'
+				WHEN '洪门'= #{2} THEN '62426900'
+				WHEN '茅洲'= #{2} THEN '62337420'
+				END
+			)
+		and "TO_CHAR"(D.DT,'yyyy-mm-dd') >= #{0}
+		and "TO_CHAR"(D.DT,'yyyy-mm-dd') < #{1}
+		]]>
+	</select>
+
+	<select id="getOneXunQ" resultType="BigDecimal">
+		<![CDATA[
+		select
+			avg(decode(sign(S.avq-0)-1,0,S.avq))Q
+		from
+			DDS_D_DAYQ S
+		WHERE
+			     S.STCD =
+				 (
+					 CASE
+					 WHEN '沙子岭'= #{2} THEN '62405200'
+					 WHEN '廖家湾'= #{2}  THEN '62401800'
+					 WHEN '娄家村'= #{2}  THEN '62406600'
+					 WHEN '李家渡'= #{2}  THEN '62402400'
+					 WHEN '南丰'=  #{2}  THEN '62405400'
+					 WHEN '洪门'=  #{2}  THEN '62403200'
+					 WHEN '茅洲'=  #{2}  THEN '62310700'
+					 END
+				 )
+		and "TO_CHAR"(S.DT,'yyyy-mm-dd') >= #{0}
+		and "TO_CHAR"(S.DT,'yyyy-mm-dd') < #{1}
+		]]>
+	</select>
+
+	<select id="getAllXunQ" resultType="BigDecimal">
+		<![CDATA[
+		select
+			avg(decode(sign(S.avq-0)-1,0,S.avq))Q
+		from
+			DDS_D_DAYQ S
+		WHERE
+			S.STCD =
+			(
+				CASE
+				WHEN '沙子岭'= #{2} THEN '62405200'
+				WHEN '廖家湾'= #{2}  THEN '62401800'
+				WHEN '娄家村'= #{2}  THEN '62406600'
+				WHEN '李家渡'= #{2}  THEN '62402400'
+				WHEN '南丰'=  #{2}  THEN '62405400'
+				WHEN '洪门'=  #{2}  THEN '62403200'
+				WHEN '茅洲'=  #{2}  THEN '62310700'
+				END
+			)
+			and "TO_CHAR"(S.DT,'mm-dd') >= #{0}
+			and "TO_CHAR"(S.DT,'mm-dd') < #{1}
+		]]>
+	</select>
+
+</mapper>

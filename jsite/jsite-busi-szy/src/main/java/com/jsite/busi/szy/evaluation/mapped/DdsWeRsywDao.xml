@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeRsywDao">
+    
+	<sql id="ddsWeRsywColumns">
+		a.yr AS "yr",
+		a.rs_cd AS "rsCd",
+		a.ysw AS "ysw",
+		a.yew AS "yew",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeRsywJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeRsyw">
+		SELECT 
+			<include refid="ddsWeRsywColumns"/>
+		FROM dds_we_rsyw a
+		<include refid="ddsWeRsywJoins"/>
+		WHERE a.yr = #{yr} and a.rs_cd = #{rsCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeRsyw">
+		SELECT 
+			<include refid="ddsWeRsywColumns"/>
+		FROM dds_we_rsyw a
+		<include refid="ddsWeRsywJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_rsyw(
+			yr,
+			rs_cd,
+			ysw,
+			yew,
+			nt
+		) VALUES (
+			#{yr},
+			#{rsCd},
+			#{ysw},
+			#{yew},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_rsyw SET 	
+			ysw = #{ysw},
+			yew = #{yew},
+			nt = #{nt}
+		WHERE yr = #{yr} and rs_cd = #{rsCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_rsyw
+		WHERE yr = #{yr} and rs_cd = #{rsCd}
+	</update>
+	
+</mapper>

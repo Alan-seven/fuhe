@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeWueDao">
+
+	<sql id="ddsWeWueColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.AD_CD AS "adCd",
+		a.WRZ_CD AS "wrzCd",
+		a.IND_INC_WW AS "indIncWw",
+		a.IND_WW_DECP AS "indWwDecp",
+		a.GDP_WW AS "gdpWw",
+		a.AGR_WW_EFF AS "agrWwEff",
+		a.DT AS "dt",
+		a.NT AS "nt",
+		a.GDP_WW_DECP AS "gdpWwDecp"
+	</sql>
+
+
+	<select id="listAllToMap" resultType="map">
+		SELECT <include refid="ddsWeWueColumns"/>
+		,b.reg_nm AS "regNm"
+		FROM dds_we_wue a,dds_we_wrcs b
+        WHERE b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+
+    <select id="get" resultType="DdsWeWue">
+        SELECT
+        <include refid="ddsWeWueColumns"/>
+        FROM dds_we_wue a
+        WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+    </select>
+
+    <insert id="save">
+        INSERT INTO dds_we_wue
+        (YR, REG_CD, REG_TYPE, AD_CD, WRZ_CD, IND_INC_WW, IND_WW_DECP, GDP_WW, AGR_WW_EFF, DT, NT, GDP_WW_DECP)
+        VALUES (
+        #{yr},
+        #{regCd},
+        #{regType},
+        #{adCd},
+        #{wrzCd},
+        #{indIncWw},
+        #{indWwDecp},
+        #{gdpWw},
+        #{agrWwEff},
+        #{dt},
+        #{nt},
+        #{gdpWwDecp}
+        )
+    </insert>
+
+    <update id="update">
+        UPDATE dds_we_wu SET
+        YR = #{yr},
+        REG_CD = #{regCd},
+        REG_TYPE = #{regType},
+        AD_CD = #{adCd},
+        WRZ_CD = #{wrzCd},
+        IND_INC_WW = #{indIncWw},
+        IND_WW_DECP = #{indWwDecp},
+        GDP_WW = #{gdpWw},
+        AGR_WW_EFF = #{agrWwEff},
+        DT = #{dt},
+        NT = #{nt},
+        GDP_WW_DECP = #{gdpWwDecp}
+        WHERE yr = #{yr} and reg_cd = #{regCd}
+    </update>
+
+	
+</mapper>

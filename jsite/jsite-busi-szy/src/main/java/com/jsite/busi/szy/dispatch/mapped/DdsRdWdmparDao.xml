@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdmparDao">
+    
+	<sql id="ddsRdWdmparColumns">
+		a.pro_cd AS "proCd",
+		a.ad_cd AS "adCd",
+		a.month AS "month",
+		a.pwm_coe AS "pwmCoe",
+		a.awm_coe AS "awmCoe",
+		a.iwm_coe AS "iwmCoe",
+        a.lmy_coe AS "lmyCoe"
+	</sql>
+
+    <sql id="ddsRdWdmparColumns2">
+        a.ad_cd AS "adCd",
+        a.month AS "month",
+        a.pwm_coe AS "pwmCoe",
+        a.awm_coe AS "awmCoe",
+        a.iwm_coe AS "iwmCoe",
+        a.lmy_coe AS "lmyCoe"
+    </sql>
+	
+	<sql id="ddsRdWdmparJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdmpar">
+		SELECT 
+			<include refid="ddsRdWdmparColumns"/>
+		FROM dds_rd_wdmpar a
+		<include refid="ddsRdWdmparJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.ad_cd = #{adCd} and a.month = #{month}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdmpar">
+		SELECT 
+			<include refid="ddsRdWdmparColumns"/>
+		FROM dds_rd_wdmpar a
+		<include refid="ddsRdWdmparJoins"/>
+		<where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="selectByProCd" resultType="DdsRdWdmpar">
+        SELECT
+        <include refid="ddsRdWdmparColumns2"/>
+        FROM dds_rd_wdmpar a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+        </where>
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wdmpar(
+			pro_cd,
+            ad_cd,
+			month,
+			pwm_coe,
+			awm_coe,
+			iwm_coe,
+            lmy_coe
+		) VALUES (
+			#{proCd},
+			#{adCd},
+			#{month},
+			#{pwmCoe},
+			#{awmCoe},
+			#{iwmCoe},
+            #{lmyCoe}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_wdmpar(pro_cd,
+        ad_cd,
+        month,
+        pwm_coe,
+        awm_coe,
+        iwm_coe,
+        lmy_coe)
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.adCd},
+            #{row.month},
+            #{row.pwmCoe},
+            #{row.awmCoe},
+            #{row.iwmCoe},
+            #{row.lmyCoe} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE dds_rd_wdmpar a
+            <set>
+                a.pwm_coe = #{row.pwmCoe},
+                a.awm_coe = #{row.awmCoe},
+                a.iwm_coe = #{row.iwmCoe},
+                a.lmy_coe = #{row.lmyCoe}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.ad_cd = #{row.adCd} and a.month = #{row.month}
+        </foreach>
+    </update>
+
+    <update id="deleteByProCd">
+        DELETE FROM dds_rd_wdmpar
+        WHERE pro_cd = rpad(#{proCd}, 13)
+    </update>
+	
+	<update id="update">
+		UPDATE dds_rd_wdmpar SET 	
+			pwm_coe = #{pwmCoe},
+			awm_coe = #{awmCoe},
+			iwm_coe = #{iwmCoe},
+            lmy_coe = #{lmyCoe}
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd} and month = #{month}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wdmpar
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd} and month = #{month}
+	</update>
+	
+</mapper>

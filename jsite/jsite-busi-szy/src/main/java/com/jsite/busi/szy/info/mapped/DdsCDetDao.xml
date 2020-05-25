@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsCDetDao">
+    
+	<sql id="ddsCDetColumns">
+		a.curve_id AS "curveId",
+		a.v0 AS "v0",
+		a.v1 AS "v1",
+		a.v2 AS "v2",
+		a.v3 AS "v3",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsCDetJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsCDet">
+		SELECT 
+			<include refid="ddsCDetColumns"/>
+		FROM dds_c_det a
+		<include refid="ddsCDetJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsCDet">
+		SELECT 
+			<include refid="ddsCDetColumns"/>
+		FROM dds_c_det a
+		<include refid="ddsCDetJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_c_det(
+			curve_id,
+			v0,
+			v1,
+			v2,
+			v3,
+			ts,
+			nt
+		) VALUES (
+			#{curveId},
+			#{v0},
+			#{v1},
+			#{v2},
+			#{v3},
+			#{ts},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_c_det SET 	
+			curve_id = #{curveId},
+			v0 = #{v0},
+			v1 = #{v1},
+			v2 = #{v2},
+			v3 = #{v3},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_c_det
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

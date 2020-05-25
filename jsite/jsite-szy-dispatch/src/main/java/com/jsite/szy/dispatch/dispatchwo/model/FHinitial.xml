@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <bean id="data" class="com.jsite.szy.dispatch.dispatchwo.convert.WODisplayConvert">
+    	<property name="initList">
+			<list>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="783944000000"></property>
+					<property name="wceTp" value="0"></property>
+					<property name="bgz" value="100.0"></property>
+					<property name="edz" value="100.0"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00008"></property>
+					<property name="wceTp" value="2"></property>
+					<property name="bgz" value="0.0"></property>
+					<property name="edz" value="0.0"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="783944000125"></property>
+					<property name="wceTp" value="0"></property>
+					<property name="bgz" value="65.0"></property>
+					<property name="edz" value="65.0"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00009"></property>
+					<property name="wceTp" value="2"></property>
+					<property name="bgz" value="0.0"></property>
+					<property name="edz" value="0.0"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00101"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="70.14"></property>
+					<property name="mnq" value="84.47"></property>
+					<property name="mxq" value="92.76"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00102"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="84.88"></property>
+					<property name="mnq" value="76.21"></property>
+					<property name="mxq" value="52.37"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00103"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="95.29"></property>
+					<property name="mnq" value="86.83"></property>
+					<property name="mxq" value="21.53"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00104"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="21.91"></property>
+					<property name="mnq" value="5.47"></property>
+					<property name="mxq" value="31.53"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00105"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="43.24"></property>
+					<property name="mnq" value="73.62"></property>
+					<property name="mxq" value="37.96"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00106"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="64.33"></property>
+					<property name="mnq" value="81.39"></property>
+					<property name="mxq" value="43.62"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00107"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="11.95"></property>
+					<property name="mnq" value="43.62"></property>
+					<property name="mxq" value="36.31"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00108"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="240.25"></property>
+					<property name="mnq" value="19.15"></property>
+					<property name="mxq" value="91.34"></property>
+				</bean>
+			</list>			
+		</property>
+	</bean>
+	
+	
+</beans>

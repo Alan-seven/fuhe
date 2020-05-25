@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmGenesttpBDao">
+    
+	<sql id="tSfmmGenesttpBColumns">
+		a.region_cd AS "regionCd",
+		a.genesttp_cd AS "genesttpCd",
+		a.genesttp_nm AS "genesttpNm",
+		a.dataitem_cd_lst AS "dataitemCdLst",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfmmGenesttpBJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmGenesttpB">
+		SELECT 
+			<include refid="tSfmmGenesttpBColumns"/>
+		FROM T_SFMM_GENESTTP_B a
+		<include refid="tSfmmGenesttpBJoins"/>
+		WHERE a.region_cd = #{regionCd} and a.genesttp_cd = #{genesttpCd}
+	</select>
+	
+	<select id="list" resultType="TSfmmGenesttpB">
+		SELECT 
+			<include refid="tSfmmGenesttpBColumns"/>
+		FROM T_SFMM_GENESTTP_B a
+		<include refid="tSfmmGenesttpBJoins"/>
+		<where>
+			<if test="regionCd != null and regionCd != ''">
+				region_cd = #{regionCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_GENESTTP_B(
+			region_cd ,
+			genesttp_cd ,
+			genesttp_nm ,
+			dataitem_cd_lst ,
+			nt 
+		) VALUES (
+			#{regionCd},
+			#{genesttpCd},
+			#{genesttpNm},
+			#{dataitemCdLst},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_GENESTTP_B SET 	
+			genesttp_nm = #{genesttpNm} ,
+			dataitem_cd_lst = #{dataitemCdLst} ,
+			nt = #{nt} 
+		WHERE region_cd = #{regionCd} and genesttp_cd = #{genesttpCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_GENESTTP_B
+		WHERE region_cd = #{regionCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdDisSectRsltDao">
+    
+	<sql id="tSfrdDisSectRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.sect_cd AS "sectCd",
+		a.rslt_tp AS "rsltTp",
+		a.st_dt AS "stDt",
+		a.ed_dt AS "edDt",
+		a.avg_z AS "avgZ",
+		a.avg_q AS "avgQ",
+		a.sect_w AS "sectW",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdDisSectRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdDisSectRslt">
+		SELECT 
+			<include refid="tSfrdDisSectRsltColumns"/>
+		FROM t_sfrd_dis_sect_rslt a
+		<include refid="tSfrdDisSectRsltJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd} and a.sect_cd =#{sectCd} and a.st_dt = #{stDt} 
+			and a.ed_dt = #{edDt} and a.rslt_tp = #{rsltTp}
+	</select>
+	
+	<select id="list" resultType="TSfrdDisSectRslt">
+		SELECT 
+			<include refid="tSfrdDisSectRsltColumns"/>
+		FROM t_sfrd_dis_sect_rslt a
+		<include refid="tSfrdDisSectRsltJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_dis_sect_rslt(
+			pro_cd,
+			en_cd,
+			sect_cd,
+			rslt_tp,
+			st_dt,
+			ed_dt,
+			avg_z,
+			avg_q,
+			sect_w,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{sectCd},
+			#{rsltTp},
+			#{stDt},
+			#{edDt},
+			#{avgZ},
+			#{avgQ},
+			#{sectW},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_dis_sect_rslt SET 	
+			avg_z = #{avgZ},
+			avg_q = #{avgQ},
+			sect_w = #{sectW},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and sect_cd =#{sectCd} and st_dt = #{stDt} 
+			and ed_dt = #{edDt} and rslt_tp = #{rsltTp}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_dis_sect_rslt
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and sect_cd =#{sectCd} and st_dt = #{stDt} 
+			and ed_dt = #{edDt} and rslt_tp = #{rsltTp}
+	</update>
+	
+</mapper>

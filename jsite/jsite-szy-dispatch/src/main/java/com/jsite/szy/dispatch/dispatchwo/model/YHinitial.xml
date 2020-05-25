@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <bean id="data" class="com.jsite.szy.dispatch.dispatchwo.convert.WODisplayConvert">
+    	<property name="initList">
+			<list>
+				<!-- <bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="711944000125"></property>
+					<property name="wceTp" value="0"></property>
+					<property name="bgz" value="244.0"></property>
+					<property name="edz" value="244.0"></property>
+				</bean> -->
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="711944000000"></property>
+					<property name="wceTp" value="0"></property>
+					<property name="bgz" value="72.0"></property>
+					<property name="edz" value="72.0"></property>
+				</bean>				
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00018"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="240.25"></property>
+					<property name="mnq" value="19.15"></property>
+					<property name="mxq" value="91.34"></property>
+				</bean>
+				<bean class="com.jsite.busi.szy.dispatch.po.DdsRdWdinit">
+					<property name="proCd" value="FH_default_01"></property>
+					<property name="wceId" value="SEC00019"></property>
+					<property name="wceTp" value="1"></property>
+					<property name="bq" value="240.25"></property>
+					<property name="mnq" value="19.15"></property>
+					<property name="mxq" value="91.34"></property>
+				</bean>
+			</list>			
+		</property>
+	</bean>
+	
+	
+</beans>

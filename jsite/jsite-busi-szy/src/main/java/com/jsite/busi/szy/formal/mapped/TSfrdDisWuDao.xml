@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdDisWuDao">
+    
+	<sql id="tSfrdDisWuColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.tm AS "tm",
+		a.IND_WUS_WT AS "indWusWt",
+		a.AGR_WUS_WT AS "agrWusWt",
+		a.LIF_WUS_WT AS "lifWusWt",
+		a.FAFR_WUS_WT AS "fafrWusWt",
+		a.IND_RE_WT AS "indReWt",
+		a.AGR_RE_WT AS "agrReWt",
+		a.LIF_RE_WT AS "lifReWt",
+		a.FAFR_RE_WT AS "fafrReWt"
+	</sql>
+	
+	 <resultMap id="wuResult" type="TSfrdDisWu">
+		<result property="enCd" column="enCd" />
+		<collection property="sub" ofType="TSfrdDisWu">
+			<id property="proCd" column="sub.proCd" />
+			<id property="tm" column="sub.tm" />
+			<id property="indWusWt" column="sub.indWusWt" />
+			<id property="agrWusWt" column="sub.agrWusWt" />
+			<id property="lifWusWt" column="sub.lifWusWt" />
+			<id property="fafrWusWt" column="sub.fafrWusWt" />
+			<id property="indReWt" column="sub.indReWt" />
+			<id property="agrReWt" column="sub.agrReWt" />
+			<id property="lifReWt" column="sub.lifReWt" />
+			<id property="fafrReWt" column="sub.fafrReWt" />
+		</collection>
+	</resultMap>
+	
+	<sql id="tSfrdDisWuJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdDisWu">
+		SELECT 
+			<include refid="tSfrdDisWuColumns"/>
+		FROM T_SFRD_DIS_WU a
+		<include refid="tSfrdDisWuJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="TSfrdDisWu">
+		SELECT 
+			<include refid="tSfrdDisWuColumns"/>
+		FROM T_SFRD_DIS_WU a
+		<include refid="tSfrdDisWuJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+			 	and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and a.en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.EN_CD,A.TM 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listByEncd" resultMap="wuResult">
+		SELECT 
+			distinct a.en_cd as "enCd",
+			a.pro_cd AS "sub.proCd",
+			a.tm AS "sub.tm",
+			a.IND_WUS_WT AS "sub.indWusWt",
+			a.AGR_WUS_WT AS "sub.agrWusWt",
+			a.LIF_WUS_WT AS "sub.lifWusWt",
+			a.FAFR_WUS_WT AS "sub.fafrWusWt",
+			a.IND_RE_WT AS "sub.indReWt",
+			a.AGR_RE_WT AS "sub.agrReWt",
+			a.LIF_RE_WT AS "sub.lifReWt",
+			a.FAFR_RE_WT AS "sub.fafrReWt"
+		FROM T_SFRD_DIS_WU a
+		<include refid="tSfrdDisWuJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+			 	and a.pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and a.en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.EN_CD,A.TM 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFRD_DIS_WU(
+			pro_cd ,
+			en_cd ,
+			tm ,
+			IND_WUS_WT ,
+			AGR_WUS_WT,
+			LIF_WUS_WT,
+			FAFR_WUS_WT,
+			IND_RE_WT,
+			AGR_RE_WT,
+			LIF_RE_WT,
+			FAFR_RE_WT
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{tm},
+			#{indWusWt},
+			#{agrWusWt},
+			#{lifWusWt},
+			#{fafrWusWt},
+			#{indReWt},
+			#{agrReWt},
+			#{lifReWt},
+			#{fafrReWt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFRD_DIS_WU SET 	
+			IND_WUS_WT = #{indWusWt} ,
+			AGR_WUS_WT = #{agrWusWt} ,
+			LIF_WUS_WT = #{lifWusWt} ,
+			FAFR_WUS_WT = #{fafrWusWt} ,
+			IND_RE_WT = #{indReWt} ,
+			AGR_RE_WT = #{agrReWt} ,
+			LIF_RE_WT = #{lifReWt} ,
+			FAFR_RE_WT = #{fafrReWt} 
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFRD_DIS_WU
+		WHERE pro_cd = #{proCd} 
+	</update>
+	
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.thinkgem.jeesite.modules.用水计划核定初始条件.dao.TSfrdWtrplanVerInitcondDao">
+    
+	<sql id="tSfrdWtrplanVerInitcondColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.is_fnsh AS "isFnsh",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdWtrplanVerInitcondJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdWtrplanVerInitcond">
+		SELECT 
+			<include refid="tSfrdWtrplanVerInitcondColumns"/>
+		FROM t_sfrd_wtrplan_ver_initcond a
+		<include refid="tSfrdWtrplanVerInitcondJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="TSfrdWtrplanVerInitcond">
+		SELECT 
+			<include refid="tSfrdWtrplanVerInitcondColumns"/>
+		FROM t_sfrd_wtrplan_ver_initcond a
+		<include refid="tSfrdWtrplanVerInitcondJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="TSfrdWtrplanVerInitcond">
+		SELECT 
+			<include refid="tSfrdWtrplanVerInitcondColumns"/>
+		FROM t_sfrd_wtrplan_ver_initcond a
+		<include refid="tSfrdWtrplanVerInitcondJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO t_sfrd_wtrplan_ver_initcond(
+			pro_cd,
+			en_cd,
+			is_fnsh,
+			ts,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{isFnsh},
+			#{ts},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_wtrplan_ver_initcond SET 	
+			pro_cd = #{proCd},
+			en_cd = #{enCd},
+			is_fnsh = #{isFnsh},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM t_sfrd_wtrplan_ver_initcond
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

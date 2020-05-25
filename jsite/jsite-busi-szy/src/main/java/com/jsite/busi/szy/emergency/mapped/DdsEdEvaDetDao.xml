@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdEvaDetDao">
+    
+	<sql id="ddsEdEvaColumns">
+		a.pro_cd AS "proCd",
+		a.secid AS "secId",
+		a.secvalue AS "secValue"
+	</sql>
+	
+	<sql id="ddsEdEvaJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdEvaDet">
+		SELECT 
+			<include refid="ddsEdEvaColumns"/>
+		FROM dds_ed_evadet a
+		<include refid="ddsEdEvaJoins"/>
+		WHERE a.pro_cd = #{proCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdEvaDet">
+		SELECT 
+			<include refid="ddsEdEvaColumns"/>
+		FROM dds_ed_evadet a
+		<include refid="ddsEdEvaJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_evadet(
+			pro_cd,
+			secid,
+			secvalue
+		) VALUES (
+			#{proCd},
+			#{secId},
+			#{secValue}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_evadet SET 	
+			secid = #{secId},
+			secvalue = #{secValue}
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_evadet
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

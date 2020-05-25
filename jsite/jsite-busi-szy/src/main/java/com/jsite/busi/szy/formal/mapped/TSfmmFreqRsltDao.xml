@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmFreqRsltDao">
+    
+	<sql id="tSfmmFreqRsltColumns">
+		a.stcd AS "stcd",
+		a.if_freq AS "ifFreq",
+		a.tm_val AS "tmVal",
+		a.q AS "q",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfmmFreqRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmFreqRslt">
+		SELECT 
+			<include refid="tSfmmFreqRsltColumns"/>
+		FROM T_SFMM_FREQ_RSLT a
+		<include refid="tSfmmFreqRsltJoins"/>
+		WHERE a.stcd = #{stcd} and a.if_freq = #{ifFreq} and a.tm_val = #{tmVal} 
+	</select>
+	
+	<select id="list" resultType="TSfmmFreqRslt">
+		SELECT 
+			<include refid="tSfmmFreqRsltColumns"/>
+		FROM T_SFMM_FREQ_RSLT a
+		<include refid="tSfmmFreqRsltJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_FREQ_RSLT(
+			stcd ,
+			if_freq ,
+			tm_val ,
+			q ,
+			nt 
+		) VALUES (
+			#{stcd},
+			#{ifFreq},
+			#{tmVal},
+			#{q},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_FREQ_RSLT SET 	
+			q = #{q} ,
+			nt = #{nt} 
+		WHERE stcd = #{stcd} and if_freq = #{ifFreq} and tm_val = #{tmVal} 
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_FREQ_RSLT
+		WHERE stcd = #{stcd} and if_freq = #{ifFreq} and tm_val = #{tmVal} 
+	</update>
+	
+</mapper>

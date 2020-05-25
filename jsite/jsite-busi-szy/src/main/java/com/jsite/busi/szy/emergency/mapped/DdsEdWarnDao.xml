@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdWarnDao">
+    
+	<sql id="ddsEdWarnColumns">
+	    a.eid AS "eid",
+		a.sec_cd AS "secCd",
+		a.startTm AS "startTm",
+		a.endTm AS "endTm",
+		a.label AS "label",
+		a.lvalue AS "lvalue",
+		a.lel AS "lel",
+		a.flag AS "flag"
+	</sql>
+	
+	<sql id="ddsEdWarnJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdWarn">
+		SELECT 
+			<include refid="ddsEdWarnColumns"/>
+		FROM dds_ed_warn a
+		<include refid="ddsEdWarnJoins"/>
+		WHERE a.eid = #{eid}
+	</select>
+	
+	<select id="list" resultType="DdsEdWarn">
+		SELECT 
+			<include refid="ddsEdWarnColumns"/>
+		FROM dds_ed_warn a
+		left join dds_b_stat c on a.sec_cd = c.stcd
+		<include refid="ddsEdWarnJoins"/>
+		<where>
+			1=1
+			<if test="eid != null and eid != '' ">
+				and a.eid = #{eid}
+			</if>
+			<if test="secCd != null and secCd != '' ">
+				and a.sec_cd = #{secCd}
+			</if>
+			<if test="flag != null and flag != '' ">
+				and a.flag = #{flag}
+			</if>
+			<if test="river != null and river != '' ">
+				and c.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.startTm desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_warn(
+		    eid,
+			sec_cd,
+			startTm,
+			endTm,
+			label,
+			lvalue,
+			lel,
+			flag
+		) VALUES (
+			#{eid},
+			#{secCd},
+			#{startTm},
+			#{endTm},
+			#{label},
+			#{lvalue},
+			#{lel},
+			#{flag}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_warn SET 	
+			lvalue = #{lvalue},
+			lel = #{lel},
+			flag = #{flag}
+			sec_cd = #{secCd},
+			startTm = #{startTm} ,
+			endTm = #{endTm} ,
+			label= #{label}
+		WHERE eid = #{eid}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_warn
+		WHERE eid = #{eid}
+	</update>
+	
+</mapper>

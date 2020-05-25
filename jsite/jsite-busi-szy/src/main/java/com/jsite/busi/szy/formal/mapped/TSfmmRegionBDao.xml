@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmRegionBDao">
+    
+	<sql id="tSfmmRegionBColumns">
+		a.region_cd AS "regionCd",
+		a.region_nm AS "regionNm",
+		a.dat_cd AS "datCd",
+		a.rv_cd AS "rvCd",
+		a.region_desc AS "regionDesc",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfmmRegionBJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmRegionB">
+		SELECT 
+			<include refid="tSfmmRegionBColumns"/>
+		FROM T_SFMM_REGION_B a
+		<include refid="tSfmmRegionBJoins"/>
+		WHERE a.region_cd = #{regionCd}
+	</select>
+	
+	<select id="list" resultType="TSfmmRegionB">
+		SELECT 
+			<include refid="tSfmmRegionBColumns"/>
+		FROM T_SFMM_REGION_B a
+		<include refid="tSfmmRegionBJoins"/>
+		<where>
+			<if test="regionNm != null and regionNm != ''">
+				 a.region_nm like 
+				<if test="dbName == 'oracle'">'%'||#{regionNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{regionNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{regionNm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_REGION_B(
+			region_cd ,
+			region_nm ,
+			dat_cd ,
+			rv_cd ,
+			region_desc ,
+			nt 
+		) VALUES (
+			#{regionCd},
+			#{regionNm},
+			#{datCd},
+			#{rvCd},
+			#{regionDesc},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_REGION_B SET 	
+			region_nm = #{regionNm} ,
+			dat_cd = #{datCd} ,
+			rv_cd = #{rvCd} ,
+			region_desc = #{regionDesc} ,
+			nt = #{nt} 
+		WHERE region_cd = #{regionCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_REGION_B
+		WHERE region_cd = #{regionCd}
+	</update>
+	
+</mapper>

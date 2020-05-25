@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSExpDao">
+    
+	<sql id="ddsSExpColumns">
+		a.code AS "code",
+		a.name AS "name",
+		a.idcard AS "idcard",
+		a.naplace AS "naplace",
+		a.dept AS "dept",
+		a.post AS "post",
+		a.grade AS "grade",
+		a.tel AS "tel",
+		a.mail AS "mail",
+		a.major AS "major",
+		a.firmaj AS "firmaj",
+		a.secmaj AS "secmaj",
+		a.thimaj AS "thimaj",
+		a.sex AS "sex",
+		a.university AS "university",
+		a.age AS "age",
+		a.profile AS "profile",
+		a.comments AS "comments"
+	</sql>
+	
+	<sql id="ddsSExpJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSExp">
+		SELECT 
+			<include refid="ddsSExpColumns"/>
+		FROM dds_s_exp a
+		<include refid="ddsSExpJoins"/>
+		WHERE a.code = #{code}
+	</select>
+	
+	<select id="list" resultType="DdsSExp">
+		SELECT 
+			<include refid="ddsSExpColumns"/>
+		FROM dds_s_exp a
+		<include refid="ddsSExpJoins"/>
+		<where>
+			
+			<if test="name != null and name != ''">
+				AND a.name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+			<if test="grade != null and grade != ''">
+				AND a.grade LIKE 
+					<if test="dbName == 'oracle'">'%'||#{grade}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{grade}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{grade},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_exp(
+			code,
+			name,
+			idcard,
+			naplace,
+			dept,
+			post,
+			grade,
+			tel,
+			mail,
+			major,
+			firmaj,
+			secmaj,
+			thimaj,
+			sex,
+			university,
+			age,
+			profile,
+			comments
+		) VALUES (
+			#{code},
+			#{name},
+			#{idcard},
+			#{naplace},
+			#{dept},
+			#{post},
+			#{grade},
+			#{tel},
+			#{mail},
+			#{major},
+			#{firmaj},
+			#{secmaj},
+			#{thimaj},
+			#{sex},
+			#{university},
+			#{age},
+			#{profile},
+			#{comments}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_exp SET 	
+			name = #{name},
+			idcard = #{idcard},
+			naplace = #{naplace},
+			dept = #{dept},
+			post = #{post},
+			grade = #{grade},
+			tel = #{tel},
+			mail = #{mail},
+			major = #{major},
+			firmaj = #{firmaj},
+			secmaj = #{secmaj},
+			thimaj = #{thimaj},
+			sex = #{sex},
+			university = #{university},
+			age = #{age},
+			profile = #{profile},
+			comments = #{comments}
+		WHERE code = #{code}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_exp
+		WHERE code = #{code}
+	</update>
+	
+</mapper>

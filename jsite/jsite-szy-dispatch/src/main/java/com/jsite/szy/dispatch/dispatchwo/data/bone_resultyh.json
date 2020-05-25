@@ -1,0 +1,36 @@
+{
+	"id": "scheduling_result",
+	"name": "调度方案",
+	"columns": [{
+		"id": "col1",
+		"text": "山口岩以上",
+		"sub": [{"ref": "CA001001", "comment": "山口岩入库"}],
+		"type": "section"
+	},{
+		"id": "col2",
+		"text": "山口岩水库",
+		"sub": [{"ref": "711944000125", "comment": "山口岩水库"}],
+		"type": "reservoir",
+		"hidden": true
+	},{
+		"id": "col3",
+		"text": "山口岩至江口",
+		"sub": [{"ref": "360323F0904102", "comment": "芦溪县-山口岩-江口"},
+				{"ref": "360902F0904102", "comment": "袁州区-山口岩-江口"},
+				{"ref": "360982F0904102", "comment": "樟树市-山口岩-江口"},
+				{"ref": "360502F0904102", "comment": "渝水区-山口岩-江口"},
+				{"ref": "360521F0904102", "comment": "分宜县-山口岩-江口"}],
+		"type": "usewater"
+	},{
+		"id": "col4",
+		"text": "江口水库",
+		"sub": [{"ref": "711944000000", "comment": "江口"}],
+		"type": "reservoir"
+	},{
+		"id": "col5",
+		"text": "江口以下",
+		"sub": [{"ref": "360983F0904103", "comment": "高安市-江口以下"},
+				{"ref": "360923F0904103", "comment": "上高县-江口以下"}],
+		"type": "usewater"
+	}]
+}

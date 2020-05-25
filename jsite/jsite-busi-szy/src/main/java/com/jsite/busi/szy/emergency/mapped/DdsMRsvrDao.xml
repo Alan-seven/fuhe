@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMRsvrDao">
+    
+	<sql id="ddsMRsvrColumns">
+		a.pro_cd AS "proCd",
+		a.res_cd AS "resCd",
+		a.z AS "z",
+		a.q AS "q",
+		a.starttime AS "starttime",
+		a.endtime AS "endtime",
+		a.type AS "type",
+		a.exq AS "exq"
+	</sql>
+	
+	<sql id="ddsMRsvrJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMRsvr">
+		SELECT 
+			<include refid="ddsMRsvrColumns"/>
+		FROM dds_m_rsvr a
+		<include refid="ddsMRsvrJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.res_cd = #{resCd}
+	</select>
+	
+	<select id="getByRcd" resultType="DdsMRsvr">
+		SELECT 
+			<include refid="ddsMRsvrColumns"/>
+			,  b.resnm AS resNM,b.stcd AS stcd
+		FROM dds_m_rsvr a
+		<include refid="ddsMRsvrJoins"/>
+		left join dds_m_rsv b on a.res_cd = b.rescd
+		WHERE a.pro_cd = #{proCd} and a.res_cd = #{resCd}
+		 and b.rcd = #{rcd}
+	</select>
+	
+	<select id="list" resultType="DdsMRsvr">
+		SELECT 
+			<include refid="ddsMRsvrColumns"/>
+			, b.res_nm AS resNM
+		FROM dds_m_rsvr a
+		<include refid="ddsMRsvrJoins"/>
+		left join dds_b_res b on a.res_cd = b.res_cd
+		<where>
+			1=1
+			<if test=" proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test=" rcd != null and rcd != '' ">
+				and a.rcd = #{rcd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				order by a.res_cd desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_rsvr(
+			pro_cd,
+			res_cd,
+			z,
+			q,
+			starttime,
+			endtime,
+			type,
+			exq
+		) VALUES (
+			#{proCd},
+			#{resCd},
+			#{z},
+			#{q},
+			#{starttime},
+			#{endtime},
+			#{type},
+			#{exq}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_rsvr SET 	
+			z = #{z},
+			q = #{q},
+			starttime = #{starttime},
+			endtime = #{endtime},
+			type = #{type},
+			exq = #{exq}
+		WHERE pro_cd = #{proCd} and res_cd = #{resCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_rsvr
+		WHERE pro_cd = #{proCd} and res_cd = #{resCd}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_m_rsvr
+		WHERE pro_cd = #{proCd} 
+	</update>
+	
+</mapper>

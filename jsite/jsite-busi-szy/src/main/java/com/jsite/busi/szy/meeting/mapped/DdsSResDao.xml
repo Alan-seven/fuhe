@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSResDao">
+    
+	<sql id="ddsSResColumns">
+		a.con_id AS "conId",
+		a.res_id AS "resId",
+		a.path AS "path",
+		a.res_name AS "resName",
+		a.disc AS "disc"
+	</sql>
+	
+	<sql id="ddsSResJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSRes">
+		SELECT 
+			<include refid="ddsSResColumns"/>
+		FROM dds_s_res a
+		<include refid="ddsSResJoins"/>
+		WHERE a.con_id = #{conId} and a.res_id = #{resId}
+	</select>
+	
+	<select id="getByResId" resultType="DdsSRes">
+		SELECT 
+			<include refid="ddsSResColumns"/>
+		FROM dds_s_res a
+		<include refid="ddsSResJoins"/>
+		WHERE a.res_id = #{resId}
+	</select>
+	
+	<select id="list" resultType="DdsSRes">
+		SELECT 
+			<include refid="ddsSResColumns"/>
+		FROM dds_s_res a
+		<include refid="ddsSResJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_res(
+			con_id,
+			res_id,
+			path,
+			res_name,
+			disc
+		) VALUES (
+			#{conId},
+			#{resId},
+			#{path},
+			#{resName},
+			#{disc}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_res SET 	
+			path = #{path},
+			res_name = #{resName},
+			disc = #{disc}
+		WHERE con_id = #{conId} and res_id = #{resId}
+	</update>
+	
+	<update id="updateByResId">
+		UPDATE dds_s_res SET 	
+			con_id = #{conId}
+		WHERE res_id = #{resId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_res
+		WHERE con_id = #{conId} and res_id = #{resId}
+	</update>
+	
+</mapper>

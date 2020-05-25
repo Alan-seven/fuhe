@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdPDao">
+    
+	<sql id="ddsRdPColumns">
+		a.pro_cd AS "proCd",
+		a.pro_tp AS "proTp",
+		a.pro_nm AS "proNm",
+		a.sub_cd AS "subCd",
+		a.rv_cd AS "rvCd",
+		a.yr AS "yr",
+		a.dp_cyc AS "dpCyc",
+		a.bg_dt AS "bgDt",
+		a.ed_dt AS "edDt",
+		a.producer AS "producer",
+		a.cr_dt AS "crDt",
+		a.dppl_cd AS "dpplCd",
+		a.pub_sta AS "pubSta",
+		a.pub_date AS "pubDate",
+		a.sta AS "sta",
+		a.eva_sta AS "evaSta",
+		a.eva_context AS "evaContext",
+		a.ts AS "ts",
+		a.nt AS "nt",
+		a.river AS "river",
+		a.byr AS "byr"
+	</sql>
+	
+	<sql id="ddsRdPJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdP">
+		SELECT 
+			<include refid="ddsRdPColumns"/>
+		FROM dds_rd_p a
+		<include refid="ddsRdPJoins"/>
+		WHERE a.pro_cd = rpad(#{proCd}, 13)
+	</select>
+
+    <select id="getDpplCdByProCd" resultType="string">
+        SELECT
+        DPPL_CD
+        FROM dds_rd_p a
+        WHERE a.pro_cd = rpad(#{proCd}, 13)
+    </select>
+	
+	<select id="list" resultType="DdsRdP">
+		SELECT 
+			<include refid="ddsRdPColumns"/>
+		FROM dds_rd_p a
+		<include refid="ddsRdPJoins"/>
+		<where>
+            1 = 1
+            <if test="rvCd != null and rvCd !='' ">
+                and a.rv_cd = rpad(#{rvCd}, 12)
+            </if>
+            <if test="proTp != null and proTp !='' ">
+                and a.pro_tp = #{proTp}
+            </if>
+            <if test="producer != null and producer !='' ">
+                and a.producer = #{producer}
+            </if>
+            <if test="bgDt !=null and bgDt !='' and edDt !=null and edDt !='' ">
+                and a.cr_dt between to_date(#{bgDt},'yyyy-MM-dd HH24:mi:ss') and to_date(#{edDt},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+        ORDER BY a.PRO_CD DESC
+	</select>
+
+	<select id="listByMeeting" resultType="DdsRdP">
+		SELECT 
+			<include refid="ddsRdPColumns"/>
+		FROM dds_rd_p a
+		<include refid="ddsRdPJoins"/>
+		<where>
+            1 = 1
+            <if test="rvCd != null and rvCd !='' ">
+                and a.river = #{river}
+            </if>
+             <if test="proTp != null and proTp !='' ">
+                and a.pro_tp = #{proTp}
+            </if>
+            <if test="proTp != null and proTp !='' ">
+                and a.pro_tp = #{proTp}
+            </if>
+            <if test="bgDt !=null and edDt !=null ">
+                and a.bg_dt = #{bgDt} and a.ed_dt = #{edDt}
+            </if>
+             <if test="sta != null  ">
+                and a.sta = #{sta}
+            </if>
+		</where>
+	</select>
+	
+    <select id="listByCondition" resultType="com.jsite.szy.dispatch.dispatch.vo.DdsRdPVO">
+        SELECT
+        a.pro_cd AS "proCd",
+        a.bg_dt AS "bgDt",
+        a.ed_dt AS "edDt",
+        a.producer AS "producer",
+        a.sta AS "sta",
+        a.nt AS "nt"
+        FROM dds_rd_p a
+        <where>
+            <if test="user == null">
+                a.producer=#{user, jdbcType=VARCHAR}
+            </if>
+            <if test="type == null">
+                AND a.producer=#{user, jdbcType=VARCHAR}
+            </if>
+            <if test="start == null">
+                AND a.cr_dt &gt;= #{start, jdbcType=VARCHAR}
+            </if>
+            <if test="end == null">
+                AND a.cr_dt &lt;= #{end, jdbcType=VARCHAR}
+            </if>
+        </where>
+
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${pg.orderBy}
+            </when>
+            <otherwise>
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="insertOne" parameterType="com.jsite.busi.szy.dispatch.po.DdsRdP">
+        <selectKey resultType="string" order="BEFORE" keyProperty="proCd">
+            SELECT PROCD_SEQ.Nextval as PRO_CD from DUAL
+        </selectKey>
+        INSERT INTO dds_rd_p(
+            pro_cd,
+            pro_tp,
+            pro_nm,
+            sub_cd,
+            rv_cd,
+            yr,
+            dp_cyc,
+            bg_dt,
+            ed_dt,
+            producer,
+            cr_dt,
+            dppl_cd,
+            pub_sta,
+            pub_date,
+            sta,
+            eva_sta,
+            eva_context,
+            ts,
+            nt,
+            river,
+            byr
+        ) VALUES (
+            #{proCd},
+            #{proTp},
+            #{proNm},
+            #{subCd},
+            #{rvCd},
+            #{yr},
+            #{dpCyc},
+            #{bgDt},
+            #{edDt},
+            #{producer},
+            #{crDt},
+            #{dpplCd},
+            #{pubSta},
+            #{pubDate},
+            #{sta},
+            #{evaSta},
+            #{evaContext},
+            #{ts},
+            #{nt},
+            #{river},
+            #{byr}
+        )
+    </insert>
+
+	<insert id="save">
+		INSERT INTO dds_rd_p(
+			pro_tp,
+			pro_nm,
+			sub_cd,
+			rv_cd,
+			yr,
+			dp_cyc,
+			bg_dt,
+			ed_dt,
+			producer,
+			cr_dt,
+			dppl_cd,
+			pub_sta,
+			pub_date,
+			sta,
+			eva_sta,
+			eva_context,
+			ts,
+			nt,
+			river,
+            byr
+		) VALUES (
+			#{proTp},
+			#{proNm},
+			#{subCd},
+			#{rvCd},
+			#{yr},
+			#{dpCyc},
+			#{bgDt},
+			#{edDt},
+			#{producer},
+			#{crDt},
+			#{dpplCd},
+			#{pubSta},
+			#{pubDate},
+			#{sta},
+			#{evaSta},
+			#{evaContext},
+			#{ts},
+			#{nt},
+			#{river},
+            #{byr}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_p SET 	
+			pro_tp = #{proTp},
+			pro_nm = #{proNm},
+			sub_cd = #{subCd},
+			rv_cd = #{rvCd},
+			yr = #{yr},
+			dp_cyc = #{dpCyc},
+			bg_dt = #{bgDt},
+			ed_dt = #{edDt},
+			producer = #{producer},
+			cr_dt = #{crDt},
+			dppl_cd = #{dpplCd},
+			pub_sta = #{pubSta},
+			pub_date = #{pubDate},
+			sta = #{sta},
+			eva_sta = #{evaSta},
+			eva_context = #{evaContext},
+			ts = #{ts},
+			nt = #{nt},
+			river = #{river},
+			byr = #{byr}
+		WHERE pro_cd = #{proCd}
+	</update>
+
+	<update id="updateSta">
+		UPDATE dds_rd_p SET
+		sta = #{sta}
+		WHERE pro_cd = rpad(#{proCd}, 13)
+	</update>
+	
+	<select id="selectSta" resultType="map">
+		SELECT CASE WHEN STA IS NULL THEN -1 ELSE STA END STA FROM DDS_RD_P p WHERE p.PRO_CD=rpad(#{proCd},13)
+	</select>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_p
+		WHERE pro_cd = rpad(#{proCd}, 13)
+	</update>
+	
+</mapper>

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeRsDao">
+
+
+    <sql id="ddsWeRsColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.lar_res_num AS "larResNum",
+		a.lar_res_ysw AS "larResYsw",
+		a.lar_res_yew AS "larResYew",
+		a.mid_res_num AS "midResNum",
+		a.mid_res_ysw AS "midResYsw",
+		a.mid_res_yew AS "midResYew",
+		a.dt AS "dt",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeRsJoins">
+        RIGHT JOIN dds_we_wrcs b ON b.reg_cd=a.reg_cd
+	</sql>
+
+    <select id="listAllToMap_name" resultType="map">
+        SELECT
+        <include refid="ddsWeRsColumns"/>
+        ,b.reg_nm AS "regNm"
+        FROM dds_we_rs a, dds_we_wrcs b
+        where b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+    
+	<select id="get" resultType="DdsWeRs">
+		SELECT 
+			<include refid="ddsWeRsColumns"/>
+		FROM dds_we_rs a
+		<include refid="ddsWeRsJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeRs">
+		SELECT 
+			<include refid="ddsWeRsColumns"/>
+		FROM dds_we_rs a
+		<include refid="ddsWeRsJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_rs(
+			yr,
+			reg_cd,
+			reg_type,
+			lar_res_num,
+			lar_res_ysw,
+			lar_res_yew,
+			mid_res_num,
+			mid_res_ysw,
+			mid_res_yew,
+			dt,
+			nt
+		) VALUES (
+			#{yr},
+			#{regCd},
+			#{regType},
+			#{larResNum},
+			#{larResYsw},
+			#{larResYew},
+			#{midResNum},
+			#{midResYsw},
+			#{midResYew},
+			#{dt},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_rs SET 	
+			reg_type = #{regType},
+			lar_res_num = #{larResNum},
+			lar_res_ysw = #{larResYsw},
+			lar_res_yew = #{larResYew},
+			mid_res_num = #{midResNum},
+			mid_res_ysw = #{midResYsw},
+			mid_res_yew = #{midResYew},
+			dt = #{dt},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_rs
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

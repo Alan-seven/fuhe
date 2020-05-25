@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdIfparDao">
+    
+	<sql id="ddsRdIfparColumns">
+		a.pro_cd AS "proCd",
+		a.sec_cd AS "secCd",
+		a.for_tp AS "forTp",
+		a.state AS "state",
+		a.model_id AS "modelId"
+	</sql>
+	
+	<sql id="ddsRdIfparJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdIfpar">
+		SELECT 
+			<include refid="ddsRdIfparColumns"/>
+		FROM dds_rd_ifpar a
+		<include refid="ddsRdIfparJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.sec_cd = #{secCd}
+	</select>
+	
+	<select id="list" resultType="DdsRdIfpar">
+		SELECT 
+			<include refid="ddsRdIfparColumns"/>
+		FROM dds_rd_ifpar a
+		<include refid="ddsRdIfparJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_ifpar(
+			pro_cd,
+			sec_cd,
+			for_tp,
+			state,
+			model_id
+		) VALUES (
+			#{proCd},
+			#{secCd},
+			#{forTp},
+			#{state},
+			#{modelId}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_ifpar SET 	
+			for_tp = #{forTp},
+			state = #{state},
+			model_id = #{modelId}
+		WHERE pro_cd = #{proCd} and sec_cd = #{secCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_ifpar
+		WHERE pro_cd = #{proCd} and sec_cd = #{secCd}
+	</update>
+	
+</mapper>

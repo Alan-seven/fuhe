@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeWrcs2Dao">
+    
+	<sql id="ddsWeWrcs2Columns">
+		a.reg_cd AS "adCd",
+		a.reg_nm AS "regNm",
+		a.ad_cd AS "adCd",
+		a.wrz_cd AS "wrzCd",
+		a.area AS "area",
+		a.ad_w AS "adW",
+		a.wrz_w AS "wrzW",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeWrcs2Joins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeWrcs2">
+		SELECT 
+			<include refid="ddsWeWrcs2Columns"/>
+		FROM dds_we_wrcs2 a
+		<include refid="ddsWeWrcs2Joins"/>
+		WHERE a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeWrcs2">
+		SELECT 
+			<include refid="ddsWeWrcs2Columns"/>
+		FROM dds_we_wrcs2 a
+		<include refid="ddsWeWrcs2Joins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_wrcs2(
+			reg_cd,
+			reg_nm,
+			ad_cd,
+			wrz_cd,
+			area,
+			ad_w,
+			wrz_w,
+			nt
+		) VALUES (
+			#{adCd},
+			#{regNm},
+			#{adCd},
+			#{wrzCd},
+			#{area},
+			#{adW},
+			#{wrzW},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_wrcs2 SET 	
+			reg_nm = #{regNm},
+			ad_cd = #{adCd},
+			wrz_cd = #{wrzCd},
+			area = #{area},
+			ad_w = #{adW},
+			wrz_w = #{wrzW},
+			nt = #{nt}
+		WHERE reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_wrcs2
+		WHERE reg_cd = #{adCd}
+	</update>
+	
+</mapper>

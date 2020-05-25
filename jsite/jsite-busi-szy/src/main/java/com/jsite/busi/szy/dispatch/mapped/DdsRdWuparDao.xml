@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWuparDao">
+    
+	<sql id="ddsRdWuparColumns">
+		a.pro_cd AS "proCd",
+		a.ad_cd AS "adCd",
+		a.d_ws_lr AS "dWsLr",
+		a.crws_r AS "crwsR",
+		a.crws_lr AS "crwsLr",
+		a.ind_lr AS "indLr",
+        a.pdir_r AS "pdirR",
+        a.pwir_r AS "pwirR",
+        a.pvir_r AS "pvirR",
+        a.fi_r AS "fiR",
+        a.ai_r AS "aiR"
+	</sql>
+
+    <sql id="ddsRdWuparColumns2">
+        a.ad_cd AS "adCd",
+        a.d_ws_lr AS "dWsLr",
+        a.crws_r AS "crwsR",
+        a.crws_lr AS "crwsLr",
+        a.ind_lr AS "indLr",
+        a.pdir_r AS "pdirR",
+        a.pwir_r AS "pwirR",
+        a.pvir_r AS "pvirR",
+        a.fi_r AS "fiR",
+        a.ai_r AS "aiR"
+    </sql>
+	
+	<sql id="ddsRdWuparJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWupar">
+		SELECT 
+			<include refid="ddsRdWuparColumns"/>
+		FROM dds_rd_wupar a
+		<include refid="ddsRdWuparJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.ad_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsRdWupar">
+		SELECT 
+			<include refid="ddsRdWuparColumns"/>
+		FROM dds_rd_wupar a
+		<include refid="ddsRdWuparJoins"/>
+		<where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="selectByProCd" resultType="DdsRdWupar">
+        SELECT
+        <include refid="ddsRdWuparColumns2"/>
+        FROM dds_rd_wupar a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+        </where>
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wupar(
+			pro_cd,
+			ad_cd,
+			d_ws_lr,
+			crws_r,
+			crws_lr,
+			ind_lr,
+			nind_lr
+		) VALUES (
+			#{proCd},
+			#{adCd},
+			#{dWsLr},
+			#{crwsR},
+			#{crwsLr},
+			#{indLr},
+			#{nindLr}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_wupar(pro_cd,ad_cd,d_ws_lr,crws_r,crws_lr,ind_lr,pdir_r,pwir_r,pvir_r,fi_r,ai_r)
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},#{row.adCd},#{row.dWsLr},#{row.crwsR},#{row.crwsLr},#{row.indLr},
+            #{row.pdirR},#{row.pwirR},#{row.pvirR},#{row.fiR},#{row.aiR} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE dds_rd_wupar a
+            <set>
+                a.d_ws_lr = #{row.dWsLr},
+                a.crws_r = #{row.crwsR},
+                a.crws_lr = #{row.crwsLr},
+                a.ind_lr = #{row.indLr},
+                a.pdir_r = #{row.pdirR},
+                a.pwir_r = #{row.pwirR},
+                a.pvir_r = #{row.pvirR},
+                a.fi_r = #{row.fiR},
+                a.ai_r = #{row.aiR}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.ad_cd = #{row.adCd}
+        </foreach>
+    </update>
+
+    <update id="deleteByProCd">
+        DELETE FROM dds_rd_wupar
+        WHERE pro_cd = rpad(#{proCd}, 13)
+    </update>
+	
+	<update id="update">
+		UPDATE dds_rd_wupar SET 	
+			d_ws_lr = #{dWsLr},
+			crws_r = #{crwsR},
+			crws_lr = #{crwsLr},
+			ind_lr = #{indLr},
+			nind_lr = #{nindLr}
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wupar
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd}
+	</update>
+	
+</mapper>

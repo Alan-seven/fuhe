@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWePstparDao">
+    
+	<sql id="ddsWePstparColumns">
+		a.yr AS "yr",
+		a.stcd AS "stcd",
+		a.adcd AS "adcd",
+		a.area AS "area",
+		a.weigh AS "weigh",
+		a.cur_p AS "curP",
+		a.cur_pd AS "curPd",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWePstparJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWePstpar">
+		SELECT 
+			<include refid="ddsWePstparColumns"/>
+		FROM dds_we_pstpar a
+		<include refid="ddsWePstparJoins"/>
+		WHERE a.yr = #{yr} and a.stcd = #{stcd} and a.adcd = #{adcd}
+	</select> 
+	
+	<select id="list" resultType="DdsWePstpar">
+		SELECT 
+			<include refid="ddsWePstparColumns"/>
+		FROM dds_we_pstpar a
+		<include refid="ddsWePstparJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_pstpar(
+			yr,
+			stcd,
+			adcd,
+			area,
+			weigh,
+			cur_p,
+			cur_pd,
+			nt
+		) VALUES (
+			#{yr},
+			#{stcd},
+			#{adcd},
+			#{area},
+			#{weigh},
+			#{curP},
+			#{curPd},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_pstpar SET 	
+			area = #{area},
+			weigh = #{weigh},
+			cur_p = #{curP},
+			cur_pd = #{curPd},
+			nt = #{nt}
+		WHERE yr = #{yr} and stcd = #{stcd} and adcd = #{adcd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_pstpar
+		WHERE yr = #{yr} and stcd = #{stcd} and adcd = #{adcd}
+	</update>
+	
+</mapper>

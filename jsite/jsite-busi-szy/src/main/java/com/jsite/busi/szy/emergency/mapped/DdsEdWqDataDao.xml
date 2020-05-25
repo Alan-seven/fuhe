@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdWqDataDao">
+    
+	<sql id="ddsEdWqDataColumns">
+		a.even_cd AS "evenCd",
+		a.downsec AS "downsec",
+		a.tm AS "tm",
+		a.c AS "c",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsEdWqDataJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdWqData">
+		SELECT 
+			<include refid="ddsEdWqDataColumns"/>
+		FROM dds_ed_wqdata a
+		<include refid="ddsEdWqDataJoins"/>
+		WHERE a.even_cd = #{evenCd} and a.downsec = #{downsec} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsEdWqData">
+		SELECT 
+			<include refid="ddsEdWqDataColumns"/>
+		FROM dds_ed_wqdata a
+		<include refid="ddsEdWqDataJoins"/>
+		<where>
+			1 = 1 
+			<if test="evenCd != null and evenCd != '' ">
+				and a.even_cd = #{evenCd}
+			</if>
+			<if test="downsec != null and downsec != '' ">
+				and a.downsec = #{downsec}
+			</if>
+			<if test="river != null and river != '' ">
+				and a.river = #{river}
+			</if>
+			<if test="startTm != null and startTm != '' and endTm != null and endTm != ''">
+				and a.tm between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_wqdata(
+			even_cd,
+			downsec,
+			tm,
+			c,
+			river
+		) VALUES (
+			#{evenCd},
+			#{downsec},
+			#{tm},
+			#{c},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_wqdata SET 	
+			river = #{river},
+			c = #{c}
+		WHERE even_cd = #{evenCd} and downsec = #{downsec}  and tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_wqdata
+		WHERE even_cd = #{evenCd} and downsec = #{downsec}  and tm = #{tm}
+	</update>
+	
+</mapper>

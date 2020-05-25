@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSProDao">
+    
+	<sql id="ddsSProColumns">
+		a.con_id AS "conId",
+		a.pro_id AS "proId",
+		a.grade AS "grade"
+	</sql>
+	
+	<sql id="ddsSProJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSPro">
+		SELECT 
+			<include refid="ddsSProColumns"/>
+		FROM dds_s_pro a
+		<include refid="ddsSProJoins"/>
+		WHERE a.con_id = #{conId} and a.pro_id = #{proId}
+	</select>
+	
+	<select id="list" resultType="DdsSPro">
+		SELECT 
+			<include refid="ddsSProColumns"/>
+		FROM dds_s_pro a
+		<include refid="ddsSProJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_pro(
+			con_id,
+			pro_id,
+			grade
+		) VALUES (
+			#{conId},
+			#{proId},
+			#{grade}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_pro SET 	
+			grade = #{grade}
+		WHERE con_id = #{conId} and pro_id = #{proId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_pro
+		WHERE con_id = #{conId} and pro_id = #{proId}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_s_pro
+		WHERE con_id = #{conId}
+	</update>
+	
+</mapper>

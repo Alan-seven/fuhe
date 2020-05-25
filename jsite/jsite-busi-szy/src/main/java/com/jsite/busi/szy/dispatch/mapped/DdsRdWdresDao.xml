@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdresDao">
+    
+	<sql id="ddsRdWdresColumns">
+		a.pro_cd AS "proCd",
+		a.wce_id AS "wceId",
+		a.wce_tp AS "wceTp",
+		a.bt AS "bt",
+		a.et AS "et",
+		a.bz AS "bz",
+		a.ez AS "ez",
+		a.az AS "az",
+		a.inq AS "inq",
+		a.dw AS "dw",
+		a.aq AS "aq",
+		a.dq AS "dq",
+		a.wsv AS "wsv",
+		a.aw AS "aw",
+		a.ww AS "ww",
+		a.rw AS "rw",
+		a.lw AS "lw",
+		a.fr AS "fr",
+		a.min_edw AS "minEdw",
+		a.eg AS "eg",
+		a.n AS "n",
+		a.h AS "h"
+	</sql>
+	
+	<sql id="ddsRdWdresJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdres">
+		SELECT 
+			<include refid="ddsRdWdresColumns"/>
+		FROM dds_rd_wdres a
+		<include refid="ddsRdWdresJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.wce_id = #{wceId} and a.bt = #{bt}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdres">
+		SELECT 
+			<include refid="ddsRdWdresColumns"/>
+		FROM dds_rd_wdres a
+		<include refid="ddsRdWdresJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wdres(
+			pro_cd,
+			wce_id,
+			wce_tp,
+			bt,
+			et,
+			bz,
+			ez,
+			az,
+			inq,
+			dw,
+			aq,
+			dq,
+			wsv,
+			aw,
+			ww,
+			rw,
+			lw,
+			fr,
+			min_edw,
+			eg,
+			n,
+			h
+		) VALUES (
+			#{proCd},
+			#{wceId},
+			#{wceTp},
+			#{bt},
+			#{et},
+			#{bz},
+			#{ez},
+			#{az},
+			#{inq},
+			#{dw},
+			#{aq},
+			#{dq},
+			#{wsv},
+			#{aw},
+			#{ww},
+			#{rw},
+			#{lw},
+			#{fr},
+			#{minEdw},
+			#{eg},
+			#{n},
+			#{h}
+		)
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		INSERT ALL
+	    <foreach collection="list" item="item" index="index">
+	    INTO dds_rd_wdres 
+	    (
+			pro_cd,
+			wce_id,
+			wce_tp,
+			bt,
+			et,
+			bz,
+			ez,
+			az,
+			inq,
+			dw,
+			aq,
+			dq,
+			wsv,
+			aw,
+			ww,
+			rw,
+			lw,
+			fr,
+			min_edw,
+			eg,
+			n,
+			h
+		) VALUES
+	    (
+	     		#{item.proCd},
+				#{item.wceId},
+				#{item.wceTp},
+				#{item.bt},
+				#{item.et},
+				#{item.bz},
+				#{item.ez},
+				#{item.az},
+				#{item.inq},
+				#{item.dw},
+				#{item.aq},
+				#{item.dq},
+				#{item.wsv},
+				#{item.aw},
+				#{item.ww},
+				#{item.rw},
+				#{item.lw},
+				#{item.fr},
+				#{item.minEdw},
+				#{item.eg},
+				#{item.n},
+				#{item.h}
+	    )
+	    </foreach>
+	    SELECT 1 FROM DUAL
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wdres SET 	
+			wce_tp = #{wceTp},
+			bz = #{bz},
+			ez = #{ez},
+			az = #{az},
+			inq = #{inq},
+			dw = #{dw},
+			aq = #{aq},
+			dq = #{dq},
+			wsv = #{wsv},
+			aw = #{aw},
+			ww = #{ww},
+			rw = #{rw},
+			lw = #{lw},
+			fr = #{fr},
+			min_edw = #{minEdw},
+			eg = #{eg},
+			n = #{n},
+			h = #{h}
+		WHERE pro_cd = #{proCd} and wce_id = #{wceId} and bt = #{bt}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wdres
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

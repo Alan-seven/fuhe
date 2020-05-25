@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBEleDao">
+    
+	<sql id="ddsBEleColumns">
+		a.wce_id AS "wceId",
+		a.wce_nm AS "wceNm",
+		a.wce_tp AS "wceTp",
+		a.bnm AS "bnm",
+		a.cha_va AS "chaVa",
+		a.ts AS "ts"
+	</sql>
+	
+	<sql id="ddsBEleJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBEle">
+		SELECT 
+			<include refid="ddsBEleColumns"/>
+		FROM dds_b_ele a
+		<include refid="ddsBEleJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBEle">
+		SELECT 
+			<include refid="ddsBEleColumns"/>
+		FROM dds_b_ele a
+		<include refid="ddsBEleJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_ele(
+			wce_id,
+			wce_nm,
+			wce_tp,
+			bnm,
+			cha_va,
+			ts
+		) VALUES (
+			#{wceId},
+			#{wceNm},
+			#{wceTp},
+			#{bnm},
+			#{chaVa},
+			#{ts}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_ele SET 	
+			wce_id = #{wceId},
+			wce_nm = #{wceNm},
+			wce_tp = #{wceTp},
+			bnm = #{bnm},
+			cha_va = #{chaVa},
+			ts = #{ts}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_ele
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

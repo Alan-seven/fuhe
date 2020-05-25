@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdwunDao">
+    
+	<sql id="ddsRdWdwunColumns">
+		a.pro_cd AS "proCd",
+		a.reg_id AS "regId",
+		a.bt AS "bt",
+		a.et AS "et",
+		a.month AS "month",
+		a.dedade AS "dedade",
+		a.life_aw AS "lifeAw",
+		a.agr_aw AS "argAw",
+		a.ind_aw AS "indAw",
+		a.life_ww AS "lifeWw",
+		a.agr_ww AS "agrWw",
+		a.ind_ww AS "indWw",
+		a.life_lw AS "lifeLw",
+		a.agr_lw AS "agrLw",
+		a.ind_lw AS "indLw"
+	</sql>
+	
+	<sql id="ddsRdWdwunJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdwun">
+		SELECT 
+			<include refid="ddsRdWdwunColumns"/>
+		FROM dds_rd_wdwun a
+		<include refid="ddsRdWdwunJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.reg_id = #{wceId}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdwun">
+		SELECT 
+			<include refid="ddsRdWdwunColumns"/>
+		FROM dds_rd_wdwun a
+		<include refid="ddsRdWdwunJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wdwun(
+			pro_cd,
+			reg_id,
+			bt,
+			et,
+			month,
+			dedade,
+			life_aw,
+			agr_aw,
+			ind_aw,
+			life_ww,
+			agr_ww,
+			ind_ww,
+			life_lw,
+			agr_lw,
+			ind_lw
+		) VALUES (
+			#{proCd},
+			#{regId},
+			#{bt},
+			#{et},
+			#{month},
+			#{dedade},
+			#{lifeAw},
+			#{argAw},
+			#{indAw},
+			#{lifeWw},
+			#{agrWw},
+			#{indWw},
+			#{lifeLw},
+			#{agrLw},
+			#{indLw}
+		)
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		INSERT ALL
+	    <foreach collection="list" item="item" index="index">
+	    INTO dds_rd_wdwun 
+	    (
+			pro_cd,
+			reg_id,
+			bt,
+			et,
+			month,
+			dedade,
+			life_aw,
+			agr_aw,
+			ind_aw,
+			life_ww,
+			agr_ww,
+			ind_ww,
+			life_lw,
+			agr_lw,
+			ind_lw
+		) VALUES
+	    (
+     		#{item.proCd},
+			#{item.regId},
+			#{item.bt},
+			#{item.et},
+			#{item.month},
+			#{item.dedade},
+			#{item.lifeAw},
+			#{item.argAw},
+			#{item.indAw},
+			#{item.lifeWw},
+			#{item.agrWw},
+			#{item.indWw},
+			#{item.lifeLw},
+			#{item.agrLw},
+			#{item.indLw}	
+	    )
+	    </foreach>
+	    SELECT 1 FROM DUAL
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wdwun SET 	
+			month = #{month},
+			dedade = #{dedade},
+			life_aw = #{lifeAw},
+			agr_aw = #{argAw},
+			ind_aw = #{indAw},
+			life_ww = #{lifeWw},
+			agr_ww = #{agrWw},
+			ind_ww = #{indWw},
+			life_lw = #{lifeLw},
+			agr_lw = #{agrLw},
+			ind_lw = #{indLw}
+		WHERE pro_cd = #{proCd} and reg_id = #{wceId} and bt = #{bt} and et = #{et}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wdwun
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

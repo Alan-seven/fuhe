@@ -1,0 +1,32 @@
+{
+	"name":"袁河调度图1",
+	"data":[
+		{"id": 0, "index1": "江口水库", "index2": "resources/images/wateroptimum/schemechart.png", "index4":92, "index5":104, "index3": [{
+	        "name": "I区",
+	        "data": [100, 100, {
+	        	"y": 100,
+	            "dataLabels": {
+	            	"enabled": true,
+	            	"y": 40,
+	            	"format": "{series.name}",
+	            	"style": {"fontSize": "18px", "fontWeight": "normal"}
+	            }
+	        }, 100, 100, 99, 99, 100, 100, 100, 100, 100],
+	        "fillOpacity": 0,
+	        "dashStyle": "dash"
+	    }, {
+	        "name": "II区",
+	        "data": [96, 96, 96, {
+	        	"y": 96,
+	            "dataLabels": {
+	            	"enabled": true,
+	            	"y": 40,
+	            	"format": "{series.name}",
+	            	"style": {"fontSize": "18px", "fontWeight": "normal"}
+	            }
+	        }, 96, 95, 95, 96, 96, 96, 96, 96],
+	        "fillOpacity": 0,
+	        "dashStyle": "dash"
+	    }]}
+	]
+}

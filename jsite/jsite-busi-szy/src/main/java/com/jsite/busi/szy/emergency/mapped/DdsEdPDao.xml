@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdPDao">
+    
+	<sql id="ddsEdPColumns">
+		a.pro_cd AS "proCd",
+		a.even_cd AS "evenCd",
+		a.pro_tp AS "proTp",
+		a.pro_nm AS "proNm",
+		a.pub_dt AS "pubDt",
+		a.river AS "river",
+		a.bg_dt AS "bgDt",
+		a.ed_dt AS "edDt",
+		a.rg_tp AS "rgTp",
+		a.rg_lg AS "rgLg",
+		a.producer AS "producer",
+		a.cr_dt AS "crDt",
+		a.sta AS "sta",
+		a.eva_sta AS "evaSta",
+		a.ts AS "ts",
+		a.forTime AS "forTime",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsEdPJoins">
+		left join dds_ed_event b
+	</sql>
+    
+	<select id="get" resultType="DdsEdP">
+		SELECT 
+			<include refid="ddsEdPColumns"/> ,
+		    b.even_nm AS "evenNm",
+			b.even_tp AS "evenTp",
+			b.hap_dt AS "hapDt",
+			b.rcd AS "rcd",
+			c.loc AS "loc",
+			c.bg_conc AS "bgco"
+		FROM dds_ed_p a
+		<include refid="ddsEdPJoins"/>  on a.even_cd = b.even_cd
+		left join dds_ed_source c on a.even_cd = c.even_cd
+		WHERE a.pro_cd = #{proCd}
+	</select>
+	
+	<select id="findByProNm" resultType="DdsEdP">
+		SELECT 
+			<include refid="ddsEdPColumns"/>
+		FROM dds_ed_p a
+		<where>
+			1 = 1
+			<if test="proNm !=null and proNm != ''">
+				and a.pro_nm = #{proNm}
+			</if>
+		</where>
+	</select>
+	
+	<select id="list" resultType="DdsEdP">
+		SELECT 
+			<include refid="ddsEdPColumns"/> ,
+			b.even_nm AS "evenNm",
+			b.even_tp AS "evenTp",
+			b.hap_dt AS "hapDt",
+			b.rcd AS "rcd",
+			c.begt AS "begt",
+			c.edt AS "edt",
+			c.tscale AS "tscale",
+			c.upsec AS "upsec",
+			c.tm AS "tm",
+			c.dur AS "dur",
+			c.da AS "da",
+			c.da_type AS "daType",
+			c.len_up AS "lenUp",
+			c.loc AS "loc",
+			c.bg_conc AS "bgco"
+		FROM dds_ed_p a
+		<include refid="ddsEdPJoins"/> on a.even_cd = b.even_cd
+		left join dds_ed_source c on a.even_cd = c.even_cd
+		<where>
+			1 = 1
+			<if test="evenTp !=null and evenTp != ''">
+				and b.even_tp = #{evenTp}
+			</if>
+			<if test="loc !=null and loc != ''">
+				and c.loc like '%'||#{loc}||'%' 
+			</if>
+			<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' ">
+				and a.cr_dt between to_date(#{startTime},'yyyy-MM-dd') and to_date(#{endTime},'yyyy-MM-dd')
+			</if>
+			<if test="river != null and river != ''">
+				and b.river = #{river} 
+			</if>
+			<if test="evenCd != null and evenCd != ''">
+				and b.even_cd = #{evenCd} 
+			</if>
+			<if test="sta != null ">
+				and a.sta  &gt;= #{sta} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.pub_dt DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listSz" resultType="DdsEdP">
+		SELECT 
+			<include refid="ddsEdPColumns"/> ,
+			b.even_nm AS "evenNm",
+			b.even_tp AS "evenTp",
+			b.hap_dt AS "hapDt",
+			b.rcd AS "rcd",
+			c.begt AS "begt",
+			c.edt AS "edt",
+			c.tscale AS "tscale",
+			c.upsec AS "upsec",
+			c.tm AS "tm",
+			c.dur AS "dur",
+			c.da AS "da",
+			c.da_type AS "daType",
+			c.len_up AS "lenUp",
+			c.loc AS "loc",
+			c.bg_conc AS "bgco"
+		FROM dds_ed_p a
+		<include refid="ddsEdPJoins"/> on a.even_cd = b.even_cd
+		left join dds_ed_source c on a.even_cd = c.even_cd
+		<where>
+			1 = 1
+			<if test="river != null and river != ''">
+				and b.river = #{river} 
+			</if>
+			and b.rcd is not null 
+			and c.da is not null
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listDispatch" resultType="DdsEdP">
+		SELECT 
+			<include refid="ddsEdPColumns"/> ,
+			b.even_nm AS "evenNm",
+			b.even_tp AS "evenTp",
+			b.hap_dt AS "hapDt",
+			b.rcd AS "rcd",
+			c.begt AS "begt",
+			c.edt AS "edt",
+			c.tscale AS "tscale",
+			c.upsec AS "upsec",
+			c.tm AS "tm",
+			c.dur AS "dur",
+			c.da AS "da",
+			c.da_type AS "daType",
+			c.len_up AS "lenUp",
+			c.loc AS "loc",
+			c.bg_conc AS "bgco"
+		FROM dds_ed_p a
+		<include refid="ddsEdPJoins"/> on a.even_cd = b.even_cd
+		left join dds_ed_source c on a.even_cd = c.even_cd
+		<where>
+			1 = 1
+			<if test="river != null and river != ''">
+				and b.river = #{river} 
+			</if>
+			and b.rcd is not null 
+			and c.da is not null
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_p(
+			pro_cd,
+			even_cd,
+			pro_tp,
+			pro_nm,
+			pub_dt,
+			river,
+			bg_dt,
+			ed_dt,
+			rg_tp,
+			rg_lg,
+			producer,
+			cr_dt,
+			sta,
+			eva_sta,
+			forTime,
+			nt
+		) VALUES (
+			#{proCd},
+			#{evenCd},
+			#{proTp},
+			#{proNm},
+			#{pubDt},
+			#{river},
+			#{bgDt},
+			#{edDt},
+			#{rgTp},
+			#{rgLg},
+			#{producer},
+			#{crDt},
+			#{sta},
+			#{evaSta},
+			#{forTime},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_p SET 	
+			even_cd = #{evenCd},
+			pro_tp = #{proTp},
+			pro_nm = #{proNm},
+			pub_dt = #{pubDt},
+			river = #{river},
+			bg_dt = #{bgDt},
+			ed_dt = #{edDt},
+			rg_tp = #{rgTp},
+			rg_lg = #{rgLg},
+			producer = #{producer},
+			sta = #{sta},
+			eva_sta = #{evaSta},
+			forTime = #{forTime},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_p
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<update id="updateSta">
+		UPDATE dds_ed_p SET 	
+			sta = #{sta}
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

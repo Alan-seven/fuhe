@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.dao.sys.DeptInfoDao">
+    
+	<sql id="ddsSysDepinfoColumns">
+		a.dep_code AS "depCode",
+		a.pcode AS "pcode",
+		a.dep_name AS "depName",
+		a.dep_resp AS "depResp",
+		a.org_code AS "orgCode",
+		a.ordernum AS "ordernum",
+		a.ifdel AS "ifdel",
+		a.mtime AS "mtime",
+		a.note AS "note",
+		a.sl_szy_node AS "slszyNode",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsSysDepinfoJoins">
+	</sql>
+    
+	<select id="get" resultType="DeptInfo">
+		SELECT 
+			<include refid="ddsSysDepinfoColumns"/>
+		FROM dds_sys_depinfo a
+		<include refid="ddsSysDepinfoJoins"/>
+		WHERE a.dep_code = #{depCode}
+	</select>
+	
+	<select id="list" resultType="DeptInfo">
+		SELECT 
+			<include refid="ddsSysDepinfoColumns"/>
+		FROM dds_sys_depinfo a
+		<include refid="ddsSysDepinfoJoins"/>
+		<where>
+			1=1
+			<if test="depName !=null and depName != '' ">
+				and a.dep_name like 
+				<if test="dbName == 'oracle'">'%'||#{depName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{depName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{depName},'%')</if>
+			</if>
+			<if test="river !=null and river != '' ">
+				and a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY dep_code 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_sys_depinfo(
+			dep_code,
+			pcode,
+			dep_name,
+			dep_resp,
+			org_code,
+			ordernum,
+			ifdel,
+			mtime,
+			note,
+			sl_szy_node,
+			river 
+		) VALUES (
+			#{depCode},
+			#{pcode},
+			#{depName},
+			#{depResp},
+			#{orgCode},
+			#{ordernum},
+			#{ifdel},
+			#{mtime},
+			#{note},
+			#{slszyNode},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_sys_depinfo SET 	
+			pcode = #{pcode},
+			dep_name = #{depName},
+			dep_resp = #{depResp},
+			org_code = #{orgCode},
+			ordernum = #{ordernum},
+			ifdel = #{ifdel},
+			mtime = #{mtime},
+			note = #{note},
+			sl_szy_node = #{slszyNode},
+			river = #{river}
+		WHERE dep_code = #{depCode}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_sys_depinfo
+		WHERE dep_code = #{depCode}
+	</update>
+	
+</mapper>

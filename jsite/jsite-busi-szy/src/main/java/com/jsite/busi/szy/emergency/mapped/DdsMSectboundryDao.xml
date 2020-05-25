@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMSectboundryDao">
+    
+	<sql id="ddsMSectboundryColumns">
+		a.rcd AS "rcd",
+		a.secid AS "secid",
+		a.sectype AS "sectype",
+		a.secnm AS "secnm",
+		a.fid AS "fid",
+		a.lendelta AS "lendelta",
+		a.lenup AS "lenup"
+	</sql>
+	
+	<sql id="ddsMSectboundryJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMSectboundry">
+		SELECT 
+			<include refid="ddsMSectboundryColumns"/>
+		FROM dds_m_sectboundry a
+		<include refid="ddsMSectboundryJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsMSectboundry">
+		SELECT 
+			<include refid="ddsMSectboundryColumns"/>
+		FROM dds_m_sectboundry a
+		<include refid="ddsMSectboundryJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_sectboundry(
+			rcd,
+			secid,
+			sectype,
+			secnm,
+			fid,
+			lendelta,
+			lenup
+		) VALUES (
+			#{rcd},
+			#{secid},
+			#{sectype},
+			#{secnm},
+			#{fid},
+			#{lendelta},
+			#{lenup}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_sectboundry SET 	
+			rcd = #{rcd},
+			secid = #{secid},
+			sectype = #{sectype},
+			secnm = #{secnm},
+			fid = #{fid},
+			lendelta = #{lendelta},
+			lenup = #{lenup}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_sectboundry
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

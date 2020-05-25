@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsMWunDao">
+    
+	<sql id="ddsMWunColumns">
+		a.ad_cd AS "adCd",
+		a.d_wun AS "dWun",
+		a.r_wun AS "rWun",
+		a.bh_wun AS "bhWun",
+		a.sh_wun AS "shWun",
+		a.irr_wun AS "irrWun",
+		a.pwir_wun AS "pwirWun",
+		a.pd_ir_wun AS "pdIrWun",
+		a.pv_ir_wun AS "pvIrWun",
+		a.fi_wun AS "fiWun",
+		a.ai_wun AS "aiWun",
+		a.mfish_wat AS "mfishWat",
+		a.ind_wun AS "indWun",
+		a.nind_wun AS "nindWun"
+	</sql>
+	
+	<sql id="ddsMWunJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMWun">
+		SELECT 
+			<include refid="ddsMWunColumns"/>
+		FROM dds_m_wun a
+		<include refid="ddsMWunJoins"/>
+		WHERE a.ad_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsMWun">
+		SELECT 
+			<include refid="ddsMWunColumns"/>
+		FROM dds_m_wun a
+		<include refid="ddsMWunJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_wun(
+			ad_cd,
+			d_wun,
+			r_wun,
+			bh_wun,
+			sh_wun,
+			irr_wun,
+			pwir_wun,
+			pd_ir_wun,
+			pv_ir_wun,
+			fi_wun,
+			ai_wun,
+			mfish_wat,
+			ind_wun,
+			nind_wun
+		) VALUES (
+			#{adCd},
+			#{dWun},
+			#{rWun},
+			#{bhWun},
+			#{shWun},
+			#{irrWun},
+			#{pwirWun},
+			#{pdIrWun},
+			#{pvIrWun},
+			#{fiWun},
+			#{aiWun},
+			#{mfishWat},
+			#{indWun},
+			#{nindWun}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_wun SET 	
+			d_wun = #{dWun},
+			r_wun = #{rWun},
+			bh_wun = #{bhWun},
+			sh_wun = #{shWun},
+			irr_wun = #{irrWun},
+			pwir_wun = #{pwirWun},
+			pd_ir_wun = #{pdIrWun},
+			pv_ir_wun = #{pvIrWun},
+			fi_wun = #{fiWun},
+			ai_wun = #{aiWun},
+			mfish_wat = #{mfishWat},
+			ind_wun = #{indWun},
+			nind_wun = #{nindWun}
+		WHERE ad_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_wun
+		WHERE ad_cd = #{adCd}
+	</update>
+	
+</mapper>

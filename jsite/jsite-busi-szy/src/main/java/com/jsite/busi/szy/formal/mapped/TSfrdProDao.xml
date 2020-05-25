@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdProDao">
+    
+	<sql id="tSfrdProColumns">
+		a.pro_cd AS "proCd",
+		a.REGION_CD AS "regionCd",
+		a.SBJ_CD AS "sbjCd",
+		a.REQ_CD AS "reqCd",
+		a.PRO_TP AS "proTp",
+		a.PRO_NM AS "proNm",
+		a.YEAR AS "year",
+		a.PAR_PRO_CD AS "parProCd",
+		a.REF_PRO_CD AS "refProCd",
+		a.BG_DT AS "bgDt",
+		a.ED_DT AS "edDt",
+		a.DP_CYC AS "dpCyc",
+		a.PRO_STA AS "proSta",
+		a.SCH_STAT AS "schStat",
+		a.USR_CD AS "usrCd",
+		a.USR_NM AS "usrNm",
+		a.PUB_TM AS "pubTm",
+		a.PRO_DESC AS "proDesc",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdProJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdPro">
+		SELECT 
+			<include refid="tSfrdProColumns"/>
+		FROM T_SFRD_PRO a
+		<include refid="tSfrdProJoins"/>
+		WHERE a.PRO_CD = #{proCd}
+	</select>
+	
+	<select id="list" resultType="TSfrdPro">
+		SELECT 
+			<include refid="tSfrdProColumns"/>
+		FROM T_SFRD_PRO a
+		<include refid="tSfrdProJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="proNm != null and proNm != ''">
+			 	and a.PRO_NM like 
+				<if test="dbName == 'oracle'">'%'||#{proNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{proNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{proNm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findByNm" resultType="TSfrdPro">
+		SELECT 
+			<include refid="tSfrdProColumns"/>
+		FROM T_SFRD_PRO a
+		<include refid="tSfrdProJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="proNm != null and proNm != ''">
+			 	and a.PRO_NM = #{proNm} 
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<insert id="save">
+		INSERT INTO T_SFRD_PRO(
+			pro_cd,
+			region_cd,
+			sbj_cd,
+			req_cd,
+			pro_tp,
+			pro_nm,
+			year,
+			par_pro_cd,
+			ref_pro_cd,
+			bg_dt,
+			ed_dt,
+			dp_cyc,
+			pro_sta,
+			sch_stat,
+			usr_cd,
+			usr_nm,
+			pub_tm,
+			pro_desc,
+			nt
+		) VALUES (
+			#{proCd},
+			#{regionCd},
+			#{sbjCd},
+			#{reqCd},
+			#{proTp},
+			#{proNm},
+			#{year},
+			#{parProCd},
+			#{refProCd},
+			#{bgDt},
+			#{edDt},
+			#{dpCyc},
+			#{proSta},
+			#{schStat},
+			#{usrCd},
+			#{usrNm},
+			#{pubTm},
+			#{proDesc},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFRD_PRO SET 	
+			region_cd = #{regionCd},
+			sbj_cd = #{sbjCd},
+			req_cd = #{reqCd},
+			pro_tp = #{proTp},
+			pro_nm = #{proNm},
+			year = #{year},
+			par_pro_cd = #{parProCd},
+			ref_pro_cd = #{refProCd},
+			bg_dt = #{bgDt},
+			ed_dt = #{edDt},
+			dp_cyc = #{dpCyc},
+			pro_sta = #{proSta},
+			sch_stat = #{schStat},
+			usr_cd = #{usrCd},
+			usr_nm = #{usrNm},
+			pub_tm = #{pubTm},
+			pro_desc = #{proDesc},
+			nt = #{nt}
+		WHERE PRO_CD = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFRD_PRO
+		WHERE PRO_CD = #{proCd}
+	</update>
+	
+	<select id="getOrderNum" resultType="TSfrdPro">
+		SELECT 
+			<include refid="tSfrdProColumns"/>
+		FROM (SELECT * FROM T_SFRD_PRO WHERE 
+			region_cd = #{regionCd} and sbj_cd = #{sbjCd}
+			ORDER BY pro_cd desc ) a
+		<include refid="tSfrdProJoins"/>
+		<where>
+			rownum = 1 
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<update id="updateStat">
+		UPDATE T_SFRD_PRO SET 	
+			sch_stat = #{schStat}
+		WHERE PRO_CD = #{proCd}
+	</update>
+	
+</mapper>

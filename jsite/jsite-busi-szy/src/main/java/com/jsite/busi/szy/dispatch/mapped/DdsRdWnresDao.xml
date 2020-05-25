@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWnresDao">
+    
+	<sql id="ddsRdWnresColumns">
+		a.pro_cd AS "proCd",
+		a.reg_cd AS "regCd",
+		a.month AS "month",
+		a.d_wat AS "dWat",
+		a.u_wat AS "uWat",
+		a.bh_wat AS "bhWat",
+		a.sh_wat AS "shWat",
+		a.pwir_wat AS "pwirWat",
+		a.pdir_wat AS "pdirWat",
+		a.pvir_wat AS "pvirWat",
+		a.fi_wat AS "fiWat",
+		a.ai_wat AS "aiWat",
+		a.fish_wat AS "fishWat",
+		a.ind_wat AS "indWat",
+		a.nind_wat AS "nindWat"
+	</sql>
+
+    <sql id="ddsRdWnresColumns2">
+        a.reg_cd AS "regCd",
+        a.month AS "month",
+        a.d_wat AS "dWat",
+        a.u_wat AS "uWat",
+        a.bh_wat AS "bhWat",
+        a.sh_wat AS "shWat",
+        a.pwir_wat AS "pwirWat",
+        a.pdir_wat AS "pdirWat",
+        a.pvir_wat AS "pvirWat",
+        a.fi_wat AS "fiWat",
+        a.ai_wat AS "aiWat",
+        a.fish_wat AS "fishWat",
+        a.ind_wat AS "indWat",
+        a.nind_wat AS "nindWat"
+    </sql>
+	
+	<sql id="ddsRdWnresJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWnres">
+		SELECT 
+			<include refid="ddsRdWnresColumns"/>
+		FROM dds_rd_wnres a
+		<include refid="ddsRdWnresJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.reg_cd = #{regCd}
+	</select>
+	
+	<select id="list" resultType="DdsRdWnres">
+		SELECT 
+			<include refid="ddsRdWnresColumns"/>
+		FROM dds_rd_wnres a
+		<include refid="ddsRdWnresJoins"/>
+		<where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="selectByProCdAndMonth" resultType="DdsRdWnres">
+        SELECT
+        <include refid="ddsRdWnresColumns2"/>
+        FROM dds_rd_wnres a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+
+            <if test="monthList != null">
+                and a.month in
+                <foreach open="(" close=")" collection="monthList" item="month" index="index" separator=",">
+                    #{month}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByYearProCd" resultType="DdsRdWnres">
+        SELECT
+        <include refid="ddsRdWnresColumns2"/>
+        FROM dds_rd_wnres a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+            and a.month = '0'
+        </where>
+    </select>
+
+    <select id="selectByMonthProCd" resultType="DdsRdWnres">
+        SELECT
+        <include refid="ddsRdWnresColumns2"/>
+        FROM dds_rd_wnres a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+            and a.month != '0'
+        </where>
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wnres(
+			pro_cd,
+			reg_cd,
+			month,
+			d_wat,
+			u_wat,
+			bh_wat,
+			sh_wat,
+			pwir_wat,
+			pdir_wat,
+			pvir_wat,
+			fi_wat,
+			ai_wat,
+			fish_wat,
+			ind_wat,
+			nind_wat
+		) VALUES (
+			#{proCd},
+			#{regCd},
+			#{month},
+			#{dWat},
+			#{uWat},
+			#{bhWat},
+			#{shWat},
+			#{pwirWat},
+			#{pdirWat},
+			#{pvirWat},
+			#{fiWat},
+			#{aiWat},
+			#{fishWat},
+			#{indWat},
+			#{nindWat}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_wnres(
+        pro_cd,
+        reg_cd,
+        month,
+        d_wat,
+        u_wat,
+        bh_wat,
+        sh_wat,
+        pwir_wat,
+        pdir_wat,
+        pvir_wat,
+        fi_wat,
+        ai_wat,
+        fish_wat,
+        ind_wat,
+        nind_wat
+        )
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.regCd},
+            #{row.month},
+            #{row.dWat},
+            #{row.uWat},
+            #{row.bhWat},
+            #{row.shWat},
+            #{row.pwirWat},
+            #{row.pdirWat},
+            #{row.pvirWat},
+            #{row.fiWat},
+            #{row.aiWat},
+            #{row.fishWat},
+            #{row.indWat},
+            #{row.nindWat} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE dds_rd_wnres a
+            <set>
+                a.month = #{row.month},
+                a.d_wat = #{row.dWat},
+                a.u_wat = #{row.uWat},
+                a.bh_wat = #{row.bhWat},
+                a.sh_wat = #{row.shWat},
+                a.pwir_wat = #{row.pwirWat},
+                a.pdir_wat = #{row.pdirWat},
+                a.pvir_wat = #{row.pvirWat},
+                a.fi_wat = #{row.fiWat},
+                a.ai_wat = #{row.aiWat},
+                a.fish_wat = #{row.fishWat},
+                a.ind_wat = #{row.indWat},
+                a.nind_wat = #{row.nindWat}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.reg_cd = #{row.regCd} and a.month = #{row.month}
+        </foreach>
+    </update>
+
+    <update id="deleteByProCd">
+        DELETE FROM dds_rd_wnres
+        WHERE pro_cd = rpad(#{proCd}, 13)
+    </update>
+	
+	<update id="update">
+		UPDATE dds_rd_wnres SET 	
+			month = #{month},
+			d_wat = #{dWat},
+			u_wat = #{uWat},
+			bh_wat = #{bhWat},
+			sh_wat = #{shWat},
+			pwir_wat = #{pwirWat},
+			pdir_wat = #{pdirWat},
+			pvir_wat = #{pvirWat},
+			fi_wat = #{fiWat},
+			ai_wat = #{aiWat},
+			fish_wat = #{fishWat},
+			ind_wat = #{indWat},
+			nind_wat = #{nindWat}
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wnres
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

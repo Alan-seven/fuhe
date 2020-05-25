@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeSwparamDao">
+    
+	<sql id="ddsWeSwparamColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.act_w AS "actW",
+		a.jlr AS "jlr",
+		a.ir_w AS "irW",
+		a.ind_w AS "indW",
+		a.lf_w AS "lfW",
+		a.rs_w AS "rsW",
+		a.yr_w AS "yrW",
+		a.yr_rd AS "yrRd",
+		a.ly_w AS "lyW",
+		a.ann_w AS "annW",
+		a.ly_rt AS "lyRt",
+		a.ann_rt AS "annRt",
+		a.dt AS "dt",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeSwparamJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeSwparam">
+		SELECT 
+			<include refid="ddsWeSwparamColumns"/>
+		FROM dds_we_swparam a
+		<include refid="ddsWeSwparamJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeSwparam">
+		SELECT 
+			<include refid="ddsWeSwparamColumns"/>
+		FROM dds_we_swparam a
+		<include refid="ddsWeSwparamJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_swparam(
+			yr,
+			reg_cd,
+			reg_type,
+			act_w,
+			jlr,
+			ir_w,
+			ind_w,
+			lf_w,
+			rs_w,
+			yr_w,
+			yr_rd,
+			ly_w,
+			ann_w,
+			ly_rt,
+			ann_rt,
+			dt,
+			nt
+		) VALUES (
+			#{yr},
+			#{adCd},
+			#{regType},
+			#{actW},
+			#{jlr},
+			#{irW},
+			#{indW},
+			#{lfW},
+			#{rsW},
+			#{yrW},
+			#{yrRd},
+			#{lyW},
+			#{annW},
+			#{lyRt},
+			#{annRt},
+			#{dt},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_swparam SET 	
+			reg_type = #{regType},
+			act_w = #{actW},
+			jlr = #{jlr},
+			ir_w = #{irW},
+			ind_w = #{indW},
+			lf_w = #{lfW},
+			rs_w = #{rsW},
+			yr_w = #{yrW},
+			yr_rd = #{yrRd},
+			ly_w = #{lyW},
+			ann_w = #{annW},
+			ly_rt = #{lyRt},
+			ann_rt = #{annRt},
+			dt = #{dt},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_swparam
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+</mapper>

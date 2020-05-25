@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMBoundryDao">
+    
+	<sql id="ddsMBoundryColumns">
+		a.rcd AS "rcd",
+		a.bname AS "bname",
+		a.vtype AS "vtype",
+		a.stcd AS "stcd",
+		a.secnm AS "secnm",
+		a.fieldnm AS "fieldnm",
+		a.btype AS "btype",
+		a.river AS "river",
+		a.ord AS "ord",
+		defaultValue AS "defaultValue"
+	</sql>
+	
+	<sql id="ddsMBoundryJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMBoundry">
+		SELECT 
+			<include refid="ddsMBoundryColumns"/>
+		FROM dds_m_boundry a
+		<include refid="ddsMBoundryJoins"/>
+		WHERE a.rcd = #{rcd} and a.stcd = #{stcd}
+	</select>
+	
+	<select id="list" resultType="DdsMBoundry">
+		SELECT 
+			<include refid="ddsMBoundryColumns"/>
+		FROM dds_m_boundry a
+		<include refid="ddsMBoundryJoins"/>
+		<where>
+			1=1
+			<if test="rcd !=null and rcd != '' ">
+				and a.rcd = #{rcd}
+			</if>
+			<if test="river !=null and river != '' ">
+				and a.river = #{river}
+			</if>
+			<if test="bname !=null and bname != '' ">
+				and a.bname like 
+				<if test="dbName == 'oracle'">'%'||#{bname}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{bname}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{bname},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.ORD 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_boundry(
+			rcd,
+			bname,
+			vtype,
+			stcd,
+			secnm,
+			fieldnm,
+			btype,
+			river,
+			defaultValue,
+			ord
+		) VALUES (
+			#{rcd},
+			#{bname},
+			#{vtype},
+			#{stcd},
+			#{secnm},
+			#{fieldnm},
+			#{btype},
+			#{river},
+			#{defaultValue},
+			#{ord}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_boundry SET 	
+			vtype = #{vtype},
+			stcd = #{stcd},
+			secnm = #{secnm},
+			fieldnm = #{fieldnm},
+			btype = #{btype},
+			defaultValue = #{defaultValue},
+			river = #{river},
+			ord = #{ord}
+		WHERE rcd = #{rcd} and bname = #{bname}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_boundry
+		WHERE rcd = #{rcd} and bname = #{bname}
+	</update>
+	
+</mapper>

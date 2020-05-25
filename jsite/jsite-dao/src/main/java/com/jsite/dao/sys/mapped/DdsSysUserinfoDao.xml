@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.dao.sys.DdsSysUserinfoDao">
+    
+	<sql id="ddsSysUserinfoColumns">
+		a.user_code AS "userCode",
+		a.user_name AS "userName",
+		a.dep_code AS "depCode",
+		a.sex AS "sex",
+		a.duty_level AS "dutyLevel",
+		a.title AS "title",
+		a.mtime AS "mtime",
+		a.note AS "note",
+		a.telnumb AS "telnumb",
+		a.moblenumb AS "moblenumb",
+		a.email AS "email",
+		a.birthday AS "birthday",
+		a.highestdegree AS "highestdegree",
+		a.ordernum AS "ordernum",
+		a.ifdel AS "ifdel",
+		a.passwd AS "passwd",
+		a.sl_szy_node AS "slszyNode",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsSysUserinfoJoins">
+	</sql>
+    
+     <resultMap id="ddsSysUserinfoResult" type="DdsSysUserinfo">
+		<id property="userCode" column="user_code" />
+		<result property="userName" column="user_name" />
+		<result property="depCode" column="dep_code" />
+		<result property="sex" column="sex" />
+		<result property="dutyLevel" column="duty_level" />
+		<result property="title" column="title" />
+		<result property="mtime" column="mtime" />
+		<result property="note" column="note" />
+		<result property="telnumb" column="telnumb" />
+		<result property="moblenumb" column="moblenumb" />
+		<result property="email" column="email" />
+		<result property="birthday" column="birthday" />
+		<result property="highestdegree" column="highestdegree" />
+		<result property="ordernum" column="ordernum" />
+		<result property="ifdel" column="ifdel" />
+		<result property="passwd" column="passwd" />
+		<result property="slszyNode" column="sl_szy_node" />
+		<result property="river" column="river" />
+		<collection property="roleDOList" ofType="Role">
+			<result property="id" column="roleDOList.id" />
+		</collection>
+	</resultMap>
+	
+	<select id="get" resultType="DdsSysUserinfo">
+		SELECT 
+			<include refid="ddsSysUserinfoColumns"/>
+		FROM dds_sys_userinfo a
+		<include refid="ddsSysUserinfoJoins"/>
+		WHERE a.user_code = #{userCode}
+	</select>
+	
+	<select id="list" resultMap="ddsSysUserinfoResult">
+		SELECT 
+			a.*	,b.dep_name AS "depName",
+			c.role_id As "roleDOList.id"
+		FROM dds_sys_userinfo a
+		<include refid="ddsSysUserinfoJoins"/>
+		left join dds_sys_depinfo b on a.dep_code = b.dep_code
+		left join dds_sys_user_role c on a.user_code = c.user_id
+		<where>
+			1= 1
+			<if test="userName != null and userName != ''">
+				and a.user_name LIKE 
+					<if test="dbName == 'oracle'">'%'||#{userName}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{userName}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{userName},'%')</if>
+			</if>
+			<if test="river !=null and river != '' ">
+				and a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.user_code 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_sys_userinfo(
+			user_code,
+			user_name,
+			dep_code,
+			sex,
+			duty_level,
+			title,
+			mtime,
+			note,
+			telnumb,
+			moblenumb,
+			email,
+			birthday,
+			highestdegree,
+			ordernum,
+			ifdel,
+			passwd,
+			sl_szy_node,
+			user_identify,
+			river
+		) VALUES (
+			#{userCode},
+			#{userName},
+			#{depCode},
+			#{sex},
+			#{dutyLevel},
+			#{title},
+			#{mtime},
+			#{note},
+			#{telnumb},
+			#{moblenumb},
+			#{email},
+			#{birthday},
+			#{highestdegree},
+			#{ordernum},
+			#{ifdel},
+			#{passwd},
+			#{slszyNode},
+			#{user.id},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_sys_userinfo SET 	
+			user_name = #{userName},
+			dep_code = #{depCode},
+			sex = #{sex},
+			duty_level = #{dutyLevel},
+			title = #{title},
+			mtime = #{mtime},
+			note = #{note},
+			telnumb = #{telnumb},
+			moblenumb = #{moblenumb},
+			email = #{email},
+			birthday = #{birthday}, 
+			highestdegree = #{highestdegree},
+			ordernum = #{ordernum},
+			ifdel = #{ifdel},
+			passwd = #{passwd},
+			sl_szy_node = #{slszyNode},
+			user_identify = #{user.id},
+			river = #{river}
+		WHERE user_code = #{userCode}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_sys_userinfo
+		WHERE user_code = #{userCode}
+	</update>
+	
+	<!-- 删除用户和角色关联表数据 -->
+	<delete id="deleteUserRole">
+		DELETE FROM dds_sys_user_role WHERE user_id = #{userCode}
+	</delete>
+	
+	<!-- 插入用户和角色关联表数据 -->
+	<insert id="saveUserDORole">
+		INSERT INTO dds_sys_user_role(user_id, role_id)
+		<foreach collection="roleDOList" item="role" separator=" union all ">
+			SELECT #{userCode}, #{role.id}
+			<if test="dbName != 'mssql'">
+			FROM dual
+			</if>
+		</foreach>
+	</insert>
+	
+</mapper>

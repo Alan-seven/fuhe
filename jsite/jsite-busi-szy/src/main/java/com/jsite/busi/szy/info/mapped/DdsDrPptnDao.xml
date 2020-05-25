@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDrPptnDao">
+    
+	<sql id="ddsDrPptnColumns">
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.drp AS "drp",
+		a.intv AS "intv",
+		a.pdr AS "pdr",
+		a.ann_p AS "annP",
+		a.wth AS "wth"
+	</sql>
+	
+	<sql id="ddsDrPptnJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDrPptn">
+		SELECT 
+			<include refid="ddsDrPptnColumns"/>
+		FROM dds_dr_pptn a
+		<include refid="ddsDrPptnJoins"/>
+		WHERE a.stcd = #{stcd} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsDrPptn">
+		SELECT b.st_nm AS "stNm", b.stcd,b.lgtd AS "lgtd",
+		b.lttd AS "lttd",  a.tm, a.drp, a.intv, a.pdr, a.ann_p AS "annP"
+		FROM dds_b_stat b left join dds_b_statext c on b.stcd=c.stcd left join (
+			SELECT ppt.stcd,ppt.tm,ppt.drp,ppt.intv,ppt.pdr,ppt.ann_p FROM dds_dr_pptn ppt
+			<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != ''">
+					  	<where>
+							ppt.tm between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+						</where>
+					</when>
+					<otherwise >
+						, (SELECT distinct stcd,max(tm) tm from dds_dr_pptn where to_char(tm,'hh24:mi:ss')='08:00:00' group by stcd ) pptn
+						<where>
+							 ppt.stcd = pptn.stcd and ppt.tm = pptn.tm
+						</where>
+					</otherwise>
+				</choose>
+		) a
+		on b.stcd=a.stcd
+		<where>
+			c.item_p='1'
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like 
+				<if test="dbName == 'oracle'">'%'||#{stNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{stNm},'%')</if>
+			</if>
+			<if test="intv != null and intv != ''">
+				and	b.intv = #{intv}
+			</if>
+			<if test="stcd != null and stcd != ''">
+				and	b.stcd = #{stcd}
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_dr_pptn(
+			stcd,
+			tm,
+			drp,
+			intv,
+			pdr,
+			ann_p,
+			wth
+		) VALUES (
+			#{stcd},
+			#{tm},
+			#{drp},
+			#{intv},
+			#{pdr},
+			#{annP},
+			#{wth}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_dr_pptn SET 	
+			stcd = #{stcd},
+			tm = #{tm},
+			drp = #{drp},
+			intv = #{intv},
+			pdr = #{pdr},
+			ann_p = #{annP},
+			wth = #{wth}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_dr_pptn
+		WHERE id = #{id}
+	</update>
+	
+	<select id="listByStcd" resultType="DdsDrPptn">
+		SELECT	
+			<include refid="ddsDrPptnColumns"/>
+		 FROM dds_dr_pptn a
+		<where>
+			to_char(tm,'hh24:mi:ss')='08:00:00'
+			<if test="stcd != null and stcd != ''">
+				and	a.stcd = #{stcd}
+			</if>
+			<if test=" startTm != null and startTm != '' and endTm != null and endTm != ''">
+				and a.tm between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+		order by a.tm asc
+	</select>
+	
+	<select id="findMaxTime" resultType="DdsDrPptn">
+	 	SELECT MAX(a.tm) tm
+	 	FROM dds_dr_pptn a
+	 	<where>
+	 		intv =1
+	 		<if test="stcd != null and stcd != ''">
+				and a.stcd = #{stcd}
+			</if>
+	 	</where>
+	</select>
+	
+	<select id="listHourByStcd" resultType="DdsDrPptn">
+		SELECT	
+			<include refid="ddsDrPptnColumns"/>
+		 FROM dds_dr_pptn a
+		<where>
+			a.intv = 1
+			<if test="stcd != null and stcd != ''">
+				and	a.stcd = #{stcd}
+			</if>
+			<if test=" startTm != null and startTm != '' and endTm != null and endTm != ''">
+				and a.tm between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+		ORDER BY a.tm asc
+	</select>
+	
+</mapper>

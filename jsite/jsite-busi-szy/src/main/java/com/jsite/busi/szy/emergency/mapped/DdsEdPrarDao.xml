@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdPrarDao">
+    
+	<sql id="ddsEdPrarColumns">
+		a.proe_cd AS "proeCd",
+		a.wce_cd AS "wceCd",
+		a.bg_z AS "bgZ",
+		a.bg_q AS "bgQ",
+		a.bg_conc AS "bgConc",
+		a.conc_st AS "concSt",
+		a.exq AS "exq",
+		a.ed_z AS "edZ",
+		a.max_q AS "maxQ",
+		a.min_q AS "minQ",
+		a.max_n AS "maxN",
+		a.min_n AS "minN",
+		a.max_h AS "maxH",
+		a.min_h AS "minH",
+		a.k AS "k",
+		a.q_type AS "qType",
+		a.prof_cd AS "profCd",
+		a.hyr AS "hyr",
+		a.max_z AS "maxZ",
+		a.min_z AS "minZ",
+		a.weda AS "weda"
+	</sql>
+	
+	<sql id="ddsEdPrarJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdPrar">
+		SELECT 
+			<include refid="ddsEdPrarColumns"/>
+		FROM dds_ed_prar a
+		<include refid="ddsEdPrarJoins"/>
+		WHERE a.proe_cd = #{proeCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdPrar">
+		SELECT 
+			<include refid="ddsEdPrarColumns"/>
+		FROM dds_ed_prar a
+		<include refid="ddsEdPrarJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_prar(
+			proe_cd,
+			wce_cd,
+			bg_z,
+			bg_q,
+			bg_conc,
+			conc_st,
+			exq,
+			ed_z,
+			max_q,
+			min_q,
+			max_n,
+			min_n,
+			max_h,
+			min_h,
+			k,
+			q_type,
+			prof_cd,
+			hyr,
+			max_z,
+			min_z,
+			weda
+		) VALUES (
+			#{proeCd},
+			#{wceCd},
+			#{bgZ},
+			#{bgQ},
+			#{bgConc},
+			#{concSt},
+			#{exq},
+			#{edZ},
+			#{maxQ},
+			#{minQ},
+			#{maxN},
+			#{minN},
+			#{maxH},
+			#{minH},
+			#{k},
+			#{qType},
+			#{profCd},
+			#{hyr},
+			#{maxZ},
+			#{minZ},
+			#{weda}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_prar SET 	
+			wce_cd = #{wceCd},
+			bg_z = #{bgZ},
+			bg_q = #{bgQ},
+			bg_conc = #{bgConc},
+			conc_st = #{concSt},
+			exq = #{exq},
+			ed_z = #{edZ},
+			max_q = #{maxQ},
+			min_q = #{minQ},
+			max_n = #{maxN},
+			min_n = #{minN},
+			max_h = #{maxH},
+			min_h = #{minH},
+			k = #{k},
+			q_type = #{qType},
+			prof_cd = #{profCd},
+			hyr = #{hyr},
+			max_z = #{maxZ},
+			min_z = #{minZ},
+			weda = #{weda}
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_prar
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+</mapper>

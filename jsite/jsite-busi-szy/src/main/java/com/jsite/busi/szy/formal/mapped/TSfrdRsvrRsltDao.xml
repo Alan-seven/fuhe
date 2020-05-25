@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdRsvrRsltDao">
+    
+	<sql id="tSfrdRsvrRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.tm AS "tm",
+		a.z AS "z"
+	</sql>
+	
+	<sql id="tSfrdRsvrRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdRsvrRslt">
+		SELECT 
+			<include refid="tSfrdRsvrRsltColumns"/>
+		FROM T_SFRD_RSVR_RSLT a
+		<include refid="tSfrdRsvrRsltJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd} 
+	</select>
+	
+	<select id="list" resultType="TSfrdRsvrRslt">
+		SELECT 
+			<include refid="tSfrdRsvrRsltColumns"/>
+		FROM T_SFRD_RSVR_Rslt a
+		<include refid="tSfrdRsvrRsltJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+			 	and pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.tm 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFRD_RSVR_Rslt(
+			pro_cd ,
+			en_cd ,
+			tm ,
+			z 
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{tm},
+			#{z}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFRD_RSVR_Rslt SET 	
+			z = #{z} 
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd}  and tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFRD_Rslt_INIT
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} 
+	</update>
+	
+</mapper>

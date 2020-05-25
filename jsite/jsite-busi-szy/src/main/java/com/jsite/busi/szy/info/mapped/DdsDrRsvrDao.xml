@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDrRsvrDao">
+    
+	<sql id="ddsDrRsvrColumns">
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.rz AS "rz",
+		a.inq AS "inq",
+		a.w AS "w",
+		a.blrz AS "blrz",
+		a.otq AS "otq",
+		a.rwchrcd AS "rwchrcd",
+		a.rwptn AS "rwptn",
+		a.inqdr AS "inqdr",
+		a.msqmt AS "msqmt"
+	</sql>
+	
+	<sql id="ddsDrRsvrJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDrRsvr">
+		SELECT 
+			<include refid="ddsDrRsvrColumns"/>
+		FROM dds_dr_rsvr a
+		<include refid="ddsDrRsvrJoins"/>
+		WHERE a.stcd = #{stcd} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsDrRsvr">
+		SELECT b.st_nm AS "stNm",a.stcd,a.tm,a.rz,a.inq,a.w,a.blrz,a.otq
+		FROM 
+			( SELECT rsv.stcd,rsv.tm,rsv.rz,rsv.inq,rsv.w,rsv.blrz,rsv.otq
+				from dds_dr_rsvr rsv 
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != ''">
+						<where>
+							rsv.tm between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(tm) tm from dds_dr_rsvr group by stcd ) rsvr
+						<where>
+							rsv.stcd = rsvr.stcd and rsv.tm = rsvr.tm
+						</where>
+					</otherwise>
+				</choose>
+			 ) a LEFT JOIN  dds_b_stat b  ON a.stcd = b.stcd left join dds_b_statext c on b.stcd=c.stcd 
+		<include refid="ddsDrRsvrJoins"/>
+		<where>
+			<!-- 1代表水库水文站 -->
+			c.item_r = '1'
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like '%'||#{stNm}||'%' 
+			</if>
+			<if test=" stcd != null and stcd != '' ">
+				and b.stcd = #{stcd}
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_dr_rsvr(
+			stcd,
+			tm,
+			rz,
+			inq,
+			w,
+			blrz,
+			otq,
+			rwchrcd,
+			rwptn,
+			inqdr,
+			msqmt
+		) VALUES (
+			#{stcd},
+			#{tm},
+			#{rz},
+			#{inq},
+			#{w},
+			#{blrz},
+			#{otq},
+			#{rwchrcd},
+			#{rwptn},
+			#{inqdr},
+			#{msqmt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_dr_rsvr SET 	
+			tm = #{tm},
+			rz = #{rz},
+			inq = #{inq},
+			w = #{w},
+			blrz = #{blrz},
+			otq = #{otq},
+			rwchrcd = #{rwchrcd},
+			rwptn = #{rwptn},
+			inqdr = #{inqdr},
+			msqmt = #{msqmt}
+		WHERE stcd = #{stcd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_dr_rsvr
+		WHERE stcd = #{stcd}
+	</update>
+	
+	<select id="findMaxTime" resultType="DdsDrRsvr">
+	 	SELECT MAX(a.tm) tm
+	 	FROM dds_dr_rsvr a
+	 	<where>
+	 		<if test="stcd != null and stcd != ''">
+				a.stcd = #{stcd}
+			</if>
+	 	</where>
+	</select>
+	
+	<select id="listByStcd" resultType="DdsDrRsvr">
+		SELECT 
+			<include refid="ddsDrRsvrColumns"/>
+		FROM dds_dr_rsvr a
+		<where>
+			1=1
+			<if test="stcd !=null and stcd !='' ">
+				and a.stcd= #{stcd}
+			</if>
+			<if test="startTm !=null and startTm !='' and endTm !=null and endTm !='' "> 
+				and a.tm between to_date(#{startTm},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTm},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		order by a.tm asc
+	</select>
+	
+	<select id="findNewData" resultType="DdsDrRsvr">
+		SELECT b.st_nm AS "stNm",b.lgtd AS "lgtd",
+		b.lttd AS "lttd", a.stcd,a.tm,a.rz,a.inq,a.otq
+		FROM dds_b_stat b left join dds_b_statext c on b.stcd=c.stcd  left join (
+			SELECT 
+				a.stcd, a.tm ,a.rz ,a.inq,a.otq
+			 FROM dds_dr_rsvr a
+			, (SELECT distinct stcd,max(tm) tm from dds_dr_rsvr group by stcd ) aa
+			<where>
+				 a.stcd = aa.stcd and a.tm = aa.tm
+			</where>
+		) a
+		on b.stcd=a.stcd
+		<where>
+			c.item_r = '1'
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like 
+				<if test="dbName == 'oracle'">'%'||#{stNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{stNm},'%')</if>
+			</if>
+			
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		ORDER BY A.TM DESC
+	</select>
+	
+</mapper>

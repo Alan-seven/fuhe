@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeEcosttDao">
+    
+	<sql id="ddsWeEcosttColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.town_pp AS "townPp",
+		a.rural_pp AS "ruralPp",
+		a.gdp1 AS "gdp1",
+		a.gdp2 AS "gdp2",
+		a.gdp3 AS "gdp3",
+		a.ind_epv AS "indEpv",
+		a.ind_opv AS "indOpv",
+		a.ind_cpv AS "indCpv",
+		a.ind_ezc AS "indEzc",
+		a.ind_exc AS "indExc",
+		a.irr_land AS "irrLand",
+		a.irr_a AS "irrA",
+		a.pweir_a AS "pweirA",
+		a.pdeir_a AS "pdeirA",
+		a.pveir_a AS "pveirA",
+		a.food_prod AS "foodProd",
+		a.tfg_a AS "tfgA",
+		a.airr_a AS "airrA",
+		a.fish_a AS "fishA",
+		a.lls_num AS "llsNum",
+		a.sls_num AS "slsNum",
+		a.pbld_a AS "pbldA",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeEcosttJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeEcostt">
+		SELECT 
+			<include refid="ddsWeEcosttColumns"/>
+		FROM dds_we_ecostt a
+		<include refid="ddsWeEcosttJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeEcostt">
+		SELECT 
+			<include refid="ddsWeEcosttColumns"/>
+		FROM dds_we_ecostt a
+		<include refid="ddsWeEcosttJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_ecostt(
+			yr,
+			reg_cd,
+			reg_type,
+			town_pp,
+			rural_pp,
+			gdp1,
+			gdp2,
+			gdp3,
+			ind_epv,
+			ind_opv,
+			ind_cpv,
+			ind_ezc,
+			ind_exc,
+			irr_land,
+			irr_a,
+			pweir_a,
+			pdeir_a,
+			pveir_a,
+			food_prod,
+			tfg_a,
+			airr_a,
+			fish_a,
+			lls_num,
+			sls_num,
+			pbld_a,
+			nt
+		) VALUES (
+			#{yr},
+			#{adCd},
+			#{regType},
+			#{townPp},
+			#{ruralPp},
+			#{gdp1},
+			#{gdp2},
+			#{gdp3},
+			#{indEpv},
+			#{indOpv},
+			#{indCpv},
+			#{indEzc},
+			#{indExc},
+			#{irrLand},
+			#{irrA},
+			#{pweirA},
+			#{pdeirA},
+			#{pveirA},
+			#{foodProd},
+			#{tfgA},
+			#{airrA},
+			#{fishA},
+			#{llsNum},
+			#{slsNum},
+			#{pbldA},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_ecostt SET 	
+			reg_type = #{regType},
+			town_pp = #{townPp},
+			rural_pp = #{ruralPp},
+			gdp1 = #{gdp1},
+			gdp2 = #{gdp2},
+			gdp3 = #{gdp3},
+			ind_epv = #{indEpv},
+			ind_opv = #{indOpv},
+			ind_cpv = #{indCpv},
+			ind_ezc = #{indEzc},
+			ind_exc = #{indExc},
+			irr_land = #{irrLand},
+			irr_a = #{irrA},
+			pweir_a = #{pweirA},
+			pdeir_a = #{pdeirA},
+			pveir_a = #{pveirA},
+			food_prod = #{foodProd},
+			tfg_a = #{tfgA},
+			airr_a = #{airrA},
+			fish_a = #{fishA},
+			lls_num = #{llsNum},
+			sls_num = #{slsNum},
+			pbld_a = #{pbldA},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_ecostt
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+</mapper>

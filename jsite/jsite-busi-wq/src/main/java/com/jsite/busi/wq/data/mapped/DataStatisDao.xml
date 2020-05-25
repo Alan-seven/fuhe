@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.DataStatisDao">
+    
+	<sql id="dataStatisColumns">
+		a.tm AS "tm",
+		a.stcd AS "stcd",
+		a.itm_id AS "itmId",
+		a.empty_times AS "emptyTimes",
+		a.out_times AS "outTimes",
+		a.sttdrcd AS "sttdrcd"
+	</sql>
+	
+	<sql id="dataStatisJoins">
+	</sql>
+    
+	<select id="get" resultType="DataStatis">
+		SELECT 
+			<include refid="dataStatisColumns"/>
+		FROM t_data_statis a
+		<include refid="dataStatisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DataStatis">
+		SELECT 
+			<include refid="dataStatisColumns"/>
+		FROM t_data_statis a
+		<include refid="dataStatisJoins"/>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_data_statis(
+			tm,
+			stcd,
+			itm_id,
+			empty_times,
+			out_times,
+			sttdrcd
+		) VALUES (
+			#{tm},
+			#{stcd},
+			#{itmId},
+			#{emptyTimes},
+			#{outTimes},
+			#{sttdrcd}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_data_statis SET 	
+			tm = #{tm},
+			stcd = #{stcd},
+			itm_id = #{itmId},
+			empty_times = #{emptyTimes},
+			out_times = #{outTimes},
+			sttdrcd = #{sttdrcd}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_data_statis
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

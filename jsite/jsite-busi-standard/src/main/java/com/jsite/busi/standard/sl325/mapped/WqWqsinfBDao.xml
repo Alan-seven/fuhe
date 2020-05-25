@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.baseinfo.standard.sl325.dao.WqWqsinfBDao">
+    
+	<sql id="wqWqsinfBColumns">
+		a.stcd AS "stcd",
+		a.stnm AS "stnm",
+		a.stgrd AS "stgrd",
+		a.bsnm AS "bsnm",
+		a.hnnm AS "hnnm",
+		a.rvnm AS "rvnm",
+		a.lgtd AS "lgtd",
+		a.lttd AS "lttd",
+		a.stlc AS "stlc",
+		a.addvcd AS "addvcd",
+		a.wrrcd AS "wrrcd",
+		a.wfrcd AS "wfrcd",
+		a.adag AS "adag",
+		a.mnag AS "mnag",
+		a.mnfrq AS "mnfrq",
+		a.atnm AS "atnm",
+		a.esstym AS "esstym",
+		a.wdstym AS "wdstym",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="wqWqsinfBJoins">
+	</sql>
+    
+	<select id="get" resultType="WqWqsinfB">
+		SELECT 
+			<include refid="wqWqsinfBColumns"/>
+		FROM wq_wqsinf_b a
+		<include refid="wqWqsinfBJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WqWqsinfB">
+		SELECT 
+			<include refid="wqWqsinfBColumns"/>
+		FROM wq_wqsinf_b a
+		<include refid="wqWqsinfBJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WqWqsinfB">
+		SELECT 
+			<include refid="wqWqsinfBColumns"/>
+		FROM wq_wqsinf_b a
+		<include refid="wqWqsinfBJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wq_wqsinf_b(
+			stcd,
+			stnm,
+			stgrd,
+			bsnm,
+			hnnm,
+			rvnm,
+			lgtd,
+			lttd,
+			stlc,
+			addvcd,
+			wrrcd,
+			wfrcd,
+			adag,
+			mnag,
+			mnfrq,
+			atnm,
+			esstym,
+			wdstym,
+			nt
+		) VALUES (
+			#{stcd},
+			#{stnm},
+			#{stgrd},
+			#{bsnm},
+			#{hnnm},
+			#{rvnm},
+			#{lgtd},
+			#{lttd},
+			#{stlc},
+			#{addvcd},
+			#{wrrcd},
+			#{wfrcd},
+			#{adag},
+			#{mnag},
+			#{mnfrq},
+			#{atnm},
+			#{esstym},
+			#{wdstym},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wq_wqsinf_b SET 	
+			stcd = #{stcd},
+			stnm = #{stnm},
+			stgrd = #{stgrd},
+			bsnm = #{bsnm},
+			hnnm = #{hnnm},
+			rvnm = #{rvnm},
+			lgtd = #{lgtd},
+			lttd = #{lttd},
+			stlc = #{stlc},
+			addvcd = #{addvcd},
+			wrrcd = #{wrrcd},
+			wfrcd = #{wfrcd},
+			adag = #{adag},
+			mnag = #{mnag},
+			mnfrq = #{mnfrq},
+			atnm = #{atnm},
+			esstym = #{esstym},
+			wdstym = #{wdstym},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM wq_wqsinf_b
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

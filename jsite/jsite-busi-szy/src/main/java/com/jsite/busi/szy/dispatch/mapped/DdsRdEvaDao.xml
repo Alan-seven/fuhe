@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdEvaDao">
+    
+	<sql id="ddsRdEvaColumns">
+		a.pro_cd AS "proCd",
+		a.fact_nm AS "factNm",
+		a.value AS "value",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsRdEvaJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdEva">
+		SELECT 
+			<include refid="ddsRdEvaColumns"/>
+		FROM dds_rd_eva a
+		<include refid="ddsRdEvaJoins"/>
+		WHERE a.pro_cd = #{pro_cd} and a.fact_nm = #{factNm}
+	</select>
+	
+	<select id="list" resultType="DdsRdEva">
+		SELECT 
+			<include refid="ddsRdEvaColumns"/>
+		FROM dds_rd_eva a
+		<include refid="ddsRdEvaJoins"/>
+		<where>
+			1=1
+			<if test="proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_eva(
+			pro_cd,
+			fact_nm,
+			value,
+			nt
+		) VALUES (
+			#{proCd},
+			#{factNm},
+			#{value},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_eva SET 	
+			value = #{value},
+			nt = #{nt}
+		WHERE pro_cd = #{pro_cd} and fact_nm = #{factNm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_eva
+		WHERE pro_cd = #{pro_cd} and fact_nm = #{factNm}
+	</update>
+	
+	<select id="getMaxMIn" resultType="DdsRdEva">
+		SELECT 
+			fact_id AS factId, max(value) AS mavalue, min(value) AS mivalue
+		FROM dds_ed_eva a
+		<where>
+			1=1
+			<if test="factId != null and factId != ''">
+				and b.fact_id = #{factId}
+			</if>	
+			<if test="proCds != null and proCds != ''">
+				and b.pro_cd in  (#{proCds})
+			</if>	
+		</where>
+		group by fact_id 
+	</select>
+	
+	
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBWqstDao">
+    
+	<sql id="ddsBWqstColumns">
+		a.stcd AS "stcd",
+		trim(a.stnm) AS "stnm",
+		a.stgrd AS "stgrd",
+		trim(a.bsnm) AS "bsnm",
+		trim(a.hnnm) AS "hnnm",
+		trim(a.rvnm) AS "rvnm",
+		a.lgtd AS "lgtd",
+		a.lttd AS "lttd",
+		trim(a.stlc) AS "stlc",
+		a.addvcs AS "addvcs",
+		a.wrrcd AS "wrrcd",
+		a.wfrcd AS "wfrcd",
+		a.adag AS "adag",
+		a.mnag AS "mnag",
+		a.mnfrq AS "mnfrq",
+		a.atmn AS "atmn",
+		a.esstym AS "esstym",
+		a.wdstym AS "wdstym",
+		a.nt AS "nt",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsBWqstJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBWqst">
+		SELECT 
+			<include refid="ddsBWqstColumns"/>
+		FROM dds_b_wqst a
+		<include refid="ddsBWqstJoins"/>
+		WHERE a.stcd = #{stcd}
+	</select>
+	
+	<select id="list" resultType="DdsBWqst">
+		SELECT 
+			<include refid="ddsBWqstColumns"/>
+		FROM dds_b_wqst a
+		<include refid="ddsBWqstJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.STCD ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_wqst(
+			stcd,
+			stnm,
+			stgrd,
+			bsnm,
+			hnnm,
+			rvnm,
+			lgtd,
+			lttd,
+			stlc,
+			addvcs,
+			wrrcd,
+			wfrcd,
+			adag,
+			mnag,
+			mnfrq,
+			atmn,
+			esstym,
+			wdstym,
+			nt
+		) VALUES (
+			#{stcd},
+			#{stnm},
+			#{stgrd},
+			#{bsnm},
+			#{hnnm},
+			#{rvnm},
+			#{lgtd},
+			#{lttd},
+			#{stlc},
+			#{addvcs},
+			#{wrrcd},
+			#{wfrcd},
+			#{adag},
+			#{mnag},
+			#{mnfrq},
+			#{atmn},
+			#{esstym},
+			#{wdstym},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_wqst SET 	
+			stnm = #{stnm},
+			stgrd = #{stgrd},
+			bsnm = #{bsnm},
+			hnnm = #{hnnm},
+			rvnm = #{rvnm},
+			lgtd = #{lgtd},
+			lttd = #{lttd},
+			stlc = #{stlc},
+			addvcs = #{addvcs},
+			wrrcd = #{wrrcd},
+			wfrcd = #{wfrcd},
+			adag = #{adag},
+			mnag = #{mnag},
+			mnfrq = #{mnfrq},
+			atmn = #{atmn},
+			esstym = #{esstym},
+			wdstym = #{wdstym},
+			nt = #{nt}
+		WHERE stcd = #{stcd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_wqst
+		WHERE stcd = #{stcd}
+	</update>
+	
+</mapper>

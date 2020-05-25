@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.WqOutStatisDao">
+    
+	<sql id="wqOutStatisColumns">
+		a.id AS "id",
+		a.stcd AS "stcd",
+		a.out AS "out",
+		a.times AS "times",
+		a.tm AS "tm",
+		a.sttdrcd AS "sttdrcd"
+	</sql>
+	
+	<sql id="wqOutStatisJoins">
+	</sql>
+    
+	<select id="get" resultType="WqOutStatis">
+		SELECT 
+			<include refid="wqOutStatisColumns"/>
+		FROM t_wq_out_statis a
+		<include refid="wqOutStatisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="WqOutStatis">
+		SELECT 
+			<include refid="wqOutStatisColumns"/>
+		FROM t_wq_out_statis a
+		<include refid="wqOutStatisJoins"/>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_wq_out_statis(
+			id,
+			stcd,
+			out,
+			times,
+			tm,
+			sttdrcd
+		) VALUES (
+			#{id},
+			#{stcd},
+			#{out},
+			#{times},
+			#{tm},
+			#{sttdrcd}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_wq_out_statis SET 	
+			stcd = #{stcd},
+			out = #{out},
+			times = #{times},
+			tm = #{tm},
+			sttdrcd = #{sttdrcd}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_wq_out_statis
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+</mapper>

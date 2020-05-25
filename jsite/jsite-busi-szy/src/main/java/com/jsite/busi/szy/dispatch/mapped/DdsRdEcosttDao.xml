@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdEcosttDao">
+    
+	<sql id="ddsRdEcosttColumns">
+		a.pro_cd AS "proCd",
+		a.reg_cd AS "regCd",
+		a.town_pp AS "townPp",
+		a.rural_pp AS "ruralPp",
+		a.gdp1 AS "gdp1",
+		a.gdp2 AS "gdp2",
+		a.gdp3 AS "gdp3",
+		a.ind_epv AS "indEpv",
+		a.ind_opv AS "indOpv",
+		a.ind_cpv AS "indCpv",
+		a.ind_ezc AS "indEzc",
+		a.ind_exc AS "indExc",
+		a.irr_land AS "irrLand",
+		a.irr_a AS "irrA",
+		a.pweir_a AS "pweirA",
+		a.pdeir_a AS "pdeirA",
+		a.pveir_a AS "pveirA",
+		a.food_prod AS "foodProd",
+		a.tfg_a AS "tfgA",
+		a.airr_a AS "airrA",
+		a.fish_a AS "fishA",
+		a.lls_num AS "llsNum",
+		a.sls_num AS "slsNum",
+		a.pbld_a AS "pbldA",
+		a.nind_epv AS "nindEpv",
+		a.nt AS "nt"
+	</sql>
+
+    <sql id="ddsRdEcosttColumns2">
+        a.reg_cd AS "regCd",
+        a.town_pp AS "townPp",
+        a.rural_pp AS "ruralPp",
+        a.ind_epv AS "indEpv",
+        a.irr_a AS "irrA",
+        a.pweir_a AS "pweirA",
+        a.pdeir_a AS "pdeirA",
+        a.pveir_a AS "pveirA",
+        a.tfg_a AS "tfgA",
+        a.airr_a AS "airrA",
+        a.fish_a AS "fishA",
+        a.lls_num AS "llsNum",
+        a.sls_num AS "slsNum",
+        a.nind_epv AS "nindEpv"
+    </sql>
+	
+	<sql id="ddsRdEcosttJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdEcostt">
+		SELECT 
+			<include refid="ddsRdEcosttColumns"/>
+		FROM dds_rd_ecostt a
+		<include refid="ddsRdEcosttJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.reg_cd = #{regCd}
+	</select>
+	
+	<select id="list" resultType="DdsRdEcostt">
+		SELECT 
+			<include refid="ddsRdEcosttColumns"/>
+		FROM dds_rd_ecostt a
+		<include refid="ddsRdEcosttJoins"/>
+		<where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="selectByProCd" resultType="DdsRdEcostt">
+        SELECT
+        <include refid="ddsRdEcosttColumns2"/>
+        FROM dds_rd_ecostt a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+        </where>
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_ecostt(
+			pro_cd,
+			reg_cd,
+			town_pp,
+			rural_pp,
+			gdp1,
+			gdp2,
+			gdp3,
+			ind_epv,
+			ind_opv,
+			ind_cpv,
+			ind_ezc,
+			ind_exc,
+			irr_land,
+			irr_a,
+			pweir_a,
+			pdeir_a,
+			pveir_a,
+			food_prod,
+			tfg_a,
+			airr_a,
+			fish_a,
+			lls_num,
+			sls_num,
+			pbld_a,
+			nind_epv,
+			nt
+		) VALUES (
+			#{proCd},
+			#{regCd},
+			#{townPp},
+			#{ruralPp},
+			#{gdp1},
+			#{gdp2},
+			#{gdp3},
+			#{indEpv},
+			#{indOpv},
+			#{indCpv},
+			#{indEzc},
+			#{indExc},
+			#{irrLand},
+			#{irrA},
+			#{pweirA},
+			#{pdeirA},
+			#{pveirA},
+			#{foodProd},
+			#{tfgA},
+			#{airrA},
+			#{fishA},
+			#{llsNum},
+			#{slsNum},
+			#{pbldA},
+			#{nindEpv},
+			#{nt}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_ecostt(
+        pro_cd,
+        reg_cd,
+        town_pp,
+        rural_pp,
+        ind_epv,
+        irr_a,
+        pweir_a,
+        pdeir_a,
+        pveir_a,
+        tfg_a,
+        airr_a,
+        fish_a,
+        lls_num,
+        sls_num,
+        nind_epv)
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.regCd},
+            #{row.townPp},
+            #{row.ruralPp},
+            #{row.indEpv},
+            #{row.irrA},
+            #{row.pweirA},
+            #{row.pdeirA},
+            #{row.pveirA},
+            #{row.tfgA},
+            #{row.airrA},
+            #{row.fishA},
+            #{row.llsNum},
+            #{row.slsNum},
+            #{row.nindEpv} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE dds_rd_ecostt a
+            <set>
+                a.town_pp = #{row.townPp},
+                a.rural_pp = #{row.ruralPp},
+                a.ind_epv = #{row.indEpv},
+                a.irr_a = #{row.irrA},
+                a.pweir_a = #{row.pweirA},
+                a.pdeir_a = #{row.pdeirA},
+                a.pveir_a = #{row.pveirA},
+                a.tfg_a = #{row.tfgA},
+                a.airr_a = #{row.airrA},
+                a.fish_a = #{row.fishA},
+                a.lls_num = #{row.llsNum},
+                a.sls_num = #{row.slsNum},
+                a.nind_epv = #{row.nindEpv}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.reg_cd = #{row.regCd}
+        </foreach>
+    </update>
+
+    <update id="deleteByProCd">
+        DELETE FROM dds_rd_ecostt
+        WHERE pro_cd = rpad(#{proCd}, 13)
+    </update>
+	
+	<update id="update">
+		UPDATE dds_rd_ecostt SET 	
+			town_pp = #{townPp},
+			rural_pp = #{ruralPp},
+			gdp1 = #{gdp1},
+			gdp2 = #{gdp2},
+			gdp3 = #{gdp3},
+			ind_epv = #{indEpv},
+			ind_opv = #{indOpv},
+			ind_cpv = #{indCpv},
+			ind_ezc = #{indEzc},
+			ind_exc = #{indExc},
+			irr_land = #{irrLand},
+			irr_a = #{irrA},
+			pweir_a = #{pweirA},
+			pdeir_a = #{pdeirA},
+			pveir_a = #{pveirA},
+			food_prod = #{foodProd},
+			tfg_a = #{tfgA},
+			airr_a = #{airrA},
+			fish_a = #{fishA},
+			lls_num = #{llsNum},
+			sls_num = #{slsNum},
+			pbld_a = #{pbldA},
+			nind_epv = #{nindEpv},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_ecostt
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

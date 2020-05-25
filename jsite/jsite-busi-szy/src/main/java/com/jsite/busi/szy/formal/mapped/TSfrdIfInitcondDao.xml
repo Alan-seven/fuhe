@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdIfInitcondDao">
+    
+	<sql id="tSfrdIfInitcondColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.for_pattern AS "forPattern",
+		a.is_fnsh AS "isFnsh",
+		a.req_cd AS "reqCd",
+		a.for_info AS "forInfo",
+		a.file_nm AS "fileNm",
+		a.if_freq AS "ifFreq",
+		a.ops_pro_cd AS "opsProCd",
+		a.ts AS "ts",
+		b.en_nm AS "enNm",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdIfInitcondJoins">
+		left join T_SFMM_EN_B b on a.en_cd = b.en_cd
+	</sql>
+    
+	<select id="get" resultType="TSfrdIfInitcond">
+		SELECT 
+			<include refid="tSfrdIfInitcondColumns"/>
+		FROM t_sfrd_if_initcond a
+		<include refid="tSfrdIfInitcondJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd}
+	</select>
+	
+	<select id="list" resultType="TSfrdIfInitcond">
+		SELECT 
+			<include refid="tSfrdIfInitcondColumns"/>
+		FROM t_sfrd_if_initcond a
+		<include refid="tSfrdIfInitcondJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_if_initcond(
+			pro_cd,
+			en_cd,
+			for_pattern,
+			is_fnsh,
+			req_cd,
+			for_info,
+			file_nm,
+			if_freq,
+			ops_pro_cd,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{forPattern},
+			#{isFnsh},
+			#{reqCd},
+			#{forInfo},
+			#{fileNm},
+			#{ifFreq},
+			#{opsProCd},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_if_initcond SET 	
+			pro_cd = #{proCd},
+			en_cd = #{enCd},
+			for_pattern = #{forPattern},
+			is_fnsh = #{isFnsh},
+			req_cd = #{reqCd},
+			for_info = #{forInfo},
+			file_nm = #{fileNm},
+			if_freq = #{ifFreq},
+			ops_pro_cd = #{opsProCd},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_if_initcond
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWaresDao">
+    
+	<sql id="ddsRdWaresColumns">
+		a.pro_cd AS "proCd",
+		a.reg_cd AS "regCd",
+		a.rs_tp AS "rsTp",
+		a.bt AS "bt",
+		a.et AS "et",
+		a.year AS "year",
+		a.month AS "month",
+		a.dedade AS "dedade",
+		a.d_rs AS "dRs",
+		a.u_rs AS "uRs",
+		a.bh_rs AS "bhRs",
+		a.sh_rs AS "shRs",
+		a.pwir_rs AS "pwirRs",
+		a.pdir_rs AS "pdirRs",
+		a.pvir_rs AS "pvirRs",
+		a.fi_rs AS "fiRs",
+		a.ai_rs AS "aiRs",
+		a.mfish_rs AS "mfishRs",
+		a.ind_rs AS "indRs",
+		a.nind_rs AS "nindRs",
+		a.tot_rs AS "totRs"
+	</sql>
+
+    <sql id="ddsRdWaresColumns2">
+        a.reg_cd AS "regCd",
+        a.month AS "month",
+        a.d_rs AS "dRs",
+        a.u_rs AS "uRs",
+        a.bh_rs AS "bhRs",
+        a.sh_rs AS "shRs",
+        a.pwir_rs AS "pwirRs",
+        a.pdir_rs AS "pdirRs",
+        a.pvir_rs AS "pvirRs",
+        a.fi_rs AS "fiRs",
+        a.ai_rs AS "aiRs",
+        a.mfish_rs AS "mfishRs",
+        a.ind_rs AS "indRs",
+        a.nind_rs AS "nindRs",
+        a.tot_rs AS "totRs"
+    </sql>
+	
+	<sql id="ddsRdWaresJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWares">
+		SELECT
+			<include refid="ddsRdWaresColumns"/>
+		FROM DDS_RD_WARES a
+		<include refid="ddsRdWaresJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.reg_cd = #{regCd} and a.rs_tp = #{rsTp}
+	</select>
+
+    <select id="listByProCd" resultType="DdsRdWares">
+        SELECT
+        <include refid="ddsRdWaresColumns2"/>
+        FROM DDS_RD_WARES a
+        WHERE a.pro_cd = rpad(#{proCd}, 13)
+    </select>
+
+    <select id="selectByProCdAndMonth" resultType="DdsRdWares">
+        SELECT
+        <include refid="ddsRdWaresColumns2"/>
+        FROM DDS_RD_WARES a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+
+            <if test="monthList != null">
+                and a.month in
+                <foreach open="(" close=")" collection="monthList" item="month" index="index" separator=",">
+                    #{month}
+                </foreach>
+            </if>
+        </where>
+    </select>
+	
+	<select id="list" resultType="DdsRdWares">
+		SELECT 
+			<include refid="ddsRdWaresColumns"/>
+		FROM DDS_RD_WARES a
+		<include refid="ddsRdWaresJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = rpad(#{proCd}, 13)
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO DDS_RD_WARES(
+			pro_cd,
+			reg_cd,
+			rs_tp,
+			bt,
+			et,
+			year,
+			month,
+			dedade,
+			d_rs,
+			u_rs,
+			bh_rs,
+			sh_rs,
+			pwir_rs,
+			pdir_rs,
+			pvir_rs,
+			fi_rs,
+			ai_rs,
+			mfish_rs,
+			ind_rs,
+			nind_rs,
+			tot_rs
+		) VALUES (
+			#{proCd},
+			#{regCd},
+			#{rsTp},
+			#{bt},
+			#{et},
+			#{year},
+			#{month},
+			#{dedade},
+			#{dRs},
+			#{uRs},
+			#{bhRs},
+			#{shRs},
+			#{pwirRs},
+			#{pdirRs},
+			#{pvirRs},
+			#{fiRs},
+			#{aiRs},
+			#{mfishRs},
+			#{indRs},
+			#{nindRs},
+			#{totRs}
+		)
+	</insert>
+
+    <insert id="batchInsertWithDate">
+        insert into DDS_RD_WARES(
+        pro_cd,
+        reg_cd,
+        rs_tp,
+        bt,
+        et,
+        month,
+        d_rs,
+        u_rs,
+        bh_rs,
+        sh_rs,
+        pwir_rs,
+        pdir_rs,
+        pvir_rs,
+        fi_rs,
+        ai_rs,
+        mfish_rs,
+        ind_rs,
+        nind_rs,
+        tot_rs
+        )
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.regCd},
+            #{row.rsTp},
+            #{row.bt},
+            #{row.et},
+            #{row.month},
+            #{row.dRs},
+            #{row.uRs},
+            #{row.bhRs},
+            #{row.shRs},
+            #{row.pwirRs},
+            #{row.pdirRs},
+            #{row.pvirRs},
+            #{row.fiRs},
+            #{row.aiRs},
+            #{row.mfishRs},
+            #{row.indRs},
+            #{row.nindRs},
+            #{row.totRs} from dual
+        </foreach>
+    </insert>
+
+    <insert id="batchInsertWithoutDate">
+        insert into DDS_RD_WARES(
+        pro_cd,
+        reg_cd,
+        rs_tp,
+        tot_rs
+        )
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.regCd},
+            #{row.rsTp},
+            #{row.totRs} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdateWithDate" >
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE DDS_RD_WARES a
+            <set>
+                a.d_rs = #{row.dRs},
+                a.u_rs = #{row.uRs},
+                a.bh_rs = #{row.bhRs},
+                a.sh_rs = #{row.shRs},
+                a.pwir_rs = #{row.pwirRs},
+                a.pdir_rs = #{row.pdirRs},
+                a.pvir_rs = #{row.pvirRs},
+                a.fi_rs = #{row.fiRs},
+                a.ai_rs = #{row.aiRs},
+                a.mfish_rs = #{row.mfishRs},
+                a.ind_rs = #{row.indRs},
+                a.nind_rs = #{row.nindRs},
+                a.tot_rs = #{row.totRs}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.reg_cd = #{row.regCd} and
+            a.rs_tp = #{row.rsTp}
+            <if test="row.bt != null">
+                and a.bt = #{row.bt, jdbcType = TIMESTAMP}
+            </if>
+            <if test="row.et != null">
+                and a.et = #{row.et, jdbcType = TIMESTAMP}
+            </if>
+        </foreach>
+    </update>
+
+    <update id="batchUpdateWithoutDate" >
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE DDS_RD_WARES a
+            <set>
+                a.tot_rs = #{row.totRs}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.reg_cd = #{row.regCd} and
+            a.rs_tp = #{row.rsTp}
+        </foreach>
+    </update>
+	
+	<update id="update">
+		UPDATE DDS_RD_WARES SET 	
+			month = #{month},
+			dedade = #{dedade},
+			d_rs = #{dRs},
+			u_rs = #{uRs},
+			bh_rs = #{bhRs},
+			sh_rs = #{shRs},
+			pwir_rs = #{pwirRs},
+			pdir_rs = #{pdirRs},
+			pvir_rs = #{pvirRs},
+			fi_rs = #{fiRs},
+			ai_rs = #{aiRs},
+			mfish_rs = #{mfishRs},
+			ind_rs = #{indRs},
+			nind_rs = #{nindRs},
+			tot_rs = #{totRs}
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd} and rs_tp = #{rsTp} and bt = #{bt} and et = #{et}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM DDS_RD_WARES
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd} and rs_tp = #{rsTp} and bt = #{bt} and et = #{et}
+	</update>
+	
+</mapper>

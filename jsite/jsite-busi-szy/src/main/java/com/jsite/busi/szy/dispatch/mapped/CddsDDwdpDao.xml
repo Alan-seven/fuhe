@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.CddsDDwdpDao">
+    
+	<sql id="cddsDDwdpColumns">
+		a.wrcs_cd AS "wrcsCd",
+		a.pro_cd AS "proCd",
+		a.wrcs_nm AS "wrcsNm",
+		a.bywq AS "bywq",
+		a.b_d_pop AS "bDPop",
+		a.bd_r_pop AS "bdRPop",
+		a.b_bh_qty AS "bBhQty",
+		a.b_sh_qty AS "bShQty"
+	</sql>
+	
+	<sql id="cddsDDwdpJoins">
+	</sql>
+    
+	<select id="get" resultType="CddsDDwdp">
+		SELECT 
+			<include refid="cddsDDwdpColumns"/>
+		FROM cdds_d_dwdp a
+		<include refid="cddsDDwdpJoins"/>
+		WHERE a.wrcs_cd = #{wrcsCd} and a.pro_cd=#{proCd}
+	</select>
+	
+	<select id="list" resultType="CddsDDwdp">
+		SELECT 
+			<include refid="cddsDDwdpColumns"/>
+		FROM cdds_d_dwdp a
+		<include refid="cddsDDwdpJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO cdds_d_dwdp(
+			wrcs_cd,
+			wrcs_nm,
+			bywq,
+			b_d_pop,
+			bd_r_pop,
+			b_bh_qty,
+			b_sh_qty
+		) VALUES (
+			#{wrcsCd},
+			#{wrcsNm},
+			#{bywq},
+			#{bDPop},
+			#{bdRPop},
+			#{bBhQty},
+			#{bShQty}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdds_d_dwdp SET 	
+			wrcs_nm = #{wrcsNm},
+			bywq = #{bywq},
+			b_d_pop = #{bDPop},
+			bd_r_pop = #{bdRPop},
+			b_bh_qty = #{bBhQty},
+			b_sh_qty = #{bShQty}
+		WHERE wrcs_cd = #{wrcsCd} and a.pro_cd=#{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM cdds_d_dwdp
+		WHERE wrcs_cd = #{wrcsCd} and pro_cd = #{proCd}
+	</update>
+	
+</mapper>

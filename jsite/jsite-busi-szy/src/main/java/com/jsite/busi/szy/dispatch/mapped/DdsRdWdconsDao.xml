@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdconsDao">
+    
+	<sql id="ddsRdWdconsColumns">
+		a.pro_cd AS "proCd",
+		a.wce_id AS "wceId",
+		a.bgt AS "bgt",
+		a.edt AS "edt",
+		a.zmx AS "zmx",
+		a.zmn AS "zmn",
+		a.qmx AS "qmx",
+		a.qmn AS "qmn",
+		a.nmx AS "nmx",
+		a.nmn AS "nmn"
+	</sql>
+	
+	<sql id="ddsRdWdconsJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdcons">
+		SELECT 
+			<include refid="ddsRdWdconsColumns"/>
+		FROM dds_rd_wdcons a
+		<include refid="ddsRdWdconsJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.wce_id = #{wceId}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdcons">
+		SELECT 
+			<include refid="ddsRdWdconsColumns"/>
+		FROM dds_rd_wdcons a
+		<include refid="ddsRdWdconsJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wdcons(
+			pro_cd,
+			wce_id,
+			bgt,
+			edt,
+			zmx,
+			zmn,
+			qmx,
+			qmn,
+			nmx,
+			nmn
+		) VALUES (
+			#{proCd},
+			#{wceId},
+			#{bgt},
+			#{edt},
+			#{zmx},
+			#{zmn},
+			#{qmx},
+			#{qmn},
+			#{nmx},
+			#{nmn}
+		)
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+		INSERT ALL
+	    <foreach collection="list" item="item" index="index">
+	    INTO dds_rd_wdcons 
+	    (
+			pro_cd,
+			wce_id,
+			bgt,
+			edt,
+			zmx,
+			zmn,
+			qmx,
+			qmn,
+			nmx,
+			nmn
+		) VALUES
+	    (
+     		#{item.proCd},
+			#{item.wceId},
+			#{item.bgt},
+			#{item.edt},
+			#{item.zmx},
+			#{item.zmn},
+			#{item.qmx},
+			#{item.qmn},
+			#{item.nmx},
+			#{item.nmn}
+	    )
+	    </foreach>
+	    SELECT 1 FROM DUAL
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wdcons SET 	
+			bgt = #{bgt},
+			edt = #{edt},
+			zmx = #{zmx},
+			zmn = #{zmn},
+			qmx = #{qmx},
+			qmn = #{qmn},
+			nmx = #{nmx},
+			nmn = #{nmn}
+		WHERE pro_cd = #{proCd} and wce_id = #{wceId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wdcons
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

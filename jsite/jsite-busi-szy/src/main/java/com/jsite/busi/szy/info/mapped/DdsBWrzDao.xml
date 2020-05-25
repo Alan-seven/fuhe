@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBWrzDao">
+    
+	<sql id="ddsBWrzColumns">
+		a.wrz_cd AS "wrzCd",
+		a.wrz_nm AS "wrzNm",
+		a.wrz_a AS "wrzA",
+		a.hill_zone_a AS "hillZoneA",
+		a.plai_a AS "plaiA",
+		a.avg_p AS "avgP",
+		a.avg_wat AS "avgWat",
+		a.avg_surf_wat AS "avgSurfWat",
+		a.avg_gw_wat AS "avgGwWat",
+		a.avg_sg_wat AS "avgSgWat",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsBWrzJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBWrz">
+		SELECT 
+			<include refid="ddsBWrzColumns"/>
+		FROM dds_b_wrz a
+		<include refid="ddsBWrzJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBWrz">
+		SELECT 
+			<include refid="ddsBWrzColumns"/>
+		FROM dds_b_wrz a
+		<include refid="ddsBWrzJoins"/>
+		<where>
+			1=1 
+			<if test="wrzNm != null and wrzNm != ''">
+				and	a.wrz_nm like '%'||#{wrzNm}||'%'
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_wrz(
+			wrz_cd,
+			wrz_nm,
+			wrz_a,
+			hill_zone_a,
+			plai_a,
+			avg_p,
+			avg_wat,
+			avg_surf_wat,
+			avg_gw_wat,
+			avg_sg_wat,
+			ts,
+			nt,
+			river
+		) VALUES (
+			#{wrzCd},
+			#{wrzNm},
+			#{wrzA},
+			#{hillZoneA},
+			#{plaiA},
+			#{avgP},
+			#{avgWat},
+			#{avgSurfWat},
+			#{avgGwWat},
+			#{avgSgWat},
+			#{ts},
+			#{nt},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_wrz SET 	
+			wrz_cd = #{wrzCd},
+			wrz_nm = #{wrzNm},
+			wrz_a = #{wrzA},
+			hill_zone_a = #{hillZoneA},
+			plai_a = #{plaiA},
+			avg_p = #{avgP},
+			avg_wat = #{avgWat},
+			avg_surf_wat = #{avgSurfWat},
+			avg_gw_wat = #{avgGwWat},
+			avg_sg_wat = #{avgSgWat},
+			ts = #{ts},
+			nt = #{nt},
+			river = #{river}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_wrz
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

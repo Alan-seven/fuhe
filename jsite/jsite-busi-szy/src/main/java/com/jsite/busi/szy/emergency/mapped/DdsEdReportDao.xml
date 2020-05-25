@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdReportDao">
+    
+	<sql id="ddsEdReportColumns">
+		a.even_cd AS "evenCd",
+		a.rep_cd AS "repCd",
+		a.org_nm AS "orgNm",
+		a.rep_num AS "repNum",
+		a.rep_time AS "repTime",
+		a.even_info AS "evenInfo",
+		a.even_tm AS "evenTm",
+		a.cause AS "cause",
+		a.udsect AS "udsect",
+		a.pol AS "pol",
+		a.mp_item AS "mpItem",
+		a.mp_fre AS "mpFre",
+		a.rang_ihd AS "rangIhd",
+		a.ihd_des AS "ihdDes",
+		a.main_mt AS "mainMt",
+		a.mt_sug AS "mtSug",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsEdReportJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdReport">
+		SELECT 
+			<include refid="ddsEdReportColumns"/>
+		FROM dds_ed_report a
+		<include refid="ddsEdReportJoins"/>
+		WHERE a.rep_cd = #{repCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdReport">
+		SELECT 
+			<include refid="ddsEdReportColumns"/>
+		FROM dds_ed_report a
+		<include refid="ddsEdReportJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_report(
+			even_cd,
+			rep_cd,
+			org_nm,
+			rep_num,
+			rep_time,
+			even_info,
+			even_tm,
+			cause,
+			udsect,
+			pol,
+			mp_item,
+			mp_fre,
+			rang_ihd,
+			ihd_des,
+			main_mt,
+			mt_sug,
+			nt
+		) VALUES (
+			#{evenCd},
+			#{repCd},
+			#{orgNm},
+			#{repNum},
+			#{repTime},
+			#{evenInfo},
+			#{evenTm},
+			#{cause},
+			#{udsect},
+			#{pol},
+			#{mpItem},
+			#{mpFre},
+			#{rangIhd},
+			#{ihdDes},
+			#{mainMt},
+			#{mtSug},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_report SET 	
+			even_cd = #{evenCd},
+			org_nm = #{orgNm},
+			rep_num = #{repNum},
+			rep_time = #{repTime},
+			even_info = #{evenInfo},
+			even_tm = #{evenTm},
+			cause = #{cause},
+			udsect = #{udsect},
+			pol = #{pol},
+			mp_item = #{mpItem},
+			mp_fre = #{mpFre},
+			rang_ihd = #{rangIhd},
+			ihd_des = #{ihdDes},
+			main_mt = #{mainMt},
+			mt_sug = #{mtSug},
+			nt = #{nt}
+		WHERE rep_cd = #{repCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_report
+		WHERE rep_cd = #{repCd}
+	</update>
+	
+</mapper>

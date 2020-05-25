@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeAnnDao">
+    
+	<sql id="ddsWeAnnColumns">
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.ann_p AS "annP",
+		a.ann_w AS "annW",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeAnnJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeAnn">
+		SELECT 
+			<include refid="ddsWeAnnColumns"/>
+		FROM dds_we_ann a
+		<include refid="ddsWeAnnJoins"/>
+		WHERE a.reg_cd = #{reg_cd}
+	</select>
+	
+	<select id="list" resultType="DdsWeAnn">
+		SELECT 
+			<include refid="ddsWeAnnColumns"/>
+		FROM dds_we_ann a
+		<include refid="ddsWeAnnJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_ann(
+			reg_cd,
+			reg_type,
+			ann_p,
+			ann_w,
+			nt
+		) VALUES (
+			#{adCd},
+			#{regType},
+			#{annP},
+			#{annW},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_ann SET 	
+			reg_type = #{regType},
+			ann_p = #{annP},
+			ann_w = #{annW},
+			nt = #{nt}
+		WHERE reg_cd = #{reg_cd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_ann
+		WHERE reg_cd = #{reg_cd}
+	</update>
+	
+</mapper>

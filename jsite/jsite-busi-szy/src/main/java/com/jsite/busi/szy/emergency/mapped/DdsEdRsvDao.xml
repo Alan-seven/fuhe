@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdRsvDao">
+    
+	<sql id="ddsEdRsvColumns">
+		a.pro_cd AS "proCd",
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.otq AS "otq",
+		a.otqtype AS "otqtype",
+		a.exq AS "exq",
+		a.exqtype AS "exqtype"
+	</sql>
+	
+	<sql id="ddsEdRsvJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdRsv">
+		SELECT 
+			<include refid="ddsEdRsvColumns"/>
+		FROM dds_ed_rsv a
+		<include refid="ddsEdRsvJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.stcd= #{stcd} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsEdRsv">
+		SELECT 
+			<include refid="ddsEdRsvColumns"/>
+		FROM dds_ed_rsv a
+		<include refid="ddsEdRsvJoins"/>
+		<where>
+			1 = 1 
+			<if test=" proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test=" stcd != null and stcd != '' ">
+				and a.stcd = #{stcd}
+			</if>
+			<if test=" otqtype != null  ">
+				and a.otqtype = #{otqtype}
+			</if>
+			<if test=" exqtype != null ">
+				and a.exqtype = #{exqtype}
+			</if>
+			<if test="startTm !=null and startTm !='' and endTm !=null and endTm !='' "> 
+				and a.tm between to_date(#{startTm},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTm},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_rsv(
+			pro_cd,
+			stcd,
+			tm,
+			otq,
+			otqtype,
+			exq,
+			exqtype
+		) VALUES (
+			#{proCd},
+			#{stcd},
+			#{tm},
+			#{otq},
+			#{otqtype},
+			#{exq},
+			#{exqtype}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_rsv SET 	
+			otq = #{otq},
+			otqtype = #{otqtype},
+			exq = #{exq},
+			exqtype = #{exqtype}
+		WHERE pro_cd = #{proCd} and stcd= #{stcd} and tm = #{tm}
+	</update>
+	
+	<update id="updateExq">
+		UPDATE dds_ed_rsv SET 	
+			exq = #{exq},exqtype = #{exqtype}
+		WHERE pro_cd = #{proCd} and stcd= #{stcd} 
+		<if test="startTm !=null and startTm !='' and endTm !=null and endTm !='' "> 
+				and tm between to_date(#{startTm},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTm},'yyyy-MM-dd HH24:mi:ss')
+		</if>
+	</update>
+	
+	<update id="updateDefault">
+		UPDATE dds_ed_rsv SET 	
+			exq = #{exq},exqtype = #{exqtype}
+		WHERE pro_cd = #{proCd} and stcd= #{stcd} 
+		and exq is null
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_rsv
+		WHERE pro_cd = #{proCd} and stcd= #{stcd} and tm = #{tm}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_ed_rsv
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdWusRDao">
+    
+	<sql id="tSfrdWusRColumns">
+		a.region_cd AS "regionCd",
+		a.en_cd AS "enCd",
+		a.st_dt AS "stDt",
+		a.ed_dt AS "edDt",
+		a.lif_ww AS "lifWw",
+		a.agr_ww AS "agrWw",
+		a.ind_ww AS "indWw",
+		a.eco_ww AS "ecoWw",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdWusRJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdWusR">
+		SELECT 
+			<include refid="tSfrdWusRColumns"/>
+		FROM t_sfrd_wus_r a
+		<include refid="tSfrdWusRJoins"/>
+		WHERE a.region_cd = #{regionCd} and a.en_cd = #{enCd} and a.st_dt =#{stDt} and a.ed_dt = #{edDt}
+	</select>
+	
+	<select id="list" resultType="TSfrdWusR">
+		SELECT 
+			<include refid="tSfrdWusRColumns"/>
+		FROM t_sfrd_wus_r a
+		<include refid="tSfrdWusRJoins"/>
+		<where>
+			<if test="regionCd != null and regionCd != ''">
+			 	 region_cd = #{regionCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_wus_r(
+			region_cd,
+			en_cd,
+			st_dt,
+			ed_dt,
+			lif_ww,
+			agr_ww,
+			ind_ww,
+			eco_ww,
+			nt
+		) VALUES (
+			#{regionCd},
+			#{enCd},
+			#{stDt},
+			#{edDt},
+			#{lifWw},
+			#{agrWw},
+			#{indWw},
+			#{ecoWw},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_wus_r SET 	
+			lif_ww = #{lifWw},
+			agr_ww = #{agrWw},
+			ind_ww = #{indWw},
+			eco_ww = #{ecoWw},
+			nt = #{nt}
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} and st_dt =#{stDt} and ed_dt = #{edDt}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_wus_r
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} and st_dt =#{stDt} and ed_dt = #{edDt}
+	</update>
+	
+</mapper>

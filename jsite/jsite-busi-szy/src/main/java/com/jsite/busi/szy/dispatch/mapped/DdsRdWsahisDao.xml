@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWsahisDao">
+    
+	<sql id="ddsRdWsahisColumns">
+		a.year AS "year",
+		a.mwsc AS "mwsc",
+		a.swr AS "swr",
+		a.nr AS "nr",
+        a.river AS "river"
+	</sql>
+
+	<select id="get" resultType="DdsRdWsahis">
+		SELECT 
+			<include refid="ddsRdWsahisColumns"/>
+		FROM dds_rd_wsahis a
+		WHERE a.year = #{year}
+	</select>
+	
+	<select id="list" resultType="DdsRdWsahis">
+		SELECT 
+			<include refid="ddsRdWsahisColumns"/>
+		FROM dds_rd_wsahis a
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+        order by a.year desc
+	</select>
+
+    <select id="selectAll" resultType="DdsRdWsahis">
+        SELECT
+        <include refid="ddsRdWsahisColumns"/>
+        FROM dds_rd_wsahis a
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wsahis(
+			year,
+			mwsc,
+			swr,
+			nr,
+            river
+		) VALUES (
+			#{year},
+			#{mwsc},
+			#{swr},
+			#{nr},
+            #{river}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_wsahis(
+        year,
+        mwsc,
+        swr,
+        nr,
+        river
+        )
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{row.year},
+            #{row.mwsc},
+            #{row.swr},
+            #{row.nr},
+            #{row.river} from dual
+        </foreach>
+    </insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wsahis SET
+            mwsc = #{mwsc},
+            swr = #{swr},
+            nr = #{nr}
+		WHERE year = #{year} and river = #{river}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wsahis
+		WHERE year = #{year}
+	</update>
+	
+</mapper>

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.baseinfo.standard.sl325.dao.WqMsarADao">
+    
+	<sql id="wqMsarAColumns">
+		a.stcd AS "stcd",
+		a.asot AS "asot",
+		a.asdr AS "asdr",
+		a.asmt AS "asmt",
+		a.wqg AS "wqg",
+		a.mespest AS "mespest",
+		a.avz AS "avz",
+		a.avq AS "avq",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="wqMsarAJoins">
+	</sql>
+    
+	<select id="get" resultType="wqMsarA">
+		SELECT 
+			<include refid="wqMsarAColumns"/>
+		FROM wq_msar_a a
+		<include refid="wqMsarAJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="wqMsarA">
+		SELECT 
+			<include refid="wqMsarAColumns"/>
+		FROM wq_msar_a a
+		<include refid="wqMsarAJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="wqMsarA">
+		SELECT 
+			<include refid="wqMsarAColumns"/>
+		FROM wq_msar_a a
+		<include refid="wqMsarAJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wq_msar_a(
+			stcd,
+			asot,
+			asdr,
+			asmt,
+			wqg,
+			mespest,
+			avz,
+			avq,
+			nt
+		) VALUES (
+			#{stcd},
+			#{asot},
+			#{asdr},
+			#{asmt},
+			#{wqg},
+			#{mespest},
+			#{avz},
+			#{avq},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wq_msar_a SET 	
+			stcd = #{stcd},
+			asot = #{asot},
+			asdr = #{asdr},
+			asmt = #{asmt},
+			wqg = #{wqg},
+			mespest = #{mespest},
+			avz = #{avz},
+			avq = #{avq},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM wq_msar_a
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

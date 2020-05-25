@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdDisAdRsltDao">
+    
+	<sql id="tSfrdDisAdRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.rslt_tp AS "rsltTp",
+		a.wu_tp AS "wuTp",
+		a.wat AS "wat",
+		a.ww AS "ww",
+		a.uw AS "uw",
+		a.rw AS "rw",
+		a.dw AS "dw",
+		a.dw_r AS "dwR",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdDisAdRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdDisAdRslt">
+		SELECT 
+			<include refid="tSfrdDisAdRsltColumns"/>
+		FROM t_sfrd_dis_ad_rslt a
+		<include refid="tSfrdDisAdRsltJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd} and a.rslt_tp = #{rsltTp} and a.wu_tp = #{wuTp}
+	</select>
+	
+	<select id="list" resultType="TSfrdDisAdRslt">
+		SELECT 
+			<include refid="tSfrdDisAdRsltColumns"/>
+		FROM t_sfrd_dis_ad_rslt a
+		<include refid="tSfrdDisAdRsltJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_dis_ad_rslt(
+			pro_cd,
+			en_cd,
+			rslt_tp,
+			wu_tp,
+			wat,
+			ww,
+			uw,
+			rw,
+			dw,
+			dw_r,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{rsltTp},
+			#{wuTp},
+			#{wat},
+			#{ww},
+			#{uw},
+			#{rw},
+			#{dw},
+			#{dwR},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_dis_ad_rslt SET 	
+			wat = #{wat},
+			ww = #{ww},
+			uw = #{uw},
+			rw = #{rw},
+			dw = #{dw},
+			dw_r = #{dwR},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and rslt_tp = #{rsltTp} and wu_tp = #{wuTp}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_dis_ad_rslt
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and rslt_tp = #{rsltTp} and wu_tp = #{wuTp}
+	</update>
+	
+</mapper>

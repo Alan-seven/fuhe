@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeRsbDao">
+    
+	<sql id="ddsWeRsbColumns">
+		a.rs_cd AS "rsCd",
+		a.rs_nm AS "rsNm",
+		a.rs_type AS "rsType",
+		a.ad_cd AS "adCd",
+		a.wrz_cd AS "wrzCd",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeRsbJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeRsb">
+		SELECT 
+			<include refid="ddsWeRsbColumns"/>
+		FROM dds_we_rsb a
+		<include refid="ddsWeRsbJoins"/>
+		WHERE a.rs_cd = #{rsCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeRsb">
+		SELECT 
+			<include refid="ddsWeRsbColumns"/>
+		FROM dds_we_rsb a
+		<include refid="ddsWeRsbJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_rsb(
+			rs_cd,
+			rs_nm,
+			rs_type,
+			ad_cd,
+			wrz_cd,
+			nt
+		) VALUES (
+			#{rsCd},
+			#{rsNm},
+			#{rsType},
+			#{adCd},
+			#{wrzCd},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_rsb SET 	
+			rs_nm = #{rsNm},
+			rs_type = #{rsType},
+			ad_cd = #{adCd},
+			wrz_cd = #{wrzCd},
+			nt = #{nt}
+		WHERE rs_cd = #{rsCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_rsb
+		WHERE rs_cd = #{rsCd}
+	</update>
+	
+</mapper>

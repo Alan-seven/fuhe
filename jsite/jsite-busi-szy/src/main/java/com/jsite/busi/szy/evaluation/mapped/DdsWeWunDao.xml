@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeWunDao">
+    
+	<sql id="ddsWeWunColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.aw_n AS "awN",
+		a.aws_sp AS "awsSp",
+		a.awd_sp AS "awdSp",
+		a.aw_lp AS "awLp",
+		a.aw_sr AS "awSr",
+		a.aw_lr AS "awLr",
+		a.fi_n AS "fiN",
+		a.ai_n AS "aiN",
+		a.fish_n AS "fishN",
+		a.lls_n AS "llsN",
+		a.sls_n AS "slsN",
+		a.io_n AS "ioN",
+		a.ic_n AS "icN",
+		a.ad_n AS "adN",
+		a.av_n AS "avN",
+		a.pbld_n AS "pbldN",
+		a.psrv_n AS "psrvN",
+		a.du_n AS "duN",
+		a.dr_n AS "drN",
+		a.ev_n AS "evN",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeWunJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeWun">
+		SELECT 
+			<include refid="ddsWeWunColumns"/>
+		FROM dds_we_wun a
+		<include refid="ddsWeWunJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeWun">
+		SELECT 
+			<include refid="ddsWeWunColumns"/>
+		FROM dds_we_wun a
+		<include refid="ddsWeWunJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_wun(
+			yr,
+			reg_cd,
+			reg_type,
+			aw_n,
+			aws_sp,
+			awd_sp,
+			aw_lp,
+			aw_sr,
+			aw_lr,
+			fi_n,
+			ai_n,
+			fish_n,
+			lls_n,
+			sls_n,
+			io_n,
+			ic_n,
+			ad_n,
+			av_n,
+			pbld_n,
+			psrv_n,
+			du_n,
+			dr_n,
+			ev_n,
+			nt
+		) VALUES (
+			#{yr},
+			#{adCd},
+			#{regType},
+			#{awN},
+			#{awsSp},
+			#{awdSp},
+			#{awLp},
+			#{awSr},
+			#{awLr},
+			#{fiN},
+			#{aiN},
+			#{fishN},
+			#{llsN},
+			#{slsN},
+			#{ioN},
+			#{icN},
+			#{adN},
+			#{avN},
+			#{pbldN},
+			#{psrvN},
+			#{duN},
+			#{drN},
+			#{evN},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_wun SET 	
+			reg_type = #{regType},
+			aw_n = #{awN},
+			aws_sp = #{awsSp},
+			awd_sp = #{awdSp},
+			aw_lp = #{awLp},
+			aw_sr = #{awSr},
+			aw_lr = #{awLr},
+			fi_n = #{fiN},
+			ai_n = #{aiN},
+			fish_n = #{fishN},
+			lls_n = #{llsN},
+			sls_n = #{slsN},
+			io_n = #{ioN},
+			ic_n = #{icN},
+			ad_n = #{adN},
+			av_n = #{avN},
+			pbld_n = #{pbldN},
+			psrv_n = #{psrvN},
+			du_n = #{duN},
+			dr_n = #{drN},
+			ev_n = #{evN},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_wun
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+</mapper>

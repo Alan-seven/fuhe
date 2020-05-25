@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeWsDao">
+    
+	<sql id="ddsWeWsColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.wsp_ws AS "wspWs",
+		a.lp_ws AS "lpWs",
+		a.wd_ws AS "wdWs",
+		a.in_ws AS "inWs",
+		a.in_bs_nm AS "inBsNm",
+		a.os_ws AS "osWs",
+		a.sg_ws AS "sgWs",
+		a.dg_ws AS "dgWs",
+		a.bra_gw_ws AS "braGwWs",
+		a.sew_reu AS "sewReu",
+		a.cp_ws AS "cpWs",
+		a.sd_ws AS "sdWs",
+		a.sea_dir_wu AS "seaDirWu",
+		a.dt AS "dt",
+		a.nt AS "nt",
+		a.under AS "under",
+		a.other AS "other"
+	</sql>
+	
+	<sql id="ddsWeWsJoins">
+	</sql>
+
+	<select id="listAllToMap" resultType="map">
+		SELECT
+		<include refid="ddsWeWsColumns"/>
+		,b.reg_nm AS "regNm",
+		WSP_WS + WD_WS + LP_WS "above",
+        WSP_WS + WD_WS + LP_WS + UNDER + OTHER "all"
+		FROM dds_we_ws a,dds_we_wrcs b
+        WHERE b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+
+
+	<select id="get" resultType="DdsWeWs">
+		SELECT 
+			<include refid="ddsWeWsColumns"/>
+		FROM dds_we_ws a
+		<include refid="ddsWeWsJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeWs">
+		SELECT 
+			<include refid="ddsWeWsColumns"/>
+		FROM dds_we_ws a
+		<include refid="ddsWeWsJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_ws(
+			yr,
+			reg_cd,
+			reg_type,
+			wsp_ws,
+			lp_ws,
+			wd_ws,
+			in_ws,
+			in_bs_nm,
+			os_ws,
+			sg_ws,
+			dg_ws,
+			bra_gw_ws,
+			sew_reu,
+			cp_ws,
+			sd_ws,
+			sea_dir_wu,
+			dt,
+			nt,
+			under,
+			other
+		) VALUES (
+			#{yr},
+			#{regCd},
+			#{regType},
+			#{wspWs},
+			#{lpWs},
+			#{wdWs},
+			#{inWs},
+			#{inBsNm},
+			#{osWs},
+			#{sgWs},
+			#{dgWs},
+			#{braGwWs},
+			#{sewReu},
+			#{cpWs},
+			#{sdWs},
+			#{seaDirWu},
+			#{dt},
+			#{nt},
+			#{under},
+			#{other}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_ws SET 	
+			reg_type = #{regType},
+			wsp_ws = #{wspWs},
+			lp_ws = #{lpWs},
+			wd_ws = #{wdWs},
+			in_ws = #{inWs},
+			in_bs_nm = #{inBsNm},
+			os_ws = #{osWs},
+			sg_ws = #{sgWs},
+			dg_ws = #{dgWs},
+			bra_gw_ws = #{braGwWs},
+			sew_reu = #{sewReu},
+			cp_ws = #{cpWs},
+			sd_ws = #{sdWs},
+			sea_dir_wu = #{seaDirWu},
+			dt = #{dt},
+			nt = #{nt},
+			#{under},
+			#{other}
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_ws
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdConstDao">
+    
+	<sql id="ddsEdConstColumns">
+		a.pro_cd AS "proCd",
+		a.secid AS "secid",
+		a.tm AS "tm",
+		a.max_z AS "maxZ",
+		a.min_z AS "minZ",
+		a.max_n AS "maxN",
+		a.min_n AS "minN",
+		a.max_q AS "maxQ",
+		a.min_q AS "minQ",
+		a.bod AS "bod",
+		a.cod AS "cod",
+		a.bo_pl AS "boPl",
+		a.oth AS "oth"
+	</sql>
+	
+	<sql id="ddsEdConstJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdConst">
+		SELECT 
+			<include refid="ddsEdConstColumns"/>
+		FROM dds_ed_const a
+		<include refid="ddsEdConstJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsEdConst">
+		SELECT 
+			<include refid="ddsEdConstColumns"/>
+		FROM dds_ed_const a
+		<include refid="ddsEdConstJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_const(
+			pro_cd,
+			secid,
+			tm,
+			max_z,
+			min_z,
+			max_n,
+			min_n,
+			max_q,
+			min_q,
+			bod,
+			cod,
+			bo_pl,
+			oth
+		) VALUES (
+			#{proCd},
+			#{secid},
+			#{tm},
+			#{maxZ},
+			#{minZ},
+			#{maxN},
+			#{minN},
+			#{maxQ},
+			#{minQ},
+			#{bod},
+			#{cod},
+			#{boPl},
+			#{oth}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_const SET 	
+			pro_cd = #{proCd},
+			secid = #{secid},
+			tm = #{tm},
+			max_z = #{maxZ},
+			min_z = #{minZ},
+			max_n = #{maxN},
+			min_n = #{minN},
+			max_q = #{maxQ},
+			min_q = #{minQ},
+			bod = #{bod},
+			cod = #{cod},
+			bo_pl = #{boPl},
+			oth = #{oth}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_const
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

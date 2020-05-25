@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWePDao">
+    
+	<sql id="ddsWePColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.cur_pd AS "curPd",
+		a.cur_p AS "curP",
+		a.ly_p AS "lyP",
+		a.ann_p AS "annP",
+		a.ly_rt AS "lyRt",
+		a.ann_rt AS "annRt",
+		a.dt AS "dt",
+		a.nt AS "nt",
+		a.area AS "area"
+	</sql>
+	
+	<sql id="ddsWePJoins">
+
+	</sql>
+    
+	<select id="get" resultType="DdsWeP">
+		SELECT 
+			<include refid="ddsWePColumns"/>
+		FROM dds_we_p a
+		<include refid="ddsWePJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+	</select>
+
+	<select id="listAllToANN" resultType="map">
+		SELECT b.ann_p AS "annP",
+		<include refid="ddsWePColumns"/>
+
+		FROM dds_we_p a,DDS_WE_ANN b
+		WHERE b.reg_cd=a.reg_cd
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+
+	<select id="listAllToMap" resultType="map">
+		SELECT
+		<include refid="ddsWePColumns"/>
+		,b.reg_nm AS "regNm"
+		FROM dds_we_p a,dds_we_wrcs b
+        WHERE b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+
+
+	<select id="list" resultType="DdsWeP">
+		SELECT 
+			<include refid="ddsWePColumns"/>
+		FROM dds_we_p a
+		<include refid="ddsWePJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_p(
+			yr,
+			reg_cd,
+			reg_type,
+			cur_pd,
+			cur_p,
+			ly_p,
+			ann_p,
+			ly_rt,
+			ann_rt,
+			dt,
+			nt,
+			area
+		) VALUES (
+			#{yr},
+			#{regCd},
+			#{regType},
+			#{curPd},
+			#{curP},
+			#{lyP},
+			#{annP},
+			#{lyRt},
+			#{annRt},
+			#{dt},
+			#{nt},
+			#{area}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_p SET 	
+			reg_type = #{regType},
+			cur_pd = #{curPd},
+			cur_p = #{curP},
+			ly_p = #{lyP},
+			ann_p = #{annP},
+			ly_rt = #{lyRt},
+			ann_rt = #{annRt},
+			dt = #{dt},
+			nt = #{nt},
+			area = #{area}
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_p
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

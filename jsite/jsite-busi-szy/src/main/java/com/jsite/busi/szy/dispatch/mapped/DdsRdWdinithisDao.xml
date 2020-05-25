@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWdinithisDao">
+    
+	<sql id="ddsRdWdinithisColumns">
+		a.wce_id AS "wceId",
+		a.year AS "year",
+		a.zs AS "zs",
+		a.ze AS "ze",
+		a.qmin AS "qmin",
+		a.qmax AS "qmax"
+	</sql>
+	
+	<sql id="ddsRdWdinithisJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWdinithis">
+		SELECT 
+			<include refid="ddsRdWdinithisColumns"/>
+		FROM dds_rd_Wdinithis a
+		<include refid="ddsRdWdinithisJoins"/>
+		WHERE a.wce_id = #{wceId} and a.year = #{year}
+	</select>
+	
+	<select id="list" resultType="DdsRdWdinithis">
+		SELECT 
+			<include refid="ddsRdWdinithisColumns"/>
+		FROM dds_rd_Wdinithis a
+		<include refid="ddsRdWdinithisJoins"/>
+		<where>
+			1=1 
+			<if test="wceId != null and wceId != ''">
+				and a.wce_id = #{wceId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listIn" resultType="DdsRdWdinithis" parameterType="java.util.List">
+		SELECT 
+			<include refid="ddsRdWdinithisColumns"/>
+		FROM dds_rd_Wdinithis a where a.wce_id in  
+		<foreach collection="list" item="item" index="index" open="(" separator="," close=")">  
+		  #{item.wceId}  
+		</foreach> 
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_Wdinithis(
+			wce_id,
+			year,
+			zs,
+			ze,
+			qmin,
+			qmax
+		) VALUES (
+			#{wceId},
+			#{year},
+			#{zs},
+			#{ze},
+			#{qmin},
+			#{qmax}
+		)
+	</insert>
+	
+	<insert id="saveBatch" parameterType="java.util.List" useGeneratedKeys="false">
+	    INSERT ALL
+	    <foreach collection="list" item="item" index="index">
+	    INTO dds_rd_Wdinithis 
+	    (
+			wce_id,
+			year,
+			zs,
+			ze,
+			qmin,
+			qmax
+		) VALUES
+	    (
+	   		#{item.wceId},
+			#{item.year},
+			#{item.zs},
+			#{item.ze},
+			#{item.qmin},
+			#{item.qmax}
+	    )
+	    </foreach>
+	    SELECT 1 FROM DUAL
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_Wdinithis SET 	
+			zs = #{zs},
+			ze = #{ze},
+			qmin = #{qmin},
+			qmax = #{qmax}
+		WHERE wce_id = #{wceId} and year = #{year}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_Wdinithis
+		WHERE wce_id = #{wceId}
+	</update>
+	
+</mapper>

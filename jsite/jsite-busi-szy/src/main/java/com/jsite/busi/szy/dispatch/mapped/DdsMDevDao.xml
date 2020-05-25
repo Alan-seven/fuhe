@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsMDevDao">
+    
+	<sql id="ddsMDevColumns">
+		a.ad_cd AS "adCd",
+		a.tot_pop_gr AS "totPopGr",
+		a.d_pop_gr AS "dPopGr",
+		a.bh_gr AS "bhGr",
+		a.sh_gr AS "shGr",
+		a.irra_gr AS "irraGr",
+		a.pwirra_gr AS "pwirraGr",
+		a.pdirra_gr AS "pdirraGr",
+		a.pvirra_gr AS "pvirraGr",
+		a.fia_gr AS "fiaGr",
+		a.aia_gr AS "aiaGr",
+		a.fisha_gr AS "fishaGr",
+		a.ind_gr AS "indGr",
+		a.nind_gr AS "nindGr"
+	</sql>
+	
+	<sql id="ddsMDevJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMDev">
+		SELECT 
+			<include refid="ddsMDevColumns"/>
+		FROM dds_m_dev a
+		<include refid="ddsMDevJoins"/>
+		WHERE a.ad_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsMDev">
+		SELECT 
+			<include refid="ddsMDevColumns"/>
+		FROM dds_m_dev a
+		<include refid="ddsMDevJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_dev(
+			ad_cd,
+			tot_pop_gr,
+			d_pop_gr,
+			bh_gr,
+			sh_gr,
+			irra_gr,
+			pwirra_gr,
+			pdirra_gr,
+			pvirra_gr,
+			fia_gr,
+			aia_gr,
+			fisha_gr,
+			ind_gr,
+			nind_gr
+		) VALUES (
+			#{adCd},
+			#{totPopGr},
+			#{dPopGr},
+			#{bhGr},
+			#{shGr},
+			#{irraGr},
+			#{pwirraGr},
+			#{pdirraGr},
+			#{pvirraGr},
+			#{fiaGr},
+			#{aiaGr},
+			#{fishaGr},
+			#{indGr},
+			#{nindGr}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_dev SET 	
+			tot_pop_gr = #{totPopGr},
+			d_pop_gr = #{dPopGr},
+			bh_gr = #{bhGr},
+			sh_gr = #{shGr},
+			irra_gr = #{irraGr},
+			pwirra_gr = #{pwirraGr},
+			pdirra_gr = #{pdirraGr},
+			pvirra_gr = #{pvirraGr},
+			fia_gr = #{fiaGr},
+			aia_gr = #{aiaGr},
+			fisha_gr = #{fishaGr},
+			ind_gr = #{indGr},
+			nind_gr = #{nindGr}
+		WHERE ad_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_dev
+		WHERE ad_cd = #{adCd}
+	</update>
+	
+</mapper>

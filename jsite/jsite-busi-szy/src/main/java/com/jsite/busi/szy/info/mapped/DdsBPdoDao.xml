@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBPdoDao">
+    
+	<sql id="ddsBPdoColumns">
+		a.pdo_cd AS "pdoCd",
+		a.pdo_nm AS "pdoNm",
+		a.wdpc_cd AS "wdpcCd",
+		a.addr AS "addr",
+		a.pdo_tp AS "pdoTp",
+		a.comp_dt AS "compDt",
+		a.emis_tp AS "emisTp",
+		a.in_rv_tp AS "inRvTp",
+		a.dwb_nm AS "dwbNm",
+		a.wfz_cd AS "wfzCd",
+		a.des_poll_cap AS "desPollCap",
+		a.pdo_size AS "pdoSize",
+		a.run_cond AS "runCond",
+		a.eng_man_cd AS "engManCd",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsBPdoJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBPdo">
+		SELECT 
+			<include refid="ddsBPdoColumns"/>
+		FROM dds_b_pdo a
+		<include refid="ddsBPdoJoins"/>
+		WHERE a.pdo_cd = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBPdo">
+		SELECT 
+			<include refid="ddsBPdoColumns"/>
+		FROM dds_b_pdo a
+		<include refid="ddsBPdoJoins"/>
+		<where>
+			1=1 
+			<if test="pdoNm != null and pdoNm != ''">
+				and	a.pdo_nm like '%'||#{pdoNm}||'%'
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_pdo(
+			pdo_cd,
+			pdo_nm,
+			wdpc_cd,
+			addr,
+			pdo_tp,
+			comp_dt,
+			emis_tp,
+			in_rv_tp,
+			dwb_nm,
+			wfz_cd,
+			des_poll_cap,
+			pdo_size,
+			run_cond,
+			eng_man_cd,
+			ts,
+			nt,
+			river
+		) VALUES (
+			#{pdoCd},
+			#{pdoNm},
+			#{wdpcCd},
+			#{addr},
+			#{pdoTp},
+			#{compDt},
+			#{emisTp},
+			#{inRvTp},
+			#{dwbNm},
+			#{wfzCd},
+			#{desPollCap},
+			#{pdoSize},
+			#{runCond},
+			#{engManCd},
+			#{ts},
+			#{nt},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_pdo SET 	
+			pdo_nm = #{pdoNm},
+			wdpc_cd = #{wdpcCd},
+			addr = #{addr},
+			pdo_tp = #{pdoTp},
+			comp_dt = #{compDt},
+			emis_tp = #{emisTp},
+			in_rv_tp = #{inRvTp},
+			dwb_nm = #{dwbNm},
+			wfz_cd = #{wfzCd},
+			des_poll_cap = #{desPollCap},
+			pdo_size = #{pdoSize},
+			run_cond = #{runCond},
+			eng_man_cd = #{engManCd},
+			ts = #{ts},
+			nt = #{nt},
+			river = #{river}
+		WHERE pdo_cd = #{pdoCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_pdo
+		WHERE pdo_cd = #{pdoCd}
+	</update>
+	
+</mapper>

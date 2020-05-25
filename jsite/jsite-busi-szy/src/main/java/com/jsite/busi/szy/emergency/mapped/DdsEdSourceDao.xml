@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdSourceDao">
+    
+	<sql id="ddsEdSourceColumns">
+		a.even_cd AS "evenCd",
+		a.begt AS "begt",
+		a.edt AS "edt",
+		a.tscale AS "tscale",
+		a.upsec AS "upsec",
+		a.downsec AS "downsec",
+		a.lgtd AS "lgtd",
+		a.lttd AS "lttd",
+		a.tm AS "tm",
+		a.dur AS "dur",
+		a.da AS "da",
+		a.da_type AS "daType",
+		a.method AS "method",
+		a.len_up AS "lenUp",
+		a.lenDown AS "lenDown",
+		a.loc AS "loc",
+		a.z AS "z",
+		a.q AS "q",
+		a.bg_conc AS "bgConc"
+	</sql>
+	
+	<sql id="ddsEdSourceJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdSource">
+		SELECT 
+			<include refid="ddsEdSourceColumns"/>
+		FROM dds_ed_source a
+		<include refid="ddsEdSourceJoins"/>
+		WHERE a.even_cd = #{evenCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdSource">
+		SELECT 
+			<include refid="ddsEdSourceColumns"/>
+		FROM dds_ed_source a
+		<include refid="ddsEdSourceJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_source(
+			even_cd,
+			begt,
+			edt,
+			tscale,
+			upsec,
+			downsec,
+			lgtd,
+			lttd,
+			tm,
+			dur,
+			da,
+			da_type,
+			method ,
+			len_up ,
+			lenDown,
+			loc ,
+			z,
+			q,
+			bg_conc
+		) VALUES (
+			#{evenCd},
+			#{begt},
+			#{edt},
+			#{tscale},
+			#{upsec},
+			#{downsec},
+			#{lgtd},
+			#{lttd},
+			#{tm},
+			#{dur},
+			#{da},
+			#{daType},
+			#{method},
+			#{lenUp},
+			#{lenDown},
+			#{loc},
+			#{z},
+			#{q},
+			#{bgConc}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_source SET 	
+			begt = #{begt},
+			edt = #{edt},
+			tscale = #{tscale},
+			upsec = #{upsec},
+			downsec = #{downsec},
+			lgtd = #{lgtd},
+			lttd = #{lttd},
+			tm = #{tm},
+			dur = #{dur},
+			da = #{da},
+			da_type = #{daType},
+			method = #{method},
+			len_up = #{lenUp},
+			lenDown = #{lenDown},
+			loc = #{loc},
+			z = #{z},
+			q = #{q},
+			bg_conc = #{bgConc}
+		WHERE even_cd = #{evenCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_source
+		WHERE even_cd = #{evenCd}
+	</update>
+	
+</mapper>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.CddsPRwdpDao">
+    
+	<sql id="cddsPRwdpColumns">
+		a.pro_cd AS "proCd",
+		a.wrcs_cd AS "wrcsCd",
+		a.wrcs_nm AS "wrcsNm",
+		a.tot_pop_gr AS "totPopGr",
+		a.d_pop_gr AS "dPopGr",
+		a.d_wquo AS "dWquo",
+		a.r_wquo AS "rWquo",
+		a.p_d_pop AS "pDPop",
+		a.p_r_pop AS "pRPop",
+		a.p_d_nwat AS "pDNwat",
+		a.p_u_nwat AS "pUNwat"
+	</sql>
+	
+	<sql id="cddsPRwdpJoins">
+	</sql>
+    
+	<select id="get" resultType="CddsPRwdp">
+		SELECT 
+			<include refid="cddsPRwdpColumns"/>
+		FROM cdds_p_rwdp a
+		<include refid="cddsPRwdpJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.wrcs_cd = #{wrcsCd}
+	</select>
+	
+	<select id="list" resultType="CddsPRwdp">
+		SELECT 
+			<include refid="cddsPRwdpColumns"/>
+		FROM cdds_p_rwdp a
+		<include refid="cddsPRwdpJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO cdds_p_rwdp(
+			pro_cd,
+			wrcs_cd,
+			wrcs_nm,
+			tot_pop_gr,
+			d_pop_gr,
+			d_wquo,
+			r_wquo,
+			p_d_pop,
+			p_r_pop,
+			p_d_nwat,
+			p_u_nwat
+		) VALUES (
+			#{proCd},
+			#{wrcsCd},
+			#{wrcsNm},
+			#{totPopGr},
+			#{dPopGr},
+			#{dWquo},
+			#{rWquo},
+			#{pDPop},
+			#{pRPop},
+			#{pDNwat},
+			#{pUNwat}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE cdds_p_rwdp SET 	
+			pro_cd = #{proCd},
+			wrcs_cd = #{wrcsCd},
+			wrcs_nm = #{wrcsNm},
+			tot_pop_gr = #{totPopGr},
+			d_pop_gr = #{dPopGr},
+			d_wquo = #{dWquo},
+			r_wquo = #{rWquo},
+			p_d_pop = #{pDPop},
+			p_r_pop = #{pRPop},
+			p_d_nwat = #{pDNwat},
+			p_u_nwat = #{pUNwat}
+		WHERE a.pro_cd = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM cdds_p_rwdp
+		WHERE a.pro_cd = #{proCd} and a.wrcs_cd=#{wrcsCd}
+	</update>
+	
+</mapper>

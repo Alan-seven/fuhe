@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDrRvdmmysqDao">
+    
+	<sql id="ddsDrRvdmmysqColumns">
+		a.stcd AS "stcd",
+		a.yr AS "yr",
+		a.mnth AS "mnth",
+		a.prdtp AS "prdtp",
+		a.avz AS "avz",
+		a.avq AS "avq",
+		a.moditime AS "moditime"
+	</sql>
+	
+	<sql id="ddsDrRvdmmysqJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDrRvdmmysq">
+		SELECT 
+			<include refid="ddsDrRvdmmysqColumns"/>
+		FROM dds_dr_rvdmmysq a
+		<include refid="ddsDrRvdmmysqJoins"/>
+		WHERE a.stcd = #{stcd} 
+		<if test=" yr != null  ">
+			and a.yr = #{yr} 
+			<if test=" mnth != null  ">
+				and a.mnth = #{mnth}
+			</if>
+			<if test=" mnth == null  ">
+				and a.mnth is null
+			</if>
+			<if test="prdtp != null ">
+				and	a.prdtp = #{prdtp}
+			</if>
+			<if test="prdtp == null ">
+				and	a.prdtp is null
+			</if>
+		</if>
+	</select>
+	
+	<select id="list" resultType="DdsDrRvdmmysq">
+		SELECT 
+			<include refid="ddsDrRvdmmysqColumns"/>
+		FROM dds_dr_rvdmmysq a
+		left join dds_b_stat b on a.stcd=b.stcd
+		<include refid="ddsDrRvdmmysqJoins"/>
+		<where>
+			1=1
+			<if test=" stcd != null  and stcd!='' ">
+				and a.stcd = #{stcd} 
+			</if>
+			<if test=" yr != null  ">
+				and a.yr = #{yr} 
+				<if test=" mnth != null  ">
+					and a.mnth = #{mnth}
+				</if>
+				<if test=" mnth == null  ">
+					and a.mnth is null
+				</if>
+				<if test="prdtp != null ">
+					and	a.prdtp = #{prdtp}
+				</if>
+				<if test="prdtp == null ">
+					and	a.prdtp is null
+				</if>
+			</if>
+			<if test="river != null and river !='' ">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.stcd asc 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_dr_rvdmmysq(
+			stcd,
+			yr,
+			mnth,
+			prdtp,
+			avz,
+			avq
+		) VALUES (
+			#{stcd},
+			#{yr},
+			#{mnth},
+			#{prdtp},
+			#{avz},
+			#{avq}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_dr_rvdmmysq SET 	
+			avz = #{avz},
+			avq = #{avq}
+		WHERE stcd = #{stcd} 
+		<if test=" yr != null  ">
+			and yr = #{yr} 
+			<if test=" mnth != null  ">
+				and mnth = #{mnth}
+			</if>
+			<if test=" mnth == null  ">
+				and mnth is null
+			</if>
+			<if test="prdtp != null ">
+				and	prdtp = #{prdtp}
+			</if>
+			<if test="prdtp == null ">
+				and	prdtp is null
+			</if>
+		</if>
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_dr_rvdmmysq a 
+		WHERE a.stcd = #{stcd}
+		<if test=" yr != null  ">
+			and a.yr = #{yr} 
+			<if test=" mnth != null  ">
+				and a.mnth = #{mnth}
+			</if>
+			<if test=" mnth == null  ">
+				and a.mnth is null
+			</if>
+			<if test="prdtp != null ">
+				and	a.prdtp = #{prdtp}
+			</if>
+			<if test="prdtp == null ">
+				and	a.prdtp is null
+			</if>
+		</if>
+	</update>
+	
+</mapper>

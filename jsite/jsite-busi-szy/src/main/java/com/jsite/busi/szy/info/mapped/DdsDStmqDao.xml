@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDStmqDao">
+    
+	<sql id="ddsDStmqColumns">
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.q AS "q",
+		a.spe_reg_data AS "speRegData",
+		a.ts AS "ts"
+	</sql>
+	
+	<sql id="ddsDStmqJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDStmq">
+		SELECT 
+			<include refid="ddsDStmqColumns"/>
+		FROM dds_d_stmq a
+		<include refid="ddsDStmqJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsDStmq">
+		SELECT b.st_nm AS "stNm",a.stcd,a.tm,a.q
+		FROM dds_b_stat b LEFT JOIN 
+			( SELECT stm.stcd,stm.tm,stm.q
+				from dds_d_stmq stm 
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+						<where>
+							stm.tm between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(tm) tm from dds_d_stmq group by stcd ) stmq
+						<where>
+							stm.stcd = stmq.stcd and stm.tm = stmq.tm
+						</where>
+					</otherwise>
+				</choose>
+			 ) a ON b.stcd = a.stcd
+		<where>
+			1=1
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like 
+				<if test="dbName == 'oracle'">'%'||#{stNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{stNm},'%')</if>
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_d_stmq(
+			stcd,
+			tm,
+			q,
+			spe_reg_data,
+			ts
+		) VALUES (
+			#{stcd},
+			#{tm},
+			#{q},
+			#{speRegData},
+			#{ts}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_d_stmq SET 	
+			stcd = #{stcd},
+			tm = #{tm},
+			q = #{q},
+			spe_reg_data = #{speRegData},
+			ts = #{ts}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_d_stmq
+		WHERE id = #{id}
+	</update>
+	
+	<select id = "listByStcd" resultType="DdsDStmq">
+	 SELECT a.stcd,a.dt AS tm,a.avq AS q
+	 FROM dds_d_dayq a 
+	 <where>
+	 	1=1
+	 	<if test=" stcd != null and stcd != '' ">
+			and a.stcd  = #{stcd}
+		</if>
+		<if test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+			and a.dt between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+		</if>
+	 </where>
+	 	ORDER BY A.DT ASC
+	</select>
+	
+	<select id="listDayQ" resultType="DdsDStmq">
+		SELECT b.st_nm AS "stNm",a.stcd,a.tm,a.q
+		FROM 
+			( SELECT stm.stcd,stm.dt AS tm,stm.avq AS q
+				from dds_d_dayq stm 
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+						<where>
+							stm.dt between to_date(#{startTm},'yyyy-mm-dd') and to_date(#{endTm},'yyyy-mm-dd')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(dt) tm from dds_d_dayq group by stcd ) stmq
+						<where>
+							stm.stcd = stmq.stcd and stm.dt = stmq.tm
+						</where>
+					</otherwise>
+				</choose>
+			 ) a LEFT JOIN  dds_b_stat b  ON a.stcd = b.stcd
+		<where>
+			1=1
+			<if test=" stNm != null and stNm != '' ">
+				and b.st_nm like CONCAT(CONCAT('%', #{stNm}),'%')
+			</if>
+			<if test=" stcd != null and stcd != '' ">
+				and b.stcd = #{stcd}
+			</if>
+			<if test="river != null and river != ''">
+				and	b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+</mapper>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.DataRevisedDao">
+    
+	<sql id="dataRevisedColumns">
+		a.id AS "id",
+		a.data_id AS "dataId",
+		a.revised AS "revised",
+		a.user_id AS "user.id",
+		a.create_date AS "createDate"
+	</sql>
+	
+	<sql id="dataRevisedJoins">
+	</sql>
+    
+	<select id="get" resultType="DataRevised">
+		SELECT 
+			<include refid="dataRevisedColumns"/>
+		FROM t_data_revised a
+		<include refid="dataRevisedJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DataRevised">
+		SELECT 
+			<include refid="dataRevisedColumns"/>
+		FROM t_data_revised a
+		<include refid="dataRevisedJoins"/>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_data_revised(
+			id,
+			data_id,
+			revised,
+			user_id,
+			create_date
+		) VALUES (
+			#{id},
+			#{dataId},
+			#{revised},
+			#{user.id},
+			#{createDate}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_data_revised SET 	
+			data_id = #{dataId},
+			revised = #{revised},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_data_revised
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

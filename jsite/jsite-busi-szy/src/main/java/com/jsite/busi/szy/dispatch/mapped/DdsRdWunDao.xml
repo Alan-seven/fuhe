@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWunDao">
+    
+	<sql id="ddsRdWunColumns">
+		a.pro_cd AS "proCd",
+		a.ad_cd AS "adCd",
+		a.d_wun AS "dWun",
+		a.r_wun AS "rWun",
+		a.bh_wun AS "bhWun",
+		a.sh_wun AS "shWun",
+		a.irr_wun AS "irrWun",
+		a.pwir_wun AS "pwirWun",
+		a.pdir_wun AS "pdirWun",
+		a.pvir_wun AS "pvirWun",
+		a.fi_wun AS "fiWun",
+		a.ai_wun AS "aiWun",
+		a.fish_wun AS "fishWun",
+		a.ind_wun AS "indWun",
+		a.nind_wun AS "nindWun"
+	</sql>
+
+    <sql id="ddsRdWunColumns2">
+        a.ad_cd AS "adCd",
+        a.d_wun AS "dWun",
+        a.r_wun AS "rWun",
+        a.bh_wun AS "bhWun",
+        a.sh_wun AS "shWun",
+        a.irr_wun AS "irrWun",
+        a.pwir_wun AS "pwirWun",
+        a.pdir_wun AS "pdirWun",
+        a.pvir_wun AS "pvirWun",
+        a.fi_wun AS "fiWun",
+        a.ai_wun AS "aiWun",
+        a.fish_wun AS "fishWun",
+        a.ind_wun AS "indWun",
+        a.nind_wun AS "nindWun"
+    </sql>
+	
+	<sql id="ddsRdWunJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWun">
+		SELECT 
+			<include refid="ddsRdWunColumns"/>
+		FROM dds_rd_wun a
+		<include refid="ddsRdWunJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.ad_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsRdWun">
+		SELECT 
+			<include refid="ddsRdWunColumns"/>
+		FROM dds_rd_wun a
+		<include refid="ddsRdWunJoins"/>
+		<where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+
+    <select id="selectByProCd" resultType="DdsRdWun">
+        SELECT
+        <include refid="ddsRdWunColumns2"/>
+        FROM dds_rd_wun a
+        <where>
+            1 = 1
+            <if test="proCd != null and proCd !='' ">
+                and a.pro_cd = rpad(#{proCd}, 13)
+            </if>
+        </where>
+    </select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wun(
+			pro_cd,
+			ad_cd,
+			d_wun,
+			r_wun,
+			bh_wun,
+			sh_wun,
+			irr_wun,
+			pwir_wun,
+			pdir_wun,
+			pvir_wun,
+			fi_wun,
+			ai_wun,
+			fish_wun,
+			ind_wun,
+			nind_wun
+		) VALUES (
+			#{proCd},
+			#{adCd},
+			#{dWun},
+			#{rWun},
+			#{bhWun},
+			#{shWun},
+			#{irrWun},
+			#{pwirWun},
+			#{pdirWun},
+			#{pvirWun},
+			#{fiWun},
+			#{aiWun},
+			#{fishWun},
+			#{indWun},
+			#{nindWun}
+		)
+	</insert>
+
+    <insert id="batchInsert">
+        insert into dds_rd_wun(
+        pro_cd,
+        ad_cd,
+        d_wun,
+        r_wun,
+        bh_wun,
+        sh_wun,
+        irr_wun,
+        pwir_wun,
+        pdir_wun,
+        pvir_wun,
+        fi_wun,
+        ai_wun,
+        fish_wun,
+        ind_wun,
+        nind_wun
+        )
+        <foreach open="(" close=")" collection="listData" item="row" index="index" separator=" UNION ALL ">
+            select #{proCd},
+            #{row.adCd},
+            #{row.dWun},
+            #{row.rWun},
+            #{row.bhWun},
+            #{row.shWun},
+            #{row.irrWun},
+            #{row.pwirWun},
+            #{row.pdirWun},
+            #{row.pvirWun},
+            #{row.fiWun},
+            #{row.aiWun},
+            #{row.fishWun},
+            #{row.indWun},
+            #{row.nindWun} from dual
+        </foreach>
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="listData" item="row" index="index" open="begin" close=";end;" separator=";">
+            UPDATE dds_rd_wun a
+            <set>
+                a.d_wun = #{row.dWun},
+                a.r_wun = #{row.rWun},
+                a.bh_wun = #{row.bhWun},
+                a.sh_wun = #{row.shWun},
+                a.irr_wun = #{row.irrWun},
+                a.pwir_wun = #{row.pwirWun},
+                a.pdir_wun = #{row.pdirWun},
+                a.pvir_wun = #{row.pvirWun},
+                a.fi_wun = #{row.fiWun},
+                a.ai_wun = #{row.aiWun},
+                a.fish_wun = #{row.fishWun},
+                a.ind_wun = #{row.indWun},
+                a.nind_wun = #{row.nindWun}
+            </set>
+            WHERE a.pro_cd = rpad(#{proCd}, 13) and a.ad_cd = #{row.adCd}
+        </foreach>
+    </update>
+
+    <update id="deleteByProCd">
+        DELETE FROM dds_rd_wun
+        WHERE pro_cd = rpad(#{proCd}, 13)
+    </update>
+	
+	<update id="update">
+		UPDATE dds_rd_wun SET 	
+			d_wun = #{dWun},
+			r_wun = #{rWun},
+			bh_wun = #{bhWun},
+			sh_wun = #{shWun},
+			irr_wun = #{irrWun},
+			pwir_wun = #{pwirWun},
+			pdir_wun = #{pdirWun},
+			pvir_wun = #{pvirWun},
+			fi_wun = #{fiWun},
+			ai_wun = #{aiWun},
+			fish_wun = #{fishWun},
+			ind_wun = #{indWun},
+			nind_wun = #{nindWun}
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wun
+		WHERE pro_cd = #{proCd} and ad_cd = #{adCd}
+	</update>
+	
+</mapper>

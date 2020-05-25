@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.WaterPredDao">
+
+    <resultMap id="fqResultMap" type="com.jsite.busi.szy.dispatch.po.FqArea">
+        <result property="adCd" column="AD_CD" javaType="string" jdbcType="VARCHAR"/>
+        <result property="adNm" column="AD_NM" javaType="string" jdbcType="VARCHAR"/>
+        <collection property="waList" column="AD_CD" ofType="com.jsite.busi.szy.dispatch.po.WaData">
+            <result property="wrcsCd" column="WRCS_CD" javaType="string" jdbcType="VARCHAR"/>
+            <result property="wrcsNm" column="WRCS_NM" javaType="string" jdbcType="VARCHAR"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectFqData" resultMap="fqResultMap">
+        SELECT a.AD_CD, a.AD_NM, b.WRCS_CD, b.WRCS_NM
+        FROM DDS_B_AD a, DDS_B_WRCS b
+        WHERE a.AD_CD=b.AD_CD AND a.AD_CD IN
+        <foreach item="item" index="index" collection="adCds" open="(" separator="," close=")">
+        #{item}
+        </foreach>
+    </select>
+
+</mapper>

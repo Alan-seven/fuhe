@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdPfarDao">
+    
+	<sql id="ddsEdPfarColumns">
+		a.proe_cd AS "proeCd",
+		a.wce_cd AS "wceCd",
+		a.forc_tp AS "forcTp",
+		a.status AS "status",
+		a.rnm AS "rnm"
+	</sql>
+	
+	<sql id="ddsEdPfarJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdPfar">
+		SELECT 
+			<include refid="ddsEdPfarColumns"/>
+		FROM dds_ed_pfar a
+		<include refid="ddsEdPfarJoins"/>
+		WHERE a.proe_cd = #{proeCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdPfar">
+		SELECT 
+			<include refid="ddsEdPfarColumns"/>
+		FROM dds_ed_pfar a
+		<include refid="ddsEdPfarJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_pfar(
+			proe_cd,
+			wce_cd,
+			forc_tp,
+			status,
+			rnm
+		) VALUES (
+			#{proeCd},
+			#{wceCd},
+			#{forcTp},
+			#{status},
+			#{rnm}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_pfar SET 	
+			wce_cd = #{wceCd},
+			forc_tp = #{forcTp},
+			status = #{status},
+			rnm = #{rnm}
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_pfar
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+</mapper>

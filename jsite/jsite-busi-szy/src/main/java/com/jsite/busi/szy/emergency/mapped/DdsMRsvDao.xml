@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMRsvDao">
+    
+	<sql id="ddsMRsvColumns">
+		a.rcd AS "rcd",
+		a.rescd AS "rescd",
+		a.resnm AS "resnm",
+		a.stcd AS "stcd",
+		a.stnm AS "stnm",
+		a.river AS "river",
+		defaultValue AS "defaultValue"
+	</sql>
+	
+	<sql id="ddsMRsvJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMRsv">
+		SELECT 
+			<include refid="ddsMRsvColumns"/>
+		FROM dds_m_rsv a
+		<include refid="ddsMRsvJoins"/>
+		WHERE a.rcd = #{rcd} and a.rescd = #{rescd}
+	</select>
+	
+	<select id="list" resultType="DdsMRsv">
+		SELECT 
+			<include refid="ddsMRsvColumns"/>
+		FROM dds_m_rsv a
+		<include refid="ddsMRsvJoins"/>
+		<where>
+			1=1 
+			<if test=" rcd != null and rcd !='' ">
+				and a.rcd = #{rcd}
+			</if>
+			<if test=" stcd != null and stcd !='' ">
+				and a.stcd = #{stcd}
+			</if>
+			<if test="resnm !=null and resnm != '' ">
+				and a.resnm like 
+				<if test="dbName == 'oracle'">'%'||#{resnm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{resnm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{resnm},'%')</if>
+			</if>
+			<if test="river !=null and river != '' ">
+				and a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				order by stcd desc
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_rsv(
+			rcd,
+			rescd,
+			resnm,
+			stcd,
+			stnm,
+			river,
+			defaultValue
+		) VALUES (
+			#{rcd},
+			#{rescd},
+			#{resnm},
+			#{stcd},
+			#{stnm},
+			#{river},
+			#{defaultValue}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_rsv SET 	
+			stcd = #{stcd},
+			resnm = #{resnm},
+			stnm = #{stnm},
+			river = #{river},
+			defaultValue = #{defaultValue}
+		WHERE rcd = #{rcd} and rescd = #{rescd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_rsv
+		WHERE rcd = #{rcd} and rescd = #{rescd}
+	</update>
+	
+</mapper>

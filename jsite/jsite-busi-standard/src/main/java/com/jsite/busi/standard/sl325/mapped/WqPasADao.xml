@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.baseinfo.standard.sl325.dao.WqPasADao">
+    
+	<sql id="wqPasAColumns">
+		a.itmid AS "itmid",
+		a.smcl AS "smcl",
+		a.stncd AS "stncd",
+		a.wqg AS "wqg",
+		a.wqgulv AS "wqgulv",
+		a.wqgllv AS "wqgllv"
+	</sql>
+	
+	<sql id="wqPasAJoins">
+	</sql>
+    
+	<select id="get" resultType="WqPasA">
+		SELECT 
+			<include refid="wqPasAColumns"/>
+		FROM wq_pas_a a
+		<include refid="wqPasAJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="findList" resultType="WqPasA">
+		SELECT 
+			<include refid="wqPasAColumns"/>
+		FROM wq_pas_a a
+		<include refid="wqPasAJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="findAllList" resultType="WqPasA">
+		SELECT 
+			<include refid="wqPasAColumns"/>
+		FROM wq_pas_a a
+		<include refid="wqPasAJoins"/>
+		<where>
+			
+		</where>		
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert">
+		INSERT INTO wq_pas_a(
+			itmid,
+			smcl,
+			stncd,
+			wqg,
+			wqgulv,
+			wqgllv
+		) VALUES (
+			#{itmid},
+			#{smcl},
+			#{stncd},
+			#{wqg},
+			#{wqgulv},
+			#{wqgllv}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE wq_pas_a SET 	
+			itmid = #{itmid},
+			smcl = #{smcl},
+			stncd = #{stncd},
+			wqg = #{wqg},
+			wqgulv = #{wqgulv},
+			wqgllv = #{wqgllv}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="delete">
+		DELETE FROM wq_pas_a
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

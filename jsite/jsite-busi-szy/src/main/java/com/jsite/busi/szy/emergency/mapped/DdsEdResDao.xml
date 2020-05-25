@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdResDao">
+    
+	<sql id="ddsEdResColumns">
+		a.pro_cd AS "proCd",
+		a.sec_id AS "secId",
+		a.tm AS "tm",
+		a.z AS "z",
+		a.q AS "q",
+		a.w AS "w",
+		a.p AS "p",
+		a.n AS "n",
+		a.nh3n AS "nh3n",
+		a.bod AS "bod",
+		a.cod AS "cod",
+		a.bo_pl AS "boPl",
+		a.oth AS "oth",
+		a.q_type AS "qType",
+		a.inq AS "inq",
+		a.otq AS "otq"
+	</sql>
+	
+	<sql id="ddsEdResJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdRes">
+		SELECT 
+			<include refid="ddsEdResColumns"/>
+		FROM dds_ed_res a
+		<include refid="ddsEdResJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.sec_id = #{secId} and a.tm = #{tm} and a.q_type=#{qType}
+	</select>
+	
+	<select id="list" resultType="DdsEdRes">
+		SELECT 
+			<include refid="ddsEdResColumns"/>
+		FROM dds_ed_res a
+		<include refid="ddsEdResJoins"/>
+		<where>
+			1 = 1
+			<if test="proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test="secId != null and secId != '' ">
+				and a.sec_id = #{secId}
+			</if>
+			<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' "> 
+				and a.tm between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+			<if test="tm !=null  "> 
+			   and a.tm = #{tm}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_res(
+			pro_cd,
+			sec_id,
+			tm,
+			z,
+			q,
+			w,
+			p,
+			n,
+			nh3n,
+			bod,
+			cod,
+			bo_pl,
+			oth,
+			q_type,
+			inq,
+			otq
+		) VALUES (
+			#{proCd},
+			#{secId},
+			#{tm},
+			#{z},
+			#{q},
+			#{w},
+			#{p},
+			#{n},
+			#{nh3n},
+			#{bod},
+			#{cod},
+			#{boPl},
+			#{oth},
+			#{qType},
+			#{inq},
+			#{otq}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_res SET 	
+			z = #{z},
+			q = #{q},
+			w = #{w},
+			p = #{p},
+			n = #{n},
+			nh3n = #{nh3n},
+			bod = #{bod},
+			cod = #{cod},
+			bo_pl = #{boPl},
+			oth = #{oth},
+			q_type = #{qType},
+			inq = #{inq},
+			otq = #{otq}
+		WHERE pro_cd = #{proCd} and sec_id = #{secId} and tm = #{tm} and q_type=#{qType}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_res
+		WHERE pro_cd = #{proCd} and sec_id = #{secId} and tm = #{tm} and q_type=#{qType}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_ed_res
+		WHERE pro_cd = #{proCd} 
+	</update>
+	
+	<select id="listTree" resultType="DdsEdRes">
+			SELECT a.sec_id,b.secnm,b.stype FROM (
+				SELECT sec_id FROM DDS_ED_RES 
+				<where>
+					pro_cd = #{proCd} group by sec_id 
+				</where>
+			 ) a  left join dds_m_consec b on a.sec_id=b.secid
+			 <where>
+			 	b.rcd = #{rcd}
+			 	and b.river = #{river}
+			 </where>
+			 order by b.ord
+	</select>
+	
+	<select id="findTimeBySecId" resultType="DdsEdRes">
+		select sec_id,tm from
+		dds_ed_res
+		<where>
+			1=1
+			<if test="proCd != null and proCd != '' ">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="secId != null and secId != '' ">
+				and sec_id = #{secId}
+			</if>
+			<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' "> 
+				and tm between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		group by sec_id,tm
+		order by tm asc 
+	</select>
+	
+	<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO dds_ed_res(
+			pro_cd,
+			sec_id,
+			tm,
+			z,
+			q,
+			w,
+			p,
+			n,
+			nh3n,
+			bod,
+			cod,
+			bo_pl,
+			oth,
+			q_type,
+			inq,
+			otq
+		) 
+		SELECT  A.*
+			FROM(
+			<foreach collection="list" item="item" index="index" separator="UNION ALL">
+			SELECT
+				#{item.proCd ,jdbcType=VARCHAR} PRO_CD,
+				#{item.secId ,jdbcType=VARCHAR} SEC_ID,
+				#{item.tm ,jdbcType=TIMESTAMP}	TM,
+				#{item.z ,jdbcType=NUMERIC} Z,
+				#{item.q ,jdbcType=NUMERIC} Q,
+				#{item.w ,jdbcType=NUMERIC} W,
+				#{item.p ,jdbcType=NUMERIC} P,
+				#{item.n ,jdbcType=NUMERIC} N,
+				#{item.nh3n ,jdbcType=NUMERIC} NH3N,
+				#{item.bod ,jdbcType=NUMERIC} BOD,
+				#{item.cod ,jdbcType=NUMERIC} COD,
+				#{item.boPl ,jdbcType=NUMERIC} BO_PL,
+				#{item.oth ,jdbcType=VARCHAR} OTH,
+				#{item.qType ,jdbcType=VARCHAR} QTYPE,
+				#{item.inq ,jdbcType=NUMERIC} INQ,
+				#{item.otq ,jdbcType=NUMERIC} OTQ
+			FROM dual
+			</foreach>
+			)A
+	</insert>
+	
+</mapper>

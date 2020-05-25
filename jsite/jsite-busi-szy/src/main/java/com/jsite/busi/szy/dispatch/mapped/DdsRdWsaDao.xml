@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWsaDao">
+    
+	<sql id="ddsRdWsaColumns">
+		a.pro_cd AS "proCd",
+		a.eco_q AS "ecoQ",
+		a.inq AS "inq",
+		a.tot_v AS "totV",
+		a.req_w AS "reqW",
+		a.u_ce AS "uCe",
+		a.max_yr_ws AS "maxYrWs",
+		a.swr AS "swr",
+		a.min_riv_wat AS "minRivWat",
+		a.f_dq AS "fDq",
+		a.tq AS "tq",
+		a.c_cea AS "cCea",
+		a.c_ceb AS "cCeb",
+		a.ind_cta AS "indCta",
+		a.max_sl AS "maxSl",
+		a.results_p AS "resultsP",
+		a.results_d AS "resultsD",
+		a.results_em AS "resultsEm"
+	</sql>
+	
+	<sql id="ddsRdWsaJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWsa">
+		SELECT 
+			<include refid="ddsRdWsaColumns"/>
+		FROM dds_rd_wsa a
+		<include refid="ddsRdWsaJoins"/>
+		WHERE a.pro_cd = rpad(#{proCd}, 13)
+	</select>
+	
+	<select id="list" resultType="DdsRdWsa">
+		SELECT 
+			<include refid="ddsRdWsaColumns"/>
+		FROM dds_rd_wsa a
+		<include refid="ddsRdWsaJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wsa(
+			pro_cd,
+			eco_q,
+			inq,
+			tot_v,
+			req_w,
+			u_ce,
+			max_yr_ws,
+			swr,
+			min_riv_wat,
+			f_dq,
+			tq,
+			c_cea,
+			c_ceb,
+			ind_cta,
+			max_sl,
+			results_p,
+			results_d,
+			results_em
+		) VALUES (
+			#{proCd},
+			#{ecoQ},
+			#{inq},
+			#{totV},
+			#{reqW},
+			#{uCe},
+			#{maxYrWs},
+			#{swr},
+			#{minRivWat},
+			#{fDq},
+			#{tq},
+			#{cCea},
+			#{cCeb},
+			#{indCta},
+			#{maxSl},
+			#{resultsP},
+			#{resultsD},
+			#{resultsEm}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wsa SET 	
+			eco_q = #{ecoQ},
+			inq = #{inq},
+			tot_v = #{totV},
+			req_w = #{reqW},
+			u_ce = #{uCe},
+			max_yr_ws = #{maxYrWs},
+			swr = #{swr},
+			min_riv_wat = #{minRivWat},
+			f_dq = #{fDq},
+			tq = #{tq},
+			c_cea = #{cCea},
+			c_ceb = #{cCeb},
+			ind_cta = #{indCta},
+			max_sl = #{maxSl},
+			results_p = #{resultsP},
+			results_d = #{resultsD},
+			results_em = #{resultsEm}
+		WHERE pro_cd = rpad(#{proCd}, 13)
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wsa
+		WHERE pro_cd = rpad(#{proCd}, 13)
+	</update>
+	
+</mapper>

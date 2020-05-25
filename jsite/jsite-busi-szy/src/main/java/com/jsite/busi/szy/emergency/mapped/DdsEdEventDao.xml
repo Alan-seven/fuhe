@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdEventDao">
+    
+	<sql id="ddsEdEventColumns">
+		a.even_cd AS "evenCd",
+		a.even_nm AS "evenNm",
+		a.even_tp AS "evenTp",
+		a.hap_dt AS "hapDt",
+		a.rcd AS "rcd",
+		a.pub_tp AS "pubTp",
+		a.even_g AS "evenG",
+		a.even_d AS "evenD",
+		a.pub_u AS "pubU",
+		a.pub_dt AS "pubDt",
+		a.pl_s AS "plS",
+		a.ts AS "ts",
+		a.nt AS "nt",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsEdEventJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdEvent">
+		SELECT 
+			<include refid="ddsEdEventColumns"/>
+		FROM dds_ed_event a
+		<include refid="ddsEdEventJoins"/>
+		WHERE a.even_cd = #{evenCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdEvent">
+		SELECT b.even_cd AS "fkevenCd" ,
+		b.tm AS "tm",
+            <include refid="ddsEdEventColumns"/>
+        FROM dds_ed_event a
+        <include refid="ddsEdEventJoins"/>
+        left join dds_ed_source b on a.even_cd = b.even_cd
+        <where>
+            1 = 1
+            <if test="evenTp !=null and evenTp != ''">
+                and a.even_tp = #{evenTp}
+            </if>
+            <if test="plS !=null and plS != ''">
+                and a.pl_s = #{plS}
+            </if>
+            <if test="rcd !=null and rcd != ''">
+                and a.rcd = #{rcd}
+            </if>
+            <if test="startTime !=null and startTime != '' and endTime !=null and endTime != ''">
+                and a.pub_dt between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+            </if>
+            <if test="nt != null and nt != ''">
+				and	a.nt = #{nt}
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+        </where>
+        <choose>
+            <when test="page !=null and page.orderBy != null and page.orderBy != ''">
+                ORDER BY ${pg.orderBy}
+            </when>
+            <otherwise>
+            	ORDER BY a.pub_dt DESC
+            </otherwise>
+        </choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_event(
+			even_cd,
+			even_nm,
+			even_tp,
+			hap_dt,
+			rcd,
+			pub_tp,
+			even_g,
+			even_d,
+			pub_u,
+			pub_dt,
+			pl_s,
+			nt,
+			river 
+		) VALUES (
+			#{evenCd},
+			#{evenNm},
+			#{evenTp},
+			#{hapDt},
+			#{rcd},
+			#{pubTp},
+			#{evenG},
+			#{evenD},
+			#{pubU},
+			#{pubDt},
+			#{plS},
+			#{nt},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_event SET 	
+			even_nm = #{evenNm},
+			even_tp = #{evenTp},
+			hap_dt = #{hapDt},
+			rcd = #{rcd},
+			pub_tp = #{pubTp},
+			even_g = #{evenG},
+			even_d = #{evenD},
+			pub_u = #{pubU},
+			pub_dt = #{pubDt},
+			pl_s = #{plS},
+			nt = #{nt},
+			river = #{river}
+		WHERE even_cd = #{evenCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_event
+		WHERE even_cd = #{evenCd}
+	</update>
+	
+		<select id="findByEvenNm" resultType="DdsEdEvent">
+		SELECT 
+            <include refid="ddsEdEventColumns"/>
+        FROM dds_ed_event a
+        <where>
+        	a.even_nm = #{evenNm}
+        </where>
+	</select>
+	
+</mapper>

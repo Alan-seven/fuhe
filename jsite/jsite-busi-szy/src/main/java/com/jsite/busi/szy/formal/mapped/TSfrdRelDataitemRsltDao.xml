@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdRelDataitemRsltDao">
+    
+	<sql id="tSfrdRelDataitemRsltColumns">
+		a.en_tp AS "enTp",
+		a.dt_tbl_nm AS "dtTblNm",
+		a.rslt_nm_lst AS "rsltNmLst",
+		a.dataitem_cd_lst AS "dataitemCdLst",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdRelDataitemRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdRelDataitemRslt">
+		SELECT 
+			<include refid="tSfrdRelDataitemRsltColumns"/>
+		FROM t_sfrd_rel_dataitem_rslt a
+		<include refid="tSfrdRelDataitemRsltJoins"/>
+		WHERE a.en_tp = #{enTp} and a.dt_tbl_nm = #{dtTblNm}
+	</select>
+	
+	<select id="list" resultType="TSfrdRelDataitemRslt">
+		SELECT 
+			<include refid="tSfrdRelDataitemRsltColumns"/>
+		FROM t_sfrd_rel_dataitem_rslt a
+		<include refid="tSfrdRelDataitemRsltJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_rel_dataitem_rslt(
+			en_tp,
+			dt_tbl_nm,
+			rslt_nm_lst,
+			dataitem_cd_lst,
+			nt
+		) VALUES (
+			#{enTp},
+			#{dtTblNm},
+			#{rsltNmLst},
+			#{dataitemCdLst},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_rel_dataitem_rslt SET 	
+			rslt_nm_lst = #{rsltNmLst},
+			dataitem_cd_lst = #{dataitemCdLst},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE en_tp = #{enTp} and dt_tbl_nm = #{dtTblNm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_rel_dataitem_rslt
+		WHERE en_tp = #{enTp} and dt_tbl_nm = #{dtTblNm}
+	</update>
+	
+</mapper>

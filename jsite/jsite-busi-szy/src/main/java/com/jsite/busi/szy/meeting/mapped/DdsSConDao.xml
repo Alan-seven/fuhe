@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSConDao">
+    
+	<sql id="ddsSConColumns">
+		a.con_id AS "conId",
+		a.con_name AS "conName",
+		a.con_type AS "conType",
+		a.proTp AS "proTp",
+		a.year AS "year",
+		a.month AS "month",
+		a.tenDay AS "tenDay",
+		a.pro_id_rec AS "proIdRec",
+		a.pro_id_dec AS "proIdDec",
+		a.dt AS "dt",
+		a.addr AS "addr",
+		a.persons AS "persons",
+		a.topics AS "topics",
+		a.department AS "department",
+		a.summary AS "summary",
+		a.river AS "river",
+		a.even_cd AS "evenCd"
+	</sql>
+	
+	<sql id="ddsSConJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSCon">
+		SELECT 
+			<include refid="ddsSConColumns"/>
+		FROM dds_s_con a
+		<include refid="ddsSConJoins"/>
+		WHERE a.con_id = #{conId}
+	</select>
+	
+	<select id="findByName" resultType="DdsSCon">
+		SELECT 
+			<include refid="ddsSConColumns"/>
+		FROM dds_s_con a
+		<include refid="ddsSConJoins"/>
+		<where>
+			1 = 1
+			<if test="conName !=null and conName != ''">
+				and a.con_name = #{conName}
+			</if>
+		</where>
+	</select>
+	
+	<select id="list" resultType="DdsSCon">
+		SELECT 
+			b.pro_nm AS RecProNm ,c.pro_nm AS DecProNm ,
+			d.even_nm AS "evenNm",  e.tm AS "tm",
+			<include refid="ddsSConColumns"/>
+		FROM dds_s_con a
+		left join dds_ed_p b on a.pro_id_rec=b.pro_cd
+		left join dds_ed_p c on a.pro_id_dec=c.pro_cd
+		left join dds_ed_event d on a.even_cd=d.even_cd
+		left join dds_ed_source e on a.even_cd=e.even_cd
+		<include refid="ddsSConJoins"/>
+		<where>
+			1 = 1
+			<if test="conName !=null and conName != ''">
+				and a.con_name like 
+				<if test="dbName == 'oracle'">'%'||#{conName}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{conName}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{conName},'%')</if>
+			</if>
+			<if test="conType !=null and conType != ''">
+				and a.con_type like 
+				<if test="dbName == 'oracle'">'%'||#{conType}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{conType}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{conType},'%')</if>
+			</if>
+			<if test="evenCd !=null and evenCd != ''">
+				and a.even_cd = #{evenCd}
+			</if>
+			<if test="river !=null and river != ''">
+				and a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY a.dt DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_con(
+			con_id,
+			con_name,
+			con_type,
+			proTp,
+			year,
+			month,
+			tenDay,
+			pro_id_rec,
+			pro_id_dec,
+			dt,
+			addr,
+			persons,
+			topics,
+			department,
+			summary,
+			river,
+			even_cd
+		) VALUES (
+			#{conId},
+			#{conName},
+			#{conType},
+			#{proTp},
+			#{year},
+			#{month},
+			#{tenDay},
+			#{proIdRec},
+			#{proIdDec},
+			#{dt},
+			#{addr},
+			#{persons},
+			#{topics},
+			#{department},
+			#{summary},
+			#{river},
+			#{evenCd}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_con SET 	
+			con_name = #{conName},
+			con_type = #{conType},
+			proTp = #{proTp},
+			year = #{year},
+			month = #{month},
+			tenDay = #{tenDay},
+			pro_id_rec = #{proIdRec},
+			pro_id_dec = #{proIdDec},
+			dt = #{dt},
+			addr = #{addr},
+			persons = #{persons},
+			topics = #{topics},
+			department = #{department},
+			summary = #{summary},
+			river = #{river},
+			even_cd = #{evenCd}
+		WHERE con_id = #{conId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_con
+		WHERE con_id = #{conId}
+	</update>
+	
+</mapper>

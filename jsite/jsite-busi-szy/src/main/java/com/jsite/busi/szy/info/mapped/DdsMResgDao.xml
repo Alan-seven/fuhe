@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsMResgDao">
+    
+	<sql id="ddsMResgColumns">
+		a.res_id AS "resId",
+		a.oc_id AS "ocId",
+		a.oc_tp AS "ocTp",
+		a.ts AS "ts"
+	</sql>
+	
+	<sql id="ddsMResgJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMResg">
+		SELECT 
+			<include refid="ddsMResgColumns"/>
+		FROM dds_m_resg a
+		<include refid="ddsMResgJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsMResg">
+		SELECT 
+			<include refid="ddsMResgColumns"/>
+		FROM dds_m_resg a
+		<include refid="ddsMResgJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_resg(
+			res_id,
+			oc_id,
+			oc_tp,
+			ts
+		) VALUES (
+			#{resId},
+			#{ocId},
+			#{ocTp},
+			#{ts}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_resg SET 	
+			res_id = #{resId},
+			oc_id = #{ocId},
+			oc_tp = #{ocTp},
+			ts = #{ts}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_resg
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

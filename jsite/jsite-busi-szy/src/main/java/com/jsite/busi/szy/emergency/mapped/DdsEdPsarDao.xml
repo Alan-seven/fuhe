@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdPsarDao">
+    
+	<sql id="ddsEdPsarColumns">
+		a.proe_cd AS "proeCd",
+		a.wce_cd AS "wceCd",
+		a.bg_z AS "bgZ",
+		a.bg_q AS "bgQ",
+		a.bg_conc AS "bgConc",
+		a.conc_st AS "concSt",
+		a.max_z AS "maxZ",
+		a.min_z AS "minZ",
+		a.weda AS "weda"
+	</sql>
+	
+	<sql id="ddsEdPsarJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdPsar">
+		SELECT 
+			<include refid="ddsEdPsarColumns"/>
+		FROM dds_ed_psar a
+		<include refid="ddsEdPsarJoins"/>
+		WHERE a.proe_cd = #{proeCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdPsar">
+		SELECT 
+			<include refid="ddsEdPsarColumns"/>
+		FROM dds_ed_psar a
+		<include refid="ddsEdPsarJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_psar(
+			proe_cd,
+			wce_cd,
+			bg_z,
+			bg_q,
+			bg_conc,
+			conc_st,
+			max_z,
+			min_z,
+			weda
+		) VALUES (
+			#{proeCd},
+			#{wceCd},
+			#{bgZ},
+			#{bgQ},
+			#{bgConc},
+			#{concSt},
+			#{maxZ},
+			#{minZ},
+			#{weda}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_psar SET 	
+			wce_cd = #{wceCd},
+			bg_z = #{bgZ},
+			bg_q = #{bgQ},
+			bg_conc = #{bgConc},
+			conc_st = #{concSt},
+			max_z = #{maxZ},
+			min_z = #{minZ},
+			weda = #{weda}
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_psar
+		WHERE proe_cd = #{proeCd}
+	</update>
+	
+</mapper>

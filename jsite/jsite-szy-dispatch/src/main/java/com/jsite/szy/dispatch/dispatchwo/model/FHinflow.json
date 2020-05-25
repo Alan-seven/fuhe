@@ -1,0 +1,37 @@
+{
+	"name":"抚河预报转调度入流方案",
+	"data":[{
+		"ref":"CA000001",
+		"comment":"李家渡汇口",
+		"formula":[	{"ref":"62421200", "multiple":1.0},
+					{"ref":"62436700", "multiple":-1.0},
+					{"ref":"62430500", "multiple":-1.0}]
+	},{
+		"ref":"CA000002",
+		"comment":"廖家湾汇口",
+		"formula":[	{"ref":"62430500", "multiple":1.0},
+					{"ref":"62401300", "multiple":-1.0}]
+	},{
+		"ref":"CA000003",
+		"comment":"黎川汇口",
+		"formula":[	{"ref":"62403600", "multiple":1.0}]
+	},{
+		"ref":"CA000004",
+		"comment":"洪门汇口",
+		"formula":[	{"ref":"62401300", "multiple":1.0},
+					{"ref":"62405400", "multiple":-1.0}]
+	},{
+		"ref":"CA000005",
+		"comment":"沙子岭汇口",
+		"formula":[	{"ref":"62405200", "multiple":1.0}]
+	},{
+		"ref":"CA000006",
+		"comment":"南城汇口",
+		"formula":[	{"ref":"62405400", "multiple":1.0},
+					{"ref":"62405200", "multiple":-1.0}]
+	},{
+		"ref":"CA000007",
+		"comment":"娄家村汇口",
+		"formula":[	{"ref":"62436700", "multiple":1.0}]
+	}]
+}

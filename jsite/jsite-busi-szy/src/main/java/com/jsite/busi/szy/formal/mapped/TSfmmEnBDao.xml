@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmEnBDao">
+    
+	<sql id="tSfmmEnBColumns">
+		a.region_cd AS "regionCd",
+		a.en_cd AS "enCd",
+		a.en_nm AS "enNm",
+		a.en_tp AS "enTp",
+		a.node_lst AS "nodeLst",
+		a.dat_cd AS "datCd",
+		a.datum_mod AS "datumMod",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfmmEnBJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmEnB">
+		SELECT 
+			<include refid="tSfmmEnBColumns"/>
+		FROM T_SFMM_EN_B a
+		<include refid="tSfmmEnBJoins"/>
+		WHERE a.region_cd = #{regionCd} and a.en_cd = #{enCd} 
+	</select>
+	
+	<select id="list" resultType="TSfmmEnB">
+		SELECT 
+			<include refid="tSfmmEnBColumns"/>
+		FROM T_SFMM_EN_B a
+		<include refid="tSfmmEnBJoins"/>
+		<where>
+			1 = 1 
+			<if test="regionCd != null and regionCd != ''">
+			 	and region_cd = #{regionCd}
+			</if>
+			<if test="enTp != null and enTp != ''">
+			 	and en_tp = #{enTp}
+			</if>
+			<if test="enNm != null and enNm != ''">
+			 	and a.en_nm like 
+				<if test="dbName == 'oracle'">'%'||#{enNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{enNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{enNm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_EN_B(
+			region_cd ,
+			en_cd ,
+			en_nm ,
+			en_tp ,
+			node_lst,
+			dat_cd,
+			datum_mod,
+			nt 
+		) VALUES (
+			#{regionCd},
+			#{enCd},
+			#{enNm},
+			#{enTp},
+			#{nodeLst},
+			#{datCd},
+			#{datumMod},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_EN_B SET 	
+			en_nm = #{enNm} ,
+			en_tp = #{enTp} ,
+			node_lst = #{nodeLst} ,
+			dat_cd = #{datCd} ,
+			datum_mod = #{datumMod} ,
+			nt = #{nt} 
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} 
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_EN_B
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} 
+	</update>
+	
+</mapper>

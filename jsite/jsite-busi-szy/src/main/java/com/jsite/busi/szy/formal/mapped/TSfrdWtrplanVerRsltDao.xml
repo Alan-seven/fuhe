@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdWtrplanVerRsltDao">
+    
+	<sql id="tSfrdWtrplanVerRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.st_dt AS "stDt",
+		a.ed_dt AS "edDt",
+		a.aw_ww AS "awWw",
+		a.ad_ww AS "adWw",
+		a.av_ww AS "avWw",
+		a.irr_gw_ww AS "irrGwWw",
+		a.fi_ww AS "fiWw",
+		a.ai_ww AS "aiWw",
+		a.fish_wu AS "fishWu",
+		a.rh_ww AS "rhWw",
+		a.ff_gw_ww AS "ffGwWw",
+		a.ie_ww AS "ieWw",
+		a.ixe_ww AS "ixeWw",
+		a.io_ww AS "ioWw",
+		a.ic_ww AS "icWw",
+		a.ind_gw_ww AS "indGwWw",
+		a.pbld_ww AS "pbldWw",
+		a.psrv_ww AS "psrvWw",
+		a.p_gw_ww AS "pGwWw",
+		a.du_ww AS "duWw",
+		a.dr_ww AS "drWw",
+		a.d_gw_ww AS "dGwWw",
+		a.eu_ww AS "euWw",
+		a.er_ww AS "erWw",
+		a.e_gw_ww AS "eGwWw",
+		a.lif_ww AS "lifWw",
+		a.agr_ww AS "agrWw",
+		a.ind_ww AS "indWw",
+		a.eco_ww AS "ecoWw",
+		a.tot_w AS "totW",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdWtrplanVerRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdWtrplanVerRslt">
+		SELECT 
+			<include refid="tSfrdWtrplanVerRsltColumns"/>
+		FROM t_sfrd_wtrplan_ver_rslt a
+		<include refid="tSfrdWtrplanVerRsltJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd =#{enCd} and a.st_dt =#{stDt} and a.ed_dt = #{edDt}
+	</select>
+	
+	<select id="list" resultType="TSfrdWtrplanVerRslt">
+		SELECT 
+			<include refid="tSfrdWtrplanVerRsltColumns"/>
+		FROM t_sfrd_wtrplan_ver_rslt a
+		<include refid="tSfrdWtrplanVerRsltJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_wtrplan_ver_rslt(
+			pro_cd,
+			en_cd,
+			st_dt,
+			ed_dt,
+			aw_ww,
+			ad_ww,
+			av_ww,
+			irr_gw_ww,
+			fi_ww,
+			ai_ww,
+			fish_wu,
+			rh_ww,
+			ff_gw_ww,
+			ie_ww,
+			ixe_ww,
+			io_ww,
+			ic_ww,
+			ind_gw_ww,
+			pbld_ww,
+			psrv_ww,
+			p_gw_ww,
+			du_ww,
+			dr_ww,
+			d_gw_ww,
+			eu_ww,
+			er_ww,
+			e_gw_ww,
+			lif_ww,
+			agr_ww,
+			ind_ww,
+			eco_ww,
+			tot_w,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{stDt},
+			#{edDt},
+			#{awWw},
+			#{adWw},
+			#{avWw},
+			#{irrGwWw},
+			#{fiWw},
+			#{aiWw},
+			#{fishWu},
+			#{rhWw},
+			#{ffGwWw},
+			#{ieWw},
+			#{ixeWw},
+			#{ioWw},
+			#{icWw},
+			#{indGwWw},
+			#{pbldWw},
+			#{psrvWw},
+			#{pGwWw},
+			#{duWw},
+			#{drWw},
+			#{dGwWw},
+			#{euWw},
+			#{erWw},
+			#{eGwWw},
+			#{lifWw},
+			#{agrWw},
+			#{indWw},
+			#{ecoWw},
+			#{totW},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_wtrplan_ver_rslt SET 	
+			aw_ww = #{awWw},
+			ad_ww = #{adWw},
+			av_ww = #{avWw},
+			irr_gw_ww = #{irrGwWw},
+			fi_ww = #{fiWw},
+			ai_ww = #{aiWw},
+			fish_wu = #{fishWu},
+			rh_ww = #{rhWw},
+			ff_gw_ww = #{ffGwWw},
+			ie_ww = #{ieWw},
+			ixe_ww = #{ixeWw},
+			io_ww = #{ioWw},
+			ic_ww = #{icWw},
+			ind_gw_ww = #{indGwWw},
+			pbld_ww = #{pbldWw},
+			psrv_ww = #{psrvWw},
+			p_gw_ww = #{pGwWw},
+			du_ww = #{duWw},
+			dr_ww = #{drWw},
+			d_gw_ww = #{dGwWw},
+			eu_ww = #{euWw},
+			er_ww = #{erWw},
+			e_gw_ww = #{eGwWw},
+			lif_ww = #{lifWw},
+			agr_ww = #{agrWw},
+			ind_ww = #{indWw},
+			eco_ww = #{ecoWw},
+			tot_w = #{totW},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and en_cd =#{enCd} and st_dt =#{stDt} and ed_dt = #{edDt}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_wtrplan_ver_rslt
+		WHERE pro_cd = #{proCd} and en_cd =#{enCd} and st_dt =#{stDt} and ed_dt = #{edDt}
+	</update>
+	
+</mapper>

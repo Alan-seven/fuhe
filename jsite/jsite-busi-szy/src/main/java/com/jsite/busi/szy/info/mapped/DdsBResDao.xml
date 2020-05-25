@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBResDao">
+    
+	<sql id="ddsBResColumns">
+		a.res_cd AS "resCd",
+		a.res_nm AS "resNm",
+		a.loc AS "loc",
+		a.comp_ym AS "compYm",
+		a.proj_scal AS "projScal",
+		a.dat_tp AS "datTp",
+		a.cat_a AS "catA",
+		a.des_fz AS "desFz",
+		<!-- to_char(a.tot_v,'fm99999999999999999990.000') AS "totV", --> 
+		a.tot_v  AS "totV",
+		a.frsc_v AS "frscV",
+		a.norm_wz AS "normWz",
+		a.cf_z AS "cfZ",
+		a.util_v AS "utilV",
+		a.fs_z AS "fsZ",
+		a.fs_z_v AS "fsZV",
+		a.dead_z AS "deadZ",
+		a.dead_v AS "deadV",
+		a.res_reg_tp AS "resRegTp",
+		a.min_disc AS "minDisc",
+		a.st_end_len AS "stEndLen",
+		a.rhcc AS "rhcc",
+		a.run_cond AS "runCond",
+		a.eng_man_cd AS "engManCd",
+		a.ws_reg AS "wsReg",
+		a.ts AS "ts",
+		a.nt AS "nt",
+		a.lttd AS "lttd",
+		a.lgtd AS "lgtd",
+		a.zvcurve_id AS "zvcurveId",
+		a.ftcurve_id AS "ftcurveId",
+		a.whcurve_id AS "whcurveId",
+		a.zfcurve_id AS "zfcurveId",
+		a.iqwhcurve_id AS "iqwhcurveId"
+	</sql>
+	
+	<sql id="ddsBResJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBRes">
+		SELECT 
+			<include refid="ddsBResColumns"/>
+		FROM dds_b_res a
+		<include refid="ddsBResJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBRes">
+		SELECT 
+			<include refid="ddsBResColumns"/>
+		FROM dds_b_res a
+		<include refid="ddsBResJoins"/>
+		<where>
+			1=1 
+			<if test="resNm != null and resNm != ''">
+				and	a.res_nm like '%'||#{resNm}||'%'
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_res(
+			res_cd,
+			res_nm,
+			loc,
+			comp_ym,
+			proj_scal,
+			dat_tp,
+			cat_a,
+			des_fz,
+			tot_v,
+			frsc_v,
+			norm_wz,
+			cf_z,
+			util_v,
+			fs_z,
+			fs_z_v,
+			dead_z,
+			dead_v,
+			res_reg_tp,
+			min_disc,
+			st_end_len,
+			rhcc,
+			run_cond,
+			eng_man_cd,
+			ws_reg,
+			ts,
+			nt,
+			lttd,
+			lgtd,
+			zvcurve_id,
+			ftcurve_id,
+			whcurve_id,
+			zfcurve_id,
+			iqwhcurve_id,
+			river 
+		) VALUES (
+			#{resCd},
+			#{resNm},
+			#{loc},
+			#{compYm},
+			#{projScal},
+			#{datTp},
+			#{catA},
+			#{desFz},
+			#{totV},
+			#{frscV},
+			#{normWz},
+			#{cfZ},
+			#{utilV},
+			#{fsZ},
+			#{fsZV},
+			#{deadZ},
+			#{deadV},
+			#{resRegTp},
+			#{minDisc},
+			#{stEndLen},
+			#{rhcc},
+			#{runCond},
+			#{engManCd},
+			#{wsReg},
+			#{ts},
+			#{nt},
+			#{lttd},
+			#{lgtd},
+			#{zvcurveId},
+			#{ftcurveId},
+			#{whcurveId},
+			#{zfcurveId},
+			#{iqwhcurveId},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_res SET 	
+			res_cd = #{resCd},
+			res_nm = #{resNm},
+			loc = #{loc},
+			comp_ym = #{compYm},
+			proj_scal = #{projScal},
+			dat_tp = #{datTp},
+			cat_a = #{catA},
+			des_fz = #{desFz},
+			tot_v = #{totV},
+			frsc_v = #{frscV},
+			norm_wz = #{normWz},
+			cf_z = #{cfZ},
+			util_v = #{utilV},
+			fs_z = #{fsZ},
+			fs_z_v = #{fsZV},
+			dead_z = #{deadZ},
+			dead_v = #{deadV},
+			res_reg_tp = #{resRegTp},
+			min_disc = #{minDisc},
+			st_end_len = #{stEndLen},
+			rhcc = #{rhcc},
+			run_cond = #{runCond},
+			eng_man_cd = #{engManCd},
+			ws_reg = #{wsReg},
+			ts = #{ts},
+			nt = #{nt},
+			lttd = #{lttd},
+			lgtd = #{lgtd},
+			zvcurve_id = #{zvcurveId},
+			ftcurve_id = #{ftcurveId},
+			whcurve_id = #{whcurveId},
+			zfcurve_id = #{zfcurveId},
+			iqwhcurve_id = #{iqwhcurveId},
+			river = #{river}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_res
+		WHERE id = #{id}
+	</update>
+	
+	<select id="findByZV" resultType="DdsBRes">
+		SELECT 
+			a.res_cd AS "resCd",a.res_nm AS "resNm", 
+			b.v0 AS "v0",b.v1 AS "v1"
+		FROM dds_b_res a left join dds_c_det b
+		on a.zvcurve_id=b.curve_id 
+		<include refid="ddsBResJoins"/>
+		<where>
+			1=1 
+			<if test="resCd != null and resCd != ''">
+				and	a.res_cd =#{resCd}
+			</if>
+			<if test="v0 != null and v0 != ''">
+				and	b.v0 =#{v0}
+			</if>
+			<if test="v1 != null and v1 != ''">
+				and	b.v1 =#{v1}
+			</if>
+		</where>
+			ORDER BY b.v0 asc 
+	</select>
+	
+	<select id="findByZQ" resultType="DdsBRes">
+		SELECT 
+			a.res_cd AS "resCd",a.res_nm AS "resNm", b.v0 AS "v0",b.v1 AS "v1"
+		FROM dds_b_res a left join dds_c_det b
+		on a.ftcurve_id=b.curve_id 
+		<include refid="ddsBResJoins"/>
+		<where>
+			1=1 
+			<if test="resCd != null and resCd != ''">
+				and	a.res_cd =#{resCd}
+			</if>
+			<if test="v0 != null and v0 != ''">
+				and	b.v0 =#{v0}
+			</if>
+			<if test="v1 != null and v1 != ''">
+				and	b.v1 =#{v1}
+			</if>
+		</where>
+			ORDER BY b.v0 asc 
+	</select>
+</mapper>

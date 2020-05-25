@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsMRescDao">
+    
+	<sql id="ddsMRescColumns">
+		a.rt_id AS "rtId",
+		a.res_id AS "resId",
+		a.bt AS "bt",
+		a.et AS "et",
+		a.rt_tp AS "rtTp",
+		a.max AS "max",
+		a.min AS "min"
+	</sql>
+	
+	<sql id="ddsMRescJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMResc">
+		SELECT 
+			<include refid="ddsMRescColumns"/>
+		FROM dds_m_resc a
+		<include refid="ddsMRescJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsMResc">
+		SELECT 
+			<include refid="ddsMRescColumns"/>
+		FROM dds_m_resc a
+		<include refid="ddsMRescJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_resc(
+			rt_id,
+			res_id,
+			bt,
+			et,
+			rt_tp,
+			max,
+			min
+		) VALUES (
+			#{rtId},
+			#{resId},
+			#{bt},
+			#{et},
+			#{rtTp},
+			#{max},
+			#{min}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_resc SET 	
+			rt_id = #{rtId},
+			res_id = #{resId},
+			bt = #{bt},
+			et = #{et},
+			rt_tp = #{rtTp},
+			max = #{max},
+			min = #{min}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_resc
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

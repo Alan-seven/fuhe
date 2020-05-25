@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdRsvrInitDao">
+    
+	<sql id="tSfrdRsvrInitColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.STZ AS "stz",
+		a.EDZ AS "edz",
+		a.STV AS "stv",
+		a.EDV AS "edv"
+	</sql>
+	
+	<sql id="tSfrdRsvrInitJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdRsvrInit">
+		SELECT 
+			<include refid="tSfrdRsvrInitColumns"/>
+		FROM T_SFRD_RSVR_INIT a
+		<include refid="tSfrdRsvrInitJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd = #{enCd} 
+	</select>
+	
+	<select id="list" resultType="TSfrdRsvrInit">
+		SELECT 
+			<include refid="tSfrdRsvrInitColumns"/>
+		FROM T_SFRD_RSVR_INIT a
+		<include refid="tSfrdRsvrInitJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+			 	and pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFRD_RSVR_INIT(
+			pro_cd ,
+			en_cd ,
+			stz ,
+			edz ,
+			stv,
+			edv
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{stz},
+			#{edz},
+			#{stv},
+			#{edv}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFRD_RSVR_INIT SET 	
+			stz = #{stz} ,
+			edz = #{edz} ,
+			stv = #{stv} ,
+			edv = #{edv} 
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} 
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFRD_RSVR_INIT
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

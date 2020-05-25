@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdGisDao">
+    
+	<sql id="ddsEdGisColumns">
+		a.pro_cd AS "proCd",
+		a.rcd AS "rcd",
+		a.time AS "time",
+		a.fid AS "fid",
+		a.planValue AS "planValue",
+		a.realValue AS "realValue"
+	</sql>
+	
+	<sql id="ddsEdGisJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdGis">
+		SELECT 
+			<include refid="ddsEdGisColumns"/>
+		FROM dds_ed_gis a
+		<include refid="ddsEdGisJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.rcd = #{rcd} and a.time = #{time} and a.fid = #{fid}
+	</select>
+	
+	<select id="list" resultType="DdsEdGis">
+		SELECT 
+			<include refid="ddsEdGisColumns"/>
+		FROM dds_ed_gis a
+		<include refid="ddsEdGisJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test="time != null ">
+				and a.time = #{time}
+			</if>
+			<if test="rcd != null  ">
+				and a.rcd  = #{rcd }
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				order by a.fid
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_gis(
+			pro_cd,
+			rcd,
+			time,
+			fid,
+			planValue,
+			realValue
+		) VALUES (
+			#{proCd},
+			#{rcd},
+			#{time},
+			#{fid},
+			#{planValue},
+			#{realValue}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_gis SET 	
+			planValue = #{planValue},
+			realValue = #{realValue}
+		WHERE pro_cd = #{proCd} and rcd = #{rcd} and time = #{time} and a.fid = #{fid}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_gis
+		WHERE pro_cd = #{proCd} and rcd = #{rcd} and time = #{time} and a.fid = #{fid}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_ed_gis
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<select  id="findTime" resultType="DdsEdGis">
+		select pro_cd,rcd,time from dds_ed_gis
+		<where>
+			1=1
+			<if test="proCd != null and proCd != '' ">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="rcd != null  ">
+				and rcd  = #{rcd }
+			</if>
+		</where>
+		group by pro_cd,rcd,time
+		order by time asc 
+	</select>
+	
+		<insert id="insertBatch" parameterType="java.util.List">
+		INSERT INTO dds_ed_gis(
+			pro_cd,
+			rcd,
+			time,
+			fid,
+			planValue,
+			realValue
+		) 
+		SELECT  A.*
+			FROM(
+			<foreach collection="list" item="item" index="index" separator="UNION ALL">
+			SELECT
+				#{item.proCd ,jdbcType=VARCHAR} PRO_CD,
+				#{item.rcd ,jdbcType=INTEGER} rcd,
+				#{item.time ,jdbcType=INTEGER}	time,
+				#{item.fid ,jdbcType=INTEGER} fid,
+				#{item.planValue ,jdbcType=NUMERIC} planValue,
+				#{item.realValue ,jdbcType=NUMERIC} realValue
+			FROM dual
+			</foreach>
+			)A
+	</insert>
+	
+</mapper>

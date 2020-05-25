@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.DataDao">
+    
+	<sql id="dataColumns">
+		a.id AS "id",
+		a.stcd AS "stcd",
+		a.tm AS "tm",
+		a.itm_id AS "itmId",
+		a.itm_vl AS "itmVl",
+		a.user_id AS "user.id"
+	</sql>
+	
+	<sql id="dataJoins">
+	</sql>
+    
+	<select id="get" resultType="Data">
+		SELECT 
+			<include refid="dataColumns"/>
+		FROM t_data a
+		<include refid="dataJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="Data">
+		SELECT 
+			<include refid="dataColumns"/>
+		FROM t_data a
+		<include refid="dataJoins"/>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_data(
+			id,
+			stcd,
+			tm,
+			itm_id,
+			itm_vl,
+			user_id
+		) VALUES (
+			#{id},
+			#{stcd},
+			#{tm},
+			#{itmId},
+			#{itmVl},
+			#{user.id}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_data SET 	
+			stcd = #{stcd},
+			tm = #{tm},
+			itm_id = #{itmId},
+			itm_vl = #{itmVl},
+			user_id = #{user.id}
+		WHERE id = #{id}
+	</update>
+
+	<update id="remove">
+		DELETE FROM t_data
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

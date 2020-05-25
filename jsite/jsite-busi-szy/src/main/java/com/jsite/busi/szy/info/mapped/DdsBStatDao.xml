@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBStatDao">
+    
+	<sql id="ddsBStatColumns">
+		a.stcd AS "stcd",
+		trim(a.st_nm) AS "stNm",
+		a.st_tp AS "stTp",
+		trim(a.loc) AS "loc",
+		a.lgtd AS "lgtd",
+		a.lttd AS "lttd",
+		a.stbk AS "stbk",
+		a.flow_dir AS "flowDir",
+		a.dat_tp AS "datTp",
+		a.dat_elev AS "datElev",
+		a.mod_bas_val AS "modBasVal",
+		a.mod_para AS "modPara",
+		a.mon_tp_a AS "monTpA",
+		a.mon_tp_b AS "monTpB",
+		a.est_st_ym AS "estStYm",
+		a.run_cond AS "runCond",
+		a.eng_man_cd AS "engManCd",
+		a.pin_yin_cd AS "pinYinCd",
+		a.ts AS "ts",
+		a.nt AS "nt",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsBStatJoins">
+		left join dds_b_statext b on a.stcd = b.stcd
+	</sql>
+    
+	<select id="get" resultType="DdsBStat">
+		SELECT 
+			<include refid="ddsBStatColumns"/>
+		FROM dds_b_stat a
+		<include refid="ddsBStatJoins"/>
+		WHERE a.stcd = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBStat">
+		SELECT 
+			<include refid="ddsBStatColumns"/>
+			, b.item_r  AS itemR ,b.item_p AS itemP,b.item_Z  AS itemZ ,b.item_Q AS itemQ
+			FROM dds_b_stat a
+		<include refid="ddsBStatJoins"/>
+		<where>
+			a.run_cond !='3'
+			<if test="stNm != null and stNm != ''">
+				and	a.st_nm like '%'||#{stNm}||'%'
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+			<if test="itemR != null and itemR != ''">
+				and	b.item_r = #{itemR}
+			</if>
+			<if test="itemZ != null and itemZ != ''">
+				and	b.item_z = #{itemZ}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				 ORDER BY A.STCD ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_stat(
+			stcd,
+			st_nm,
+			st_tp,
+			loc,
+			stbk,
+			lgtd,
+			lttd,
+			flow_dir,
+			dat_tp,
+			dat_elev,
+			mod_bas_val,
+			mod_para,
+			mon_tp_a,
+			mon_tp_b,
+			est_st_ym,
+			run_cond,
+			eng_man_cd,
+			pin_yin_cd,
+			ts,
+			nt,
+			river,
+		) VALUES (
+			#{stcd},
+			#{stNm},
+			#{stTp},
+			#{loc},
+			#{stbk},
+			#{lgtd},
+			#{lttd},
+			#{flowDir},
+			#{datTp},
+			#{datElev},
+			#{modBasVal},
+			#{modPara},
+			#{monTpA},
+			#{monTpB},
+			#{estStYm},
+			#{runCond},
+			#{engManCd},
+			#{pinYinCd},
+			#{ts},
+			#{nt},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_stat SET 	
+			stcd = #{stcd},
+			st_nm = #{stNm},
+			st_tp = #{stTp},
+			loc = #{loc},
+			lgtd = #{lgtd},
+			lttd = #{lttd},
+			stbk = #{stbk},
+			flow_dir = #{flowDir},
+			dat_tp = #{datTp},
+			dat_elev = #{datElev},
+			mod_bas_val = #{modBasVal},
+			mod_para = #{modPara},
+			mon_tp_a = #{monTpA},
+			mon_tp_b = #{monTpB},
+			est_st_ym = #{estStYm},
+			run_cond = #{runCond},
+			eng_man_cd = #{engManCd},
+			pin_yin_cd = #{pinYinCd},
+			ts = #{ts},
+			nt = #{nt},
+			river = #{river}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_stat
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdWsaRsltDao">
+    
+	<sql id="tSfrdWsaRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.tm AS "tm",
+		a.indw AS "indw",
+		a.lifw AS "lifw",
+		a.agrw AS "agrw",
+		a.fafrw AS "fafrw",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdWsaRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdWsaRslt">
+		SELECT 
+			<include refid="tSfrdWsaRsltColumns"/>
+		FROM t_sfrd_wsa_rslt a
+		<include refid="tSfrdWsaRsltJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.en_cd=#{enCd}
+	</select>
+	
+	<select id="list" resultType="TSfrdWsaRslt">
+		SELECT 
+			<include refid="tSfrdWsaRsltColumns"/>
+		FROM t_sfrd_wsa_rslt a
+		<include refid="tSfrdWsaRsltJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+				and en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TM
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_wsa_rslt(
+			pro_cd,
+			en_cd,
+			tm,
+			indw,
+			lifw,
+			agrw,
+			fafrw,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{tm},
+			#{indw},
+			#{lifw},
+			#{agrw},
+			#{fafrw},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_wsa_rslt SET 	
+			indw = #{indw},
+			lifw = #{lifw},
+			agrw = #{agrw},
+			fafrw = #{fafrw},
+			nt = #{nt}
+		WHERE pro_cd = #{proCd} and en_cd = #{enCd} and tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_wsa_rslt
+		WHERE pro_cd = #{proCd} and en_cd=#{enCd}
+	</update>
+	
+</mapper>

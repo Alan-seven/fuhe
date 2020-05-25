@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.WqClassifyStatisDao">
+    
+	<sql id="wqClassifyStatisColumns">
+		a.id AS "id",
+		a.stcd AS "stcd",
+		a.wqg AS "wqg",
+		a.times AS "times",
+		a.ratio AS "ratio",
+		a.tm AS "tm",
+		a.sttdrcd AS "sttdrcd"
+	</sql>
+	
+	<sql id="wqClassifyStatisJoins">
+	</sql>
+    
+	<select id="get" resultType="WqClassifyStatis">
+		SELECT 
+			<include refid="wqClassifyStatisColumns"/>
+		FROM t_wq_classify_statis a
+		<include refid="wqClassifyStatisJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="WqClassifyStatis">
+		SELECT 
+			<include refid="wqClassifyStatisColumns"/>
+		FROM t_wq_classify_statis a
+		<include refid="wqClassifyStatisJoins"/>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_wq_classify_statis(
+			id,
+			stcd,
+			wqg,
+			times,
+			ratio,
+			tm,
+			sttdrcd
+		) VALUES (
+			#{id},
+			#{stcd},
+			#{wqg},
+			#{times},
+			#{ratio},
+			#{tm},
+			#{sttdrcd}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_wq_classify_statis SET 	
+			stcd = #{stcd},
+			wqg = #{wqg},
+			times = #{times},
+			ratio = #{ratio},
+			tm = #{tm},
+			sttdrcd = #{sttdrcd}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_wq_classify_statis
+		WHERE id = #{id} OR parent_ids LIKE '%,'||#{id}||',%'
+	</update>
+	
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBAdDao">
+    
+	<sql id="ddsBAdColumns">
+		a.ad_cd AS "adCd",
+		a.ad_nm AS "adNm",
+		a.ad_shnm AS "adShnm",
+		a.ad_a AS "adA",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsBAdJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBAd">
+		SELECT 
+			<include refid="ddsBAdColumns"/>
+		FROM dds_b_ad a
+		<include refid="ddsBAdJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBAd">
+		SELECT 
+			<include refid="ddsBAdColumns"/>
+		FROM dds_b_ad a
+		<include refid="ddsBAdJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_ad(
+			ad_cd,
+			ad_nm,
+			ad_shnm,
+			ad_a,
+			ts,
+			nt
+		) VALUES (
+			#{adCd},
+			#{adNm},
+			#{adShnm},
+			#{adA},
+			#{ts},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_ad SET 	
+			ad_cd = #{adCd},
+			ad_nm = #{adNm},
+			ad_shnm = #{adShnm},
+			ad_a = #{adA},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_ad
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

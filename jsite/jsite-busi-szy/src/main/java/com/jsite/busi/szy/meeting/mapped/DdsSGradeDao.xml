@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSGradeDao">
+    
+	<sql id="ddsSGradeColumns">
+		a.con_id AS "conId",
+		a.pro_id AS "proId",
+		a.exp_id AS "expId",
+		a.grade AS "grade",
+		a.weight AS "weight"
+	</sql>
+	
+	<sql id="ddsSGradeJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSGrade">
+		SELECT 
+			<include refid="ddsSGradeColumns"/>
+		FROM dds_s_grade a
+		<include refid="ddsSGradeJoins"/>
+		WHERE a.con_id = #{conId} and a.pro_id = #{proId} and a.exp_id = #{expId}
+	</select>
+	
+	<select id="list" resultType="DdsSGrade">
+		SELECT 
+			<include refid="ddsSGradeColumns"/>
+		FROM dds_s_grade a
+		<include refid="ddsSGradeJoins"/>
+		<where>
+			<if test="conId != null and conId != ''">
+				a.con_id = #{conId}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_grade(
+			con_id,
+			pro_id,
+			exp_id,
+			grade,
+			weight
+		) VALUES (
+			#{conId},
+			#{proId},
+			#{expId},
+			#{grade},
+			#{weight}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_grade SET 	
+			pro_id = #{proId},
+			exp_id = #{expId},
+			grade = #{grade},
+			weight = #{weight}
+		WHERE con_id = #{conId} and pro_id = #{proId} and exp_id = #{expId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_grade
+		WHERE con_id = #{conId} and pro_id = #{proId} and exp_id = #{expId}
+	</update>
+	
+	<select id="getExpByConid" resultType="DdsSGrade">
+		select a.con_id,a.exp_id,b.name 
+		FROM 
+			( SELECT 
+				a.con_id,exp_id
+			FROM dds_s_grade a
+			<include refid="ddsSGradeJoins"/>
+			WHERE con_id = #{conId} 
+			group by a.con_id , a.exp_id ) a 
+		left join dds_s_exp b on a.exp_id = b.code
+		order by a.exp_id
+	</select>
+	
+	<select id="getProByConid" resultType="DdsSGrade">
+		select a.con_id,a.pro_id,b.pro_nm AS "name" 
+		FROM 
+			( SELECT 
+				a.con_id,pro_id
+			FROM dds_s_grade a
+			<include refid="ddsSGradeJoins"/>
+			WHERE con_id = #{conId} 
+			group by a.con_id , a.pro_id ) a 
+		left join dds_ed_p b on a.pro_id = b.pro_id
+		order by a.exp_id
+	</select>
+</mapper>

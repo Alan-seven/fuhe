@@ -1,0 +1,52 @@
+{
+	"id": "scheduling_result",
+	"name": "调度方案",
+	"columns": [{
+		"id": "col1",
+		"text": "沙子岭",
+		"sub": [{"ref": "CA000005", "comment": "沙子岭汇口"}],
+		"type": "section"
+	},{
+		"id": "col2",
+		"text": "南城站上游(盱江段)",
+		"sub": [{"ref": "361030F0905201", "comment": "广昌县-盱江"},
+				{"ref": "361023F0905201", "comment": "南丰县-盱江"},
+				{"ref": "361021F0905201", "comment": "南城县-盱江"}],
+		"type": "usewater"
+	},{
+		"id": "col3",
+		"text": "洪门上游(黎滩河)",
+		"sub": [{"ref": "361022F0905301", "comment": "黎川县-黎滩河"},
+				{"ref": "361021F0905301", "comment": "南城县-黎滩河"}],
+		"type": "usewater"
+	},{
+		"id": "col4",
+		"text": "洪门水库",
+		"sub": [{"ref": "783944000000", "comment": "洪门"}],
+		"type": "reservoir"
+	},{
+		"id": "col5",
+		"text": "南城站(洪门-抚河)",
+		"sub": [{"ref": "361021F0905302", "comment": "南城县-洪门-抚河"}],
+		"type": "usewater"
+	},{
+		"id": "col6",
+		"text": "廖坊水库",
+		"sub": [{"ref": "783944000125", "comment": "廖坊"}],
+		"type": "reservoir"
+	},{
+		"id": "col7",
+		"text": "廖坊至李家渡",
+		"sub": [{"ref": "361028F0905304", "comment": "资溪县-廖坊-临水"},
+				{"ref": "361027F0905304", "comment": "金溪县-廖坊-临水"},
+				{"ref": "361002F0905304", "comment": "临川县-廖坊-临水"},
+				{"ref": "361026F0905101", "comment": "宜黄县-临水"},
+				{"ref": "361025F0905101", "comment": "乐安县-临水"},
+				{"ref": "361024F0905101", "comment": "崇仁县-临水"},
+				{"ref": "361002F0905101", "comment": "临川县-临水"},
+				{"ref": "361027F0905305", "comment": "金溪县-临水以下"},
+				{"ref": "361002F0905305", "comment": "临川县-临水以下"},
+				{"ref": "361029F0905305", "comment": "东乡县-临水以下"}],
+		"type": "usewater"
+	}]
+}

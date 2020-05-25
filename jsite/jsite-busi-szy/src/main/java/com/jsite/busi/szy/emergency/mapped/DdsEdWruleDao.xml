@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdWruleDao">
+    
+	<sql id="ddsEdWruleColumns">
+		a.stcd AS "stcd",
+		a.types AS "types",
+		a.levels AS "levels",
+		a.updown AS "updown",
+		a.vavule AS "vavule",
+		a.unit_code AS "unitCode",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsEdWruleJoins">
+	</sql>
+    
+    <resultMap id="ddsEdWruleResult" type="DdsEdWrule">
+		<id property="stcd" column="stcd" />
+		<result property="types" column="types" />
+		<result property="levels" column="levels" />
+		<result property="updown" column="updown" />
+		<result property="vavule" column="vavule" />
+		<result property="unit_code" column="unitCode" /> 
+		<result property="nt" column="nt" /> 
+		<collection property="wruleList" ofType="DdsEdWrule">
+			<id property="stcd" column="wruleList.stcd" />
+			<result property="types" column="wruleList.types" />
+			<result property="levels" column="wruleList.levels" />
+			<result property="updown" column="wruleList.updown" />
+			<result property="vavule" column="wruleList.vavule" />
+			<result property="unit_code" column="wruleList.unitCode" /> 
+			<result property="nt" column="wruleList.nt" /> 
+		</collection> 
+	</resultMap>
+	
+	
+	<select id="get" resultType="DdsEdWrule">
+		SELECT 
+			<include refid="ddsEdWruleColumns"/>
+		FROM dds_ed_wrule a
+		<include refid="ddsEdWruleJoins"/>
+		WHERE a.stcd = #{stcd} and a.types = #{types} and a.levels = #{levels}  and a.updown = #{updown}
+	</select>
+	
+	<select id="listGroupByIn" resultType="DdsEdWrule">
+		SELECT stcd,types,updown 
+		FROM dds_ed_wrule 
+		<where>
+			1 = 1
+			<if test="types !=null and types != ''">
+				and types = #{types}
+			</if>
+			<if test="stcd !=null and stcd != ''">
+				and	stcd = #{stcd}
+			</if>
+			<if test="river !=null and river != ''">
+				and	river = #{river}
+			</if>
+		</where>
+		group by stcd,types,updown 
+	</select>
+	
+	<select id="list" resultType="DdsEdWrule">
+		SELECT 
+				<include refid="ddsEdWruleColumns"/>
+		FROM dds_ed_wrule a
+		<where>
+			1 = 1
+			<if test="stcd !=null and stcd != ''">
+				and	stcd = #{stcd}
+			</if>
+			<if test="updown !=null ">
+				and	updown = #{updown}
+			</if>
+			<if test="types !=null and types != ''">
+				and types = #{types}
+			</if>
+			<if test="river !=null and river != ''">
+				and	river = #{river}
+			</if>
+		</where>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_wrule(
+			stcd,
+			types,
+			levels,
+			updown,
+			vavule,
+			nt,
+			river,
+			unit_code
+		) VALUES (
+			#{stcd},
+			#{types},
+			#{levels},
+			#{updown},
+			#{vavule},
+			#{nt},
+			#{river},
+			#{unitCode}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_wrule SET 	
+			vavule = #{vavule},
+			nt = #{nt},
+			river = #{river},
+			unit_code = #{unitCode}
+		WHERE stcd = #{stcd} and types = #{types} and levels = #{levels} and updown = #{updown}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_wrule
+		WHERE stcd = #{stcd} and types = #{types} and levels = #{levels} and updown = #{updown}
+	</update>
+	
+</mapper>

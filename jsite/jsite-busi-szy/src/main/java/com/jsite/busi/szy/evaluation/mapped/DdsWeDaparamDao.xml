@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeDaparamDao">
+    
+	<sql id="ddsWeDaparamColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "adCd",
+		a.reg_type AS "regType",
+		a.town_life_dp AS "townLifeDp",
+		a.ind_sew_dp AS "indSewDp",
+		a.bld_dp AS "bldDp",
+		a.srv_dp AS "srvDp",
+		a.iey_dp AS "ieyDp",
+		a.imy_dp AS "imyDp",
+		a.riv_dp AS "rivDp",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsWeDaparamJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeDaparam">
+		SELECT 
+			<include refid="ddsWeDaparamColumns"/>
+		FROM dds_we_daparam a
+		<include refid="ddsWeDaparamJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{adCd}
+	</select>
+	
+	<select id="list" resultType="DdsWeDaparam">
+		SELECT 
+			<include refid="ddsWeDaparamColumns"/>
+		FROM dds_we_daparam a
+		<include refid="ddsWeDaparamJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_daparam(
+			yr,
+			reg_cd,
+			reg_type,
+			town_life_dp,
+			ind_sew_dp,
+			bld_dp,
+			srv_dp,
+			iey_dp,
+			imy_dp,
+			riv_dp,
+			nt
+		) VALUES (
+			#{yr},
+			#{adCd},
+			#{regType},
+			#{townLifeDp},
+			#{indSewDp},
+			#{bldDp},
+			#{srvDp},
+			#{ieyDp},
+			#{imyDp},
+			#{rivDp},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_daparam SET 	
+			yr = #{yr},
+			reg_cd = #{adCd},
+			reg_type = #{regType},
+			town_life_dp = #{townLifeDp},
+			ind_sew_dp = #{indSewDp},
+			bld_dp = #{bldDp},
+			srv_dp = #{srvDp},
+			iey_dp = #{ieyDp},
+			imy_dp = #{imyDp},
+			riv_dp = #{rivDp},
+			nt = #{nt}
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_daparam
+		WHERE yr = #{yr} and reg_cd = #{adCd}
+	</update>
+	
+</mapper>

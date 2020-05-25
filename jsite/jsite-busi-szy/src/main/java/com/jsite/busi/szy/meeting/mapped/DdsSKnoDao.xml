@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSKnoDao">
+    
+	<sql id="ddsSKnoColumns">
+		a.kno_id AS "knoId",
+		a.title AS "title",
+		a.creator AS "creator",
+		a.kno_type AS "knoType",
+		a.dt AS "dt",
+		a.keys AS "keys",
+		a.nt AS "nt",
+		a.content AS "content",
+		a.path AS "path"
+	</sql>
+	
+	<sql id="ddsSKnoJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSKno">
+		SELECT 
+			<include refid="ddsSKnoColumns"/>
+		FROM dds_s_kno a
+		<include refid="ddsSKnoJoins"/>
+		WHERE a.kno_id = #{knoId}
+	</select>
+	
+	<select id="findByTitle" resultType="DdsSKno">
+		SELECT 
+			<include refid="ddsSKnoColumns"/>
+		FROM dds_s_kno a
+		<include refid="ddsSKnoJoins"/>
+		<where>
+			1=1
+			<if test="title != null and title != ''">	
+				and a.title = #{title}
+			</if>
+		</where>
+	</select>
+	
+	<select id="list" resultType="DdsSKno">
+		SELECT 
+			<include refid="ddsSKnoColumns"/>
+		FROM dds_s_kno a
+		<include refid="ddsSKnoJoins"/>
+		<where>
+			1=1
+			<if test="title != null and title != ''">
+				AND a.title LIKE 
+					<if test="dbName == 'oracle'">'%'||#{title}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{title}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{title},'%')</if>
+			</if>
+			<if test="knoType != null and knoType != ''">
+				AND a.kno_type LIKE 
+					<if test="dbName == 'oracle'">'%'||#{knoType}||'%'</if>
+					<if test="dbName == 'mssql'">'%'+#{knoType}+'%'</if>
+					<if test="dbName == 'mysql'">concat('%',#{knoType},'%')</if>
+			</if>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.DT DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_kno(
+			kno_id,
+			title,
+			creator,
+			kno_type,
+			dt,
+			keys,
+			nt,
+			content,
+			path
+		) VALUES (
+			#{knoId},
+			#{title},
+			#{creator},
+			#{knoType},
+			#{dt},
+			#{keys},
+			#{nt},
+			#{content},
+			#{path}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_kno SET 	
+			title = #{title},
+			creator = #{creator},
+			kno_type = #{knoType},
+			dt = #{dt},
+			keys = #{keys},
+			nt = #{nt},
+			content = #{content},
+			path = #{path}
+		WHERE kno_id = #{knoId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_kno
+		WHERE kno_id = #{knoId}
+	</update>
+	
+</mapper>

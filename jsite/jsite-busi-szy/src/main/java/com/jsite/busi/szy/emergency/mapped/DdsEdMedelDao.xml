@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdMedelDao">
+    
+	<sql id="ddsEdMedelColumns">
+		a.pro_cd AS "proCd",
+		a.r AS "r",
+		a.a AS "a",
+		a.k AS "k",
+		a.hydro AS "hydro"
+	</sql>
+	
+	<sql id="ddsEdMedelJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdMedel">
+		SELECT 
+			<include refid="ddsEdMedelColumns"/>
+		FROM dds_ed_medel a
+		<include refid="ddsEdMedelJoins"/>
+		WHERE a.pro_cd = #{proCd}
+	</select>
+	
+	<select id="list" resultType="DdsEdMedel">
+		SELECT 
+			<include refid="ddsEdMedelColumns"/>
+		FROM dds_ed_medel a
+		<include refid="ddsEdMedelJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_medel(
+			pro_cd,
+			r,
+			a,
+			k,
+			hydro
+		) VALUES (
+			#{proCd},
+			#{r},
+			#{a},
+			#{k},
+			#{hydro}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_medel SET 	
+			r = #{r},
+			a = #{a},
+			k = #{k},
+			hydro = #{hydro}
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_medel
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+</mapper>

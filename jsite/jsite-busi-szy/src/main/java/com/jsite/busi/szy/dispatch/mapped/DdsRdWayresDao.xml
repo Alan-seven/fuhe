@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdWayresDao">
+    
+	<sql id="ddsRdWayresColumns">
+		a.pro_cd AS "proCd",
+		a.reg_cd AS "regCd",
+		a.rs_tp AS "rsTp",
+		a.yr AS "yr",
+		a.d_rs AS "dRs",
+		a.u_rs AS "uRs",
+		a.bh_rs AS "bhRs",
+		a.sh_rs AS "shRs",
+		a.pwir_rs AS "pwirRs",
+		a.pdir_rs AS "pdirRs",
+		a.pvir_rs AS "pvirRs",
+		a.fi_rs AS "fiRs",
+		a.ai_rs AS "aiRs",
+		a.mfish_rs AS "mfishRs",
+		a.ind_rs AS "indRs",
+		a.nind_rs AS "nindRs",
+		a.tot_rs AS "totRs"
+	</sql>
+	
+	<sql id="ddsRdWayresJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdWayres">
+		SELECT 
+			<include refid="ddsRdWayresColumns"/>
+		FROM dds_rd_wayres a
+		<include refid="ddsRdWayresJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.reg_cd = #{regCd} and a.rs_tp = #{rsTp} and a.yr = #{yr}
+	</select>
+	
+	<select id="list" resultType="DdsRdWayres">
+		SELECT 
+			<include refid="ddsRdWayresColumns"/>
+		FROM dds_rd_wayres a
+		<include refid="ddsRdWayresJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_wayres(
+			pro_cd,
+			reg_cd,
+			rs_tp,
+			yr,
+			d_rs,
+			u_rs,
+			bh_rs,
+			sh_rs,
+			pwir_rs,
+			pdir_rs,
+			pvir_rs,
+			fi_rs,
+			ai_rs,
+			mfish_rs,
+			ind_rs,
+			nind_rs,
+			tot_rs
+		) VALUES (
+			#{proCd},
+			#{regCd},
+			#{rsTp},
+			#{yr},
+			#{dRs},
+			#{uRs},
+			#{bhRs},
+			#{shRs},
+			#{pwirRs},
+			#{pdirRs},
+			#{pvirRs},
+			#{fiRs},
+			#{aiRs},
+			#{mfishRs},
+			#{indRs},
+			#{nindRs},
+			#{totRs}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_wayres SET 	
+			d_rs = #{dRs},
+			u_rs = #{uRs},
+			bh_rs = #{bhRs},
+			sh_rs = #{shRs},
+			pwir_rs = #{pwirRs},
+			pdir_rs = #{pdirRs},
+			pvir_rs = #{pvirRs},
+			fi_rs = #{fiRs},
+			ai_rs = #{aiRs},
+			mfish_rs = #{mfishRs},
+			ind_rs = #{indRs},
+			nind_rs = #{nindRs},
+			tot_rs = #{totRs}
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd} and rs_tp = #{rsTp} and yr = #{yr}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_wayres
+		WHERE pro_cd = #{proCd} and reg_cd = #{regCd} and rs_tp = #{rsTp} and yr = #{yr}
+	</update>
+	
+</mapper>

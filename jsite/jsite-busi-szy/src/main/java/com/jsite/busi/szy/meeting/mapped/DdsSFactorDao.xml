@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSFactorDao">
+    
+	<sql id="ddsSFactorColumns">
+		a.fact_id AS "factId",
+		a.fact_tp AS "factTp",
+		a.fact_nm AS "factNm",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsSFactorJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsSFactor">
+		SELECT 
+			<include refid="ddsSFactorColumns"/>
+		FROM dds_s_factor a
+		<include refid="ddsSFactorJoins"/>
+		WHERE a.fact_id = #{factId}
+	</select>
+	
+	<select id="list" resultType="DdsSFactor">
+		SELECT 
+			<include refid="ddsSFactorColumns"/>
+		FROM dds_s_factor a
+		<include refid="ddsSFactorJoins"/>
+		<where>
+			1=1 
+			<if test="factTp != null and factTp != '' ">
+				and a.fact_tp = #{factTp}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_factor(
+			fact_id,
+			fact_tp,
+			fact_nm,
+			river
+		) VALUES (
+			#{factId},
+			#{factTp},
+			#{factNm},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_factor SET 	
+			fact_tp = #{factTp},
+			fact_nm = #{factNm},
+			river = #{river}
+		WHERE fact_id = #{factId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_factor
+		WHERE fact_id = #{factId}
+	</update>
+	
+</mapper>

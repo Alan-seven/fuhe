@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.dispatch.dao.DdsRdIfresDao">
+    
+	<sql id="ddsRdIfresColumns">
+		a.pro_cd AS "proCd",
+		a.sec_cd AS "secCd",
+		a.bgtm AS "bgtm",
+		a.edtm AS "edtm",
+		a.month AS "month",
+		a.for_w AS "forW",
+		a.ly_w AS "lyW",
+		a.ly_rt AS "lyRt",
+		a.ann_w AS "annW",
+		a.ano_v AS "anoV",
+		a.concl AS "concl"
+	</sql>
+	
+	<sql id="ddsRdIfresJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsRdIfres">
+		SELECT 
+			<include refid="ddsRdIfresColumns"/>
+		FROM dds_rd_ifres a
+		<include refid="ddsRdIfresJoins"/>
+		WHERE a.pro_cd = rpad(#{proCd}, 13) and a.sec_cd = #{secCd} and a.bgtm = #{bgtm} and a.edtm = #{edtm}
+	</select>
+	
+	<select id="list" resultType="DdsRdIfres">
+		SELECT 
+			<include refid="ddsRdIfresColumns"/>
+		FROM dds_rd_ifres a
+		<include refid="ddsRdIfresJoins"/>
+		<where>
+			1=1 
+			<if test="proCd != null and proCd != ''">
+				and a.pro_cd = rpad(#{proCd}, 13)
+			</if>			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_rd_ifres(
+			pro_cd,
+			sec_cd,
+			bgtm,
+			edtm,
+			month,
+			for_w,
+			ly_w,
+			ly_rt,
+			ann_w,
+			ano_v,
+			concl
+		) VALUES (
+			rpad(#{proCd}, 13),
+			#{secCd},
+			#{bgtm},
+			#{edtm},
+			#{month},
+			#{forW},
+			#{lyW},
+			#{lyRt},
+			#{annW},
+			#{anoV},
+			#{concl}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_rd_ifres SET 	
+			for_w = #{forW},
+			ly_w = #{lyW},
+			ly_rt = #{lyRt},
+			ann_w = #{annW},
+			ano_v = #{anoV},
+			concl = #{concl}
+		WHERE pro_cd = rpad(#{proCd}, 13) and sec_cd = #{secCd} and bgtm = #{bgtm} and edtm = #{edtm} and month = #{month}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_rd_ifres
+		WHERE pro_cd = rpad(#{proCd}, 13) and sec_cd = #{secCd} and bgtm = #{bgtm} and edtm = #{edtm}
+	</update>
+
+
+</mapper>

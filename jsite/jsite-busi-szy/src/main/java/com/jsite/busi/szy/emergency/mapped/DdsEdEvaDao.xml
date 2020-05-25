@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdEvaDao">
+    
+	<sql id="ddsEdEvaColumns">
+		a.pro_cd AS "proCd",
+		a.fact_id AS "factId",
+		a.value AS "value",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsEdEvaJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdEva">
+		SELECT 
+			<include refid="ddsEdEvaColumns"/>
+		FROM dds_ed_eva a
+		<include refid="ddsEdEvaJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.fact_id = #{factId}
+	</select>
+	
+	<select id="list" resultType="DdsEdEva">
+		SELECT 
+			<include refid="ddsEdEvaColumns"/>
+			,b.fact_nm AS "factNm"
+		FROM dds_ed_eva a
+		<include refid="ddsEdEvaJoins"/>
+		left join dds_s_factor b on a.fact_id=b.fact_id
+		<where>
+			<if test="proCd != null and proCd != ''">
+				a.pro_cd = #{proCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_eva(
+			pro_cd,
+			fact_id,
+			value,
+			river
+		) VALUES (
+			#{proCd},
+			#{factId},
+			#{value},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_eva SET 	
+			fact_id = #{factId},
+			value = #{value},
+			river = #{river}
+		WHERE pro_cd = #{proCd} and fact_id = #{factId}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_eva
+		WHERE pro_cd = #{proCd}
+	</update>
+	
+	<select id="getMaxMIn" resultType="DdsEdEva">
+		SELECT 
+			fact_id AS factId, max(value) AS mavalue, min(value) AS mivalue
+		FROM dds_ed_eva a
+		LEFT JOIN dds_ed_p b on a.pro_cd=b.pro_cd
+		<where>
+			1=1
+			<if test="evenCd != null and evenCd != ''">
+				and b.even_cd = #{evenCd}
+			</if>
+			<if test="factId != null and factId != ''">
+				and a.fact_id = #{factId}
+			</if>
+		</where>
+		group by fact_id 
+	</select>
+	
+</mapper>

@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+    <bean id="dateFormat" class="java.text.SimpleDateFormat">
+        <constructor-arg value="yyyy-MM-dd" />
+    </bean>
+    
+    <bean id="para" class="com.jsite.szy.dispatch.dispatchwo.model.WOConditionHolder">
+	<property name="dispatchPara">
+		<list>
+			<bean class="com.wrms.core.scheme.regular.SchemeRDispatchPara">
+				<property name="schemeId" value="FHScheme0000001"></property>
+				<property name="entityId" value="783944000000"></property>
+				<property name="entityName" value="洪门"></property>
+				<property name="type" value="0"></property>
+				<property name="timeStart">
+					<bean factory-bean="dateFormat" factory-method="parse">
+						<constructor-arg value="2015-01-01" />
+					</bean>
+				</property>
+				<property name="levelBegin" value="100.0"></property>
+				<property name="levelEnd" value="100.0"></property>
+				<property name="outflowInitial" value="0.0"></property>
+				<property name="outflowMax" value="0.0"></property>
+				<property name="outflowMin" value="0.0"></property>
+				<property name="dispatchConstraints">
+					<list>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-01-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-02-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-02-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-03-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-03-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-04-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-04-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-05-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-05-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-06-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-06-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-07-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-07-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-08-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-08-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-09-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-09-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-10-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-10-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-11-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-11-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-12-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000000"></property>
+							<property name="entityName" value="洪门"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-12-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2016-01-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="100.0"></property>
+							<property name="levelMin" value="92.0"></property>
+							<property name="outflowMax" value="20200.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="53.3"></property>
+							<property name="outputMin" value="6.04"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+			<bean class="com.wrms.core.scheme.regular.SchemeRDispatchPara">
+				<property name="schemeId" value="FHScheme0000001"></property>
+				<property name="entityId" value="SEC00008"></property>
+				<property name="entityName" value="盱江-抚河汇口"></property>
+				<property name="type" value="1"></property>
+				<property name="timeStart">
+					<bean factory-bean="dateFormat" factory-method="parse">
+						<constructor-arg value="2015-01-01" />
+					</bean>
+				</property>
+				<property name="levelBegin" value="0.0"></property>
+				<property name="levelEnd" value="0.0"></property>
+				<property name="outflowInitial" value="0.0"></property>
+				<property name="outflowMax" value="0.0"></property>
+				<property name="outflowMin" value="0.0"></property>
+			</bean>
+			<bean class="com.wrms.core.scheme.regular.SchemeRDispatchPara">
+				<property name="schemeId" value="FHScheme0000001"></property>
+				<property name="entityId" value="783944000125"></property>
+				<property name="entityName" value="廖坊"></property>
+				<property name="type" value="0"></property>
+				<property name="timeStart">
+					<bean factory-bean="dateFormat" factory-method="parse">
+						<constructor-arg value="2015-01-01" />
+					</bean>
+				</property>
+				<property name="levelBegin" value="65.0"></property>
+				<property name="levelEnd" value="65.0"></property>
+				<property name="outflowInitial" value="0.0"></property>
+				<property name="outflowMax" value="0.0"></property>
+				<property name="outflowMin" value="0.0"></property>
+				<property name="dispatchConstraints">
+					<list>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-01-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-02-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-02-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-03-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-03-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-04-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="61.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-04-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-05-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="61.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-05-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-06-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="61.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-06-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-07-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="61.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-07-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-08-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-08-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-09-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-09-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-10-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-10-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-11-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-11-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-12-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+						<bean class="com.wrms.core.scheme.regular.moudle.DispatchConstraintItem">
+							<property name="schemeId" value="FHScheme0000001"></property>
+							<property name="entityId" value="783944000125"></property>
+							<property name="entityName" value="廖坊"></property>
+							<property name="timeStart">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2015-12-01" />
+								</bean>
+							</property>
+							<property name="timeEnd">
+								<bean factory-bean="dateFormat" factory-method="parse">
+									<constructor-arg value="2016-01-01" />
+								</bean>
+							</property>
+							<property name="levelMax" value="65.0"></property>
+							<property name="levelMin" value="61.0"></property>
+							<property name="outflowMax" value="32300.0"></property>
+							<property name="outflowMin" value="0.0"></property>
+							<property name="outputMax" value="36.0"></property>
+							<property name="outputMin" value="4.346"></property>
+						</bean>
+					</list>
+				</property>
+			</bean>
+			<bean class="com.wrms.core.scheme.regular.SchemeRDispatchPara">
+				<property name="schemeId" value="FHScheme0000001"></property>
+				<property name="entityId" value="SEC00009"></property>
+				<property name="entityName" value="临水-抚河汇口"></property>
+				<property name="type" value="1"></property>
+				<property name="timeStart">
+					<bean factory-bean="dateFormat" factory-method="parse">
+						<constructor-arg value="2015-01-01" />
+					</bean>
+				</property>
+				<property name="levelBegin" value="0.0"></property>
+				<property name="levelEnd" value="0.0"></property>
+				<property name="outflowInitial" value="0.0"></property>
+				<property name="outflowMax" value="0.0"></property>
+				<property name="outflowMin" value="0.0"></property>
+			</bean>
+		</list>
+	</property>
+</bean>
+    
+</beans>

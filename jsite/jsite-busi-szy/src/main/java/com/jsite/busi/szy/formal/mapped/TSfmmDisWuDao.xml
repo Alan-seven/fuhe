@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmDisWuDao">
+    
+	<sql id="tSfmmDisWuColumns">
+		a.mnth AS "mnth",
+		a.IND_WUS_WT AS "indWusWt",
+		a.AGR_WUS_WT AS "agrWusWt",
+		a.LIF_WUS_WT AS "lifWusWt",
+		a.FAFR_WUS_WT AS "fafrWusWt",
+		a.IND_RE_WT AS "indReWt",
+		a.AGR_RE_WT AS "agrReWt",
+		a.LIF_RE_WT AS "lifReWt",
+		a.FAFR_RE_WT AS "fafrReWt"
+	</sql>
+	
+	<sql id="tSfmmDisWuJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmDisWu">
+		SELECT 
+			<include refid="tSfmmDisWuColumns"/>
+		FROM T_SFMM_DIS_WU a
+		<include refid="tSfmmDisWuJoins"/>
+		WHERE  a.mnth = #{mnth}
+	</select>
+	
+	<select id="list" resultType="TSfmmDisWu">
+		SELECT 
+			<include refid="tSfmmDisWuColumns"/>
+		FROM T_SFMM_DIS_WU a
+		<include refid="tSfmmDisWuJoins"/>
+		<where>
+		
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.mnth 
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_DIS_WU(
+			mnth ,
+			IND_WUS_WT ,
+			AGR_WUS_WT,
+			LIF_WUS_WT,
+			FAFR_WUS_WT,
+			IND_RE_WT,
+			AGR_RE_WT,
+			LIF_RE_WT,
+			FAFR_RE_WT
+		) VALUES (
+			#{mnth},
+			#{indWusWt},
+			#{agrWusWt},
+			#{lifWusWt},
+			#{fafrWusWt},
+			#{indReWt},
+			#{agrReWt},
+			#{lifReWt},
+			#{fafrReWt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_DIS_WU SET 	
+			IND_WUS_WT = #{indWusWt} ,
+			AGR_WUS_WT = #{agrWusWt} ,
+			LIF_WUS_WT = #{lifWusWt} ,
+			FAFR_WUS_WT = #{fafrWusWt} ,
+			IND_RE_WT = #{indReWt} ,
+			AGR_RE_WT = #{agrReWt} ,
+			LIF_RE_WT = #{lifReWt} ,
+			FAFR_RE_WT = #{fafrReWt} 
+		WHERE mnth = #{mnth}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_DIS_WU
+		WHERE mnth = #{mnth}
+	</update>
+	
+</mapper>

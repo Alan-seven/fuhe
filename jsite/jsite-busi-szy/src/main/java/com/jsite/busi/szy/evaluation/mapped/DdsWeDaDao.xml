@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.evaluation.dao.DdsWeDaDao">
+    
+	<sql id="ddsWeDaColumns">
+		a.yr AS "yr",
+		a.reg_cd AS "regCd",
+		a.reg_type AS "regType",
+		a.town_life_da AS "townLifeDa",
+		a.ind_sew_da AS "indSewDa",
+		a.bld_da AS "bldDa",
+		a.srv_da AS "srvDa",
+		a.iey_da AS "ieyDa",
+		a.imy_da AS "imyDa",
+		a.riv_da AS "rivDa",
+		a.dt AS "dt",
+		a.nt AS "nt",
+		a.area AS "area"
+	</sql>
+	
+	<sql id="ddsWeDaJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsWeDa">
+		SELECT 
+			<include refid="ddsWeDaColumns"/>
+		FROM dds_we_da a
+		<include refid="ddsWeDaJoins"/>
+		WHERE a.yr = #{yr} and a.reg_cd = #{regCd}
+	</select>
+
+	<select id="listAllToMap" resultType="map">
+		SELECT
+		<include refid="ddsWeDaColumns"/>
+		,b.reg_nm AS "regNm",
+		IND_SEW_DA + BLD_DA "second",
+		TOWN_LIFE_DA + IND_SEW_DA + BLD_DA + SRV_DA "all"
+		FROM dds_we_da a,dds_we_wrcs b
+        WHERE b.reg_cd=a.reg_cd and a.reg_cd in
+        <foreach item="item" index="index" collection="regCds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+	</select>
+	
+	<select id="list" resultType="DdsWeDa">
+		SELECT 
+			<include refid="ddsWeDaColumns"/>
+		FROM dds_we_da a
+		<include refid="ddsWeDaJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_we_da(
+			yr,
+			reg_cd,
+			reg_type,
+			town_life_da,
+			ind_sew_da,
+			bld_da,
+			srv_da,
+			iey_da,
+			imy_da,
+			riv_da,
+			dt,
+			nt,
+			area
+		) VALUES (
+			#{yr},
+			#{regCd},
+			#{regType},
+			#{townLifeDa},
+			#{indSewDa},
+			#{bldDa},
+			#{srvDa},
+			#{ieyDa},
+			#{imyDa},
+			#{rivDa},
+			#{dt},
+			#{nt},
+			#{area}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_we_da SET 	
+			reg_type = #{regType},
+			town_life_da = #{townLifeDa},
+			ind_sew_da = #{indSewDa},
+			bld_da = #{bldDa},
+			srv_da = #{srvDa},
+			iey_da = #{ieyDa},
+			imy_da = #{imyDa},
+			riv_da = #{rivDa},
+			dt = #{dt},
+			nt = #{nt},
+			area = #{area}
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_we_da
+		WHERE yr = #{yr} and reg_cd = #{regCd}
+	</update>
+	
+</mapper>

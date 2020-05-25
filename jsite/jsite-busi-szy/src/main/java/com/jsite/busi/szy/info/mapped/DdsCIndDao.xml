@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsCIndDao">
+    
+	<sql id="ddsCIndColumns">
+		a.curve_id AS "curveId",
+		a.curve_nm AS "curveNm",
+		a.curve_ep AS "curveEp",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsCIndJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsCInd">
+		SELECT 
+			<include refid="ddsCIndColumns"/>
+		FROM dds_c_ind a
+		<include refid="ddsCIndJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsCInd">
+		SELECT 
+			<include refid="ddsCIndColumns"/>
+		FROM dds_c_ind a
+		<include refid="ddsCIndJoins"/>
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_c_ind(
+			curve_id,
+			curve_nm,
+			curve_ep,
+			ts,
+			nt
+		) VALUES (
+			#{curveId},
+			#{curveNm},
+			#{curveEp},
+			#{ts},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_c_ind SET 	
+			curve_id = #{curveId},
+			curve_nm = #{curveNm},
+			curve_ep = #{curveEp},
+			ts = #{ts},
+			nt = #{nt}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_c_ind
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

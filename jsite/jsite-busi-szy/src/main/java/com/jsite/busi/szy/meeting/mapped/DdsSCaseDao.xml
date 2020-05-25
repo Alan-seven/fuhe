@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.meeting.dao.DdsSCaseDao">
+    
+	<sql id="ddsSCaseColumns">
+		a.ID AS "id",
+		a.HAP_DT AS "hapDt",
+		a.LOC AS "loc",
+		a.SRESULT AS "sresult",
+		a.SINFO AS "sinfo",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsSCaseJoins">
+	</sql>
+    
+    <resultMap id="ddsSCaseResult" type="DdsSCase" >
+		<id property="id" column="id" />
+		<result property="hapDt" column="Date" />
+		<result property="loc" column="LOC" />
+		<result property="sresult" column="sresult" />
+		<result property="sinfo" column="sinfo" />
+		<result property="river" column="river" />
+		<collection property="ddsSResList" resultMap="ddsSResMap"/>
+	</resultMap>
+	
+	 <resultMap id="ddsSResMap" type="DdsSRes" >
+		<id column="con_id" property="conId" />
+		<result column="res_id" property="resId" />
+		<result column="path"   property="path" />
+		<result column="res_name" property="resName" />
+		<result column="disc"     property="disc" />
+	 </resultMap>
+	 
+	<select id="get" resultType="DdsSCase">
+		SELECT 
+			<include refid="ddsSCaseColumns"/>
+		FROM dds_s_case a
+		<include refid="ddsSCaseJoins"/>
+		WHERE a.id = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsSCase">
+		SELECT 
+			<include refid="ddsSCaseColumns"/>
+		FROM dds_s_case a
+		<where>
+			<if test="loc !=null and loc !='' ">
+				a.loc like '%'||#{loc}||'%'
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.HAP_DT DESC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listRes" resultMap="ddsSCaseResult">
+		SELECT 
+			<include refid="ddsSCaseColumns"/>,
+			b.res_id ,
+			b.path ,
+			b.res_name ,
+			b.disc 
+		FROM dds_s_case a
+		left join dds_s_res b on a.id = b.con_id
+		<where>
+			
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_s_case(
+			ID,
+			HAP_DT,
+			LOC,
+			SRESULT,
+			SINFO,
+			river
+		) VALUES (
+			#{id},
+			#{hapDt},
+			#{loc},
+			#{sresult},
+			#{sinfo},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_s_case SET 	
+			HAP_DT = #{hapDt},
+			LOC = #{loc},
+			SRESULT = #{sresult},
+			SINFO = #{sinfo},
+			river = #{river}
+		WHERE  id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_s_case
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

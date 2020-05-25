@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.wq.data.dao.DeviceDao">
+
+	<sql id="deviceColumns">
+		a.id AS "id",
+		a.name AS "name",
+		a.precision AS "precision"
+	</sql>
+
+	<sql id="deviceJoins">
+	</sql>
+
+	<select id="get" resultType="Device">
+		SELECT
+		<include refid="deviceColumns" />
+		FROM t_device a
+		<include refid="deviceJoins" />
+		WHERE a.id = #{id}
+	</select>
+
+	<select id="list" resultType="Device">
+		SELECT
+		<include refid="deviceColumns" />
+		FROM t_device a
+		<include refid="deviceJoins" />
+		<where>
+
+			<if test="name != null and name != ''">
+				AND a.name LIKE
+				<if test="dbName == 'oracle'">'%'||#{name}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{name}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{name},'%')</if>
+			</if>
+		</where>
+	</select>
+
+	<insert id="save">
+		INSERT INTO t_device(
+		id,
+		name,
+		precision
+		) VALUES (
+		#{id},
+		#{name},
+		#{precision}
+		)
+	</insert>
+
+	<update id="update">
+		UPDATE t_device SET
+		name = #{name},
+		precision = #{precision}
+		WHERE id = #{id}
+	</update>
+
+	<update id="remove">
+		DELETE FROM t_device
+		WHERE id = #{id} OR parent_ids
+		LIKE '%,'||#{id}||',%'
+	</update>
+
+</mapper>

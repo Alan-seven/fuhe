@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMRiverDao">
+    
+	<sql id="ddsMRiverColumns">
+		a.river AS "river",
+		a.rcd AS "rcd",
+		a.rnm AS "rnm",
+		a.calriver AS "calriver"
+	</sql>
+	
+	<sql id="ddsMRiverJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMRiver">
+		SELECT 
+			<include refid="ddsMRiverColumns"/>
+		FROM dds_m_river a
+		<include refid="ddsMRiverJoins"/>
+		WHERE a.river = #{river} and a.rcd = #{rcd}
+	</select>
+	
+	<select id="list" resultType="DdsMRiver">
+		SELECT 
+			<include refid="ddsMRiverColumns"/>
+		FROM dds_m_river a
+		<include refid="ddsMRiverJoins"/>
+		<where>
+			1=1
+			<if test="river !=null and river !='' ">
+				and a.river = #{river}
+			</if>
+			<if test="rcd !=null and rcd !='' ">
+				and a.rcd = #{rcd}
+			</if>
+			<if test="rnm !=null and rnm !='' ">
+				and a.rnm like
+				<if test="dbName == 'oracle'">'%'||#{rnm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{rnm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{rnm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_river(
+			river,
+			rcd,
+			rnm,
+			calriver
+		) VALUES (
+			#{river},
+			#{rcd},
+			#{rnm},
+			#{calriver}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_river SET 	
+			rnm = #{rnm},
+			calriver = #{calriver}
+		WHERE river = #{river} and rcd = #{rcd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_river
+		WHERE river = #{river} and rcd = #{rcd}
+	</update>
+	
+</mapper>

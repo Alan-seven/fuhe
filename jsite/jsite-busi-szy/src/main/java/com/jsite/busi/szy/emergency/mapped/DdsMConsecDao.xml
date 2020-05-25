@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsMConsecDao">
+    
+	<sql id="ddsMConsecColumns">
+		a.rcd AS "rcd",
+		a.secid AS "secid",
+		a.secflag AS "secflag",
+		a.lendelta AS "lendelta",
+		a.lenup AS "lenup",
+		a.secnm AS "secnm",
+		a.stype AS "stype",
+		a.river AS "river",
+		a.flag AS "flag",
+		a.lttd AS "lttd",
+		a.lgtd AS "lgtd",
+		a.ord AS "ord"
+	</sql>
+	
+	<sql id="ddsMConsecJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsMConsec">
+		SELECT 
+			<include refid="ddsMConsecColumns"/>
+		FROM dds_m_consec a
+		<include refid="ddsMConsecJoins"/>
+		WHERE a.secid = #{secid} 
+	</select>
+	
+	<select id="list" resultType="DdsMConsec">
+		SELECT 
+			<include refid="ddsMConsecColumns"/>
+		FROM dds_m_consec a
+		<include refid="ddsMConsecJoins"/>
+		<where>
+			1=1
+			<if test=" rcd != null and rcd !='' ">
+				and a.rcd = #{rcd}
+			</if>
+			<if test=" secflag != null and secflag !='' ">
+				and a.secflag = #{secflag}
+			</if>
+			<if test=" river != null and river !='' ">
+				and a.river = #{river}
+			</if>
+			<if test="secnm !=null and secnm != '' ">
+				and a.secnm like 
+				<if test="dbName == 'oracle'">'%'||#{secnm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{secnm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{secnm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<select id="listParams" resultType="DdsMConsec">
+		SELECT 
+			<include refid="ddsMConsecColumns"/>
+			,b.pro_cd AS "procd",b.conc_st AS "concst"
+		FROM dds_m_consec a
+		left join dds_ed_init b on a.secid = b.secid
+		<include refid="ddsMConsecJoins"/>
+		<where>
+			1=1
+			<if test=" rcd != null and rcd !='' ">
+				and a.rcd = #{rcd}
+			</if>
+			<if test=" secflag != null and secflag !='' ">
+				and a.secflag = #{secflag}
+			</if>
+			<if test=" procd != null and procd !='' ">
+				and b.pro_cd = #{procd}
+			</if>
+			<if test=" river != null and river !='' ">
+				and a.river = #{river}
+			</if>
+			<if test=" flag != null and flag !='' ">
+				and a.flag = #{flag}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_m_consec(
+			rcd,
+			secid,
+			secnm,
+			secflag,
+			lendelta,
+			lenup,
+			stype,
+			river,
+			flag,
+			lttd,
+			lgtd,
+			ord
+		) VALUES (
+			#{rcd},
+			#{secnm},
+			#{secid},
+			#{secflag},
+			#{lendelta},
+			#{lenup},
+			#{stype},
+			#{river},
+			#{flag},
+			#{lttd},
+			#{lgtd},
+			ord
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_m_consec SET 	
+			rcd = #{rcd},
+			secnm = #{secnm},
+			secflag = #{secflag},
+			lendelta = #{lendelta},
+			lenup = #{lenup},
+			stype = #{stype},
+			river = #{river},
+			flag = #{flag},
+			lttd = #{lttd},
+			lgtd = #{lgtd},
+			ord = #{ord}
+		WHERE secid = #{secid} and rcd = #{rcd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_m_consec
+		WHERE secid = #{secid} and rcd = #{rcd}
+	</update>
+	
+	<select id="listByRcd" resultType="DdsMConsec">
+		SELECT 
+			a.rcd,a.secid,a.secflag,a.lendelta,a.lenup,a.secnm,b.sectype AS "type" ,c.conc_st AS "concst"
+		FROM dds_m_consec a
+		left join DDS_M_SECTBOUNDRY b on a.SECID = b.SECID and a.rcd=b.RCD 
+		left join ( select secid,conc_st from dds_ed_init 
+			<where>
+			<if test=" procd != null and procd !='' ">
+				c.pro_cd = #{procd}
+			</if>
+		</where>
+		) c on a.secid = c.secid
+		
+		<where>
+			<if test=" rcd != null and rcd !='' ">
+				a.rcd=#{rcd}
+			</if>
+		</where>
+	</select>
+	
+</mapper>

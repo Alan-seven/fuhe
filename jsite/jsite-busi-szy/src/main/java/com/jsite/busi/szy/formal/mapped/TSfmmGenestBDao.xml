@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmGenestBDao">
+    
+	<sql id="tSfmmGenestBColumns">
+		a.region_cd AS "regionCd",
+		a.genest_cd AS "genestCd",
+		a.genest_nm AS "genestNm",
+		a.dat_cd AS "datCd",
+		a.stcd AS "stcd",
+		a.genesttp_cd AS "genesttpCd",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfmmGenestBJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmGenestB">
+		SELECT 
+			<include refid="tSfmmGenestBColumns"/>
+		FROM T_SFMM_GENEST_B a
+		<include refid="tSfmmGenestBJoins"/>
+		WHERE a.region_cd = #{regionCd} and a.genest_cd = #{genestCd}
+	</select>
+	
+	<select id="list" resultType="TSfmmGenestB">
+		SELECT 
+			<include refid="tSfmmGenestBColumns"/>
+		FROM T_SFMM_GENEST_B a
+		<include refid="tSfmmGenestBJoins"/>
+		<where>
+			<if test="genestNm != null and genestNm != ''">
+				genest_nm like 
+				<if test="dbName == 'oracle'">'%'||#{genestNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{genestNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{genestNm},'%')</if>
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.TS 
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_GENEST_B(
+			region_cd ,
+			genest_cd ,
+			genest_nm ,
+			dat_cd ,
+			stcd,
+			genesttp_cd,
+			nt 
+		) VALUES (
+			#{regionCd},
+			#{genestCd},
+			#{genestNm},
+			#{datCd},
+			#{stcd},
+			#{genesttpCd},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_GENEST_B SET 	
+			genest_nm = #{genestNm} ,
+			dat_cd = #{datCd} ,
+			stcd = #{stcd} ,
+			genesttp_cd = #{genesttpCd} ,
+			nt = #{nt} 
+		WHERE region_cd = #{regionCd} and genest_cd = #{genestCd}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_GENEST_B
+		WHERE region_cd = #{regionCd}  and genest_cd = #{genestCd}
+	</update>
+	
+</mapper>

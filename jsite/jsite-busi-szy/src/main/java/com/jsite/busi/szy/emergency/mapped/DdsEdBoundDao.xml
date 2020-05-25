@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdBoundDao">
+    
+	<sql id="ddsEdBoundColumns">
+		a.pro_cd AS "proCd",
+		a.stcd AS "stcd",
+		a.qtype AS "qtype",
+		a.tm AS "tm",
+		a.q AS "q",
+		a.inq AS "inq",
+		a.z AS "z",
+		a.vcheck AS "vcheck"
+	</sql>
+	
+	<sql id="ddsEdBoundJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdBound">
+		SELECT 
+			<include refid="ddsEdBoundColumns"/>
+		FROM dds_ed_bound a
+		<include refid="ddsEdBoundJoins"/>
+		WHERE a.pro_cd = #{proCd} and a.stcd = #{stcd} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsEdBound">
+		SELECT 
+			<include refid="ddsEdBoundColumns"/>
+		FROM dds_ed_bound a
+		<include refid="ddsEdBoundJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != '' ">
+				and a.pro_cd = #{proCd}
+			</if>
+			<if test="stcd != null and stcd != '' ">
+				and a.stcd = #{stcd}
+			</if>
+			<if test="startTime !=null and startTime !='' and endTime !=null and endTime !='' "> 
+				and a.tm between to_date(#{startTime},'yyyy-MM-dd HH24:mi:ss') and to_date(#{endTime},'yyyy-MM-dd HH24:mi:ss')
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_bound(
+			pro_cd,
+			stcd,
+			qtype,
+			tm,
+			q,
+			inq,
+			z,
+			vcheck
+		) VALUES (
+			#{proCd},
+			#{stcd},
+			#{qtype},
+			#{tm},
+			#{q},
+			#{inq},
+			#{z},
+			#{vcheck}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_bound SET 	
+			q = #{q},inq = #{inq},
+			z = #{z},
+			vcheck = #{vcheck}
+		WHERE pro_cd = #{proCd} and stcd = #{stcd} and  tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_bound
+		WHERE pro_cd = #{proCd} and stcd = #{stcd} and tm = #{tm}
+	</update>
+	
+	<update id="removeAll">
+		DELETE FROM dds_ed_bound
+		WHERE pro_cd = #{proCd} 
+	</update>
+	
+</mapper>

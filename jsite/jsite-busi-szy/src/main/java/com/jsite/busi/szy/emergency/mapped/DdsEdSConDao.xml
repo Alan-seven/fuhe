@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.emergency.dao.DdsEdSConDao">
+    
+	<sql id="ddsEdSConColumns">
+		a.evev_cd AS "evenCd",
+		a.secid AS "secId",
+		a.tm AS "tm",
+		a.conc AS "conc",
+		a.river AS "river"
+	</sql>
+	
+	<sql id="ddsEdSConoins">
+	</sql>
+    
+	<select id="get" resultType="DdsEdSCon">
+		SELECT 
+			<include refid="ddsEdSConColumns"/>
+		FROM dds_ed_scon a
+		<include refid="ddsEdSConoins"/>
+		WHERE a.evev_cd = #{evevCd} and a.secid = #{secId} and a.tm = #{tm}
+	</select>
+	
+	<select id="list" resultType="DdsEdSCon">
+		SELECT 
+			<include refid="ddsEdSConColumns"/>
+		FROM dds_ed_scon a
+		<include refid="ddsEdSConoins"/>
+		<where>
+			1 = 1 
+			<if test=" evenCd != null and evenCd != '' ">
+				and a.even_cd = #{evenCd}
+			</if>
+			<if test=" river != null and river != '' ">
+				and a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_ed_scon(
+			evev_cd,
+			secid,
+			tm,
+			conc,
+			river
+		) VALUES (
+			#{evevCd},
+			#{secId},
+			#{tm},
+			#{conc},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_ed_scon SET 	
+			conc = #{conc},
+			river = #{river}
+		WHERE a.evev_cd = #{evevCd} and a.secid = #{secId} and a.tm = #{tm}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_ed_scon
+		WHERE a.evev_cd = #{evevCd} and a.secid = #{secId} and a.tm = #{tm}
+	</update>
+	
+</mapper>

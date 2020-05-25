@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsBIntDao">
+    
+	<sql id="ddsBIntColumns">
+		a.int_cd AS "intCd",
+		a.int_nm AS "intNm",
+		a.int_tp AS "intTp",
+		a.from_int_dt AS "fromIntDt",
+		a.max_perm_q AS "maxPermQ",
+		a.des_q AS "desQ",
+		a.perm_ww AS "permWw",
+		a.run_cond AS "runCond",
+		a.eng_man_cd AS "engManCd",
+		a.ws_reg AS "wsReg",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="ddsBIntJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsBInt">
+		SELECT 
+			<include refid="ddsBIntColumns"/>
+		FROM dds_b_int a
+		<include refid="ddsBIntJoins"/>
+		WHERE a.int_cd = #{id}
+	</select>
+	
+	<select id="list" resultType="DdsBInt">
+		SELECT 
+			<include refid="ddsBIntColumns"/>
+		FROM dds_b_int a
+		<include refid="ddsBIntJoins"/>
+		<where>
+			1=1 
+			<if test="intNm != null and intNm != ''">
+				and	a.int_nm like '%'||#{intNm}||'%'
+			</if>
+			<if test="river != null and river != ''">
+				and	a.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_b_int(
+			int_cd,
+			int_nm,
+			int_tp,
+			from_int_dt,
+			max_perm_q,
+			des_q,
+			perm_ww,
+			run_cond,
+			eng_man_cd,
+			ws_reg,
+			ts,
+			nt,
+			river
+		) VALUES (
+			#{intCd},
+			#{intNm},
+			#{intTp},
+			#{fromIntDt},
+			#{maxPermQ},
+			#{desQ},
+			#{permWw},
+			#{runCond},
+			#{engManCd},
+			#{wsReg},
+			#{ts},
+			#{nt},
+			#{river}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_b_int SET 	
+			int_cd = #{intCd},
+			int_nm = #{intNm},
+			int_tp = #{intTp},
+			from_int_dt = #{fromIntDt},
+			max_perm_q = #{maxPermQ},
+			des_q = #{desQ},
+			perm_ww = #{permWw},
+			run_cond = #{runCond},
+			eng_man_cd = #{engManCd},
+			ws_reg = #{wsReg},
+			ts = #{ts},
+			nt = #{nt},
+			river = #{river}
+		WHERE id = #{id}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_b_int
+		WHERE id = #{id}
+	</update>
+	
+</mapper>

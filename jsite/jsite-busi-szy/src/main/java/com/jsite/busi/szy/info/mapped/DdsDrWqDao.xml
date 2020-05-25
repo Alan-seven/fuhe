@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.info.dao.DdsDrWqDao">
+    
+	<sql id="ddsDrWqColumns">
+		a.stcd AS "stcd",
+		a.stnm AS "stNm",
+		a.spt AS "spt",
+		a.wt AS "wt",
+		a.ph AS "ph",
+		a.codcr AS "codcr",
+		a.nh3n AS "nh3n",
+		a.codmn AS "codmn",
+		a.tp AS "tp",
+		a.cond AS "cond",
+		a.turb AS "turb",
+		a.dox AS "dox",
+		a.tn AS "tn",
+		a.no2 AS "no2",
+		a.no3 AS "no3",
+		a.toc AS "toc",
+		a.vlph AS "vlph",
+		a.chla AS "chla",
+		a.f AS "f",
+		a.ars AS "ars",
+		a.hg AS "hg",
+		a.cr6 AS "cr6",
+		a.cu AS "cu",
+		a.pb AS "ph",
+		a.cd AS "cd",
+		a.zn AS "zn",
+		a.sb AS "sb"
+	</sql>
+	
+	<sql id="ddsDrWqJoins">
+	</sql>
+    
+	<select id="get" resultType="DdsDrWq">
+		SELECT 	
+			<include refid="ddsDrWqColumns"/>
+		FROM dds_d_wq a
+		<include refid="ddsDrWqJoins"/>
+		WHERE a.stcd = #{stcd} and a.spt = #{spt}
+	</select>
+	
+	<select id="list" resultType="DdsDrWq">
+		SELECT 
+			c.*,
+			b.lgtd AS "lgtd",
+			b.lttd AS "lttd"
+		FROM 
+		 ( SELECT 
+			a.*
+				from dds_d_wq a
+				<choose>
+					<when test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+					  	<where>
+							a.spt between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+						</where>
+					</when>
+					<otherwise >
+						, ( select distinct stcd,max(spt) spt from dds_d_wq group by stcd ) rwq
+						<where>
+							a.stcd = rwq.stcd and a.spt = rwq.spt
+						</where>
+					</otherwise>
+				</choose>
+			 ) c 
+		LEFT JOIN dds_b_wqst b  ON c.stcd = b.stcd
+		<include refid="ddsDrWqJoins"/> 
+		<where>
+			1=1
+			<if test=" stNm != null and stNm != '' ">
+				and c.stnm like 
+				<if test="dbName == 'oracle'">'%'||#{stNm}||'%'</if>
+				<if test="dbName == 'mssql'">'%'+#{stNm}+'%'</if>
+				<if test="dbName == 'mysql'">concat('%',#{stNm},'%')</if>
+			</if>
+			<if test="stcd != null and stcd != ''">
+				and	c.stcd = #{stcd}
+			</if>
+			<if test="river != null and river != ''">
+				and b.river = #{river}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${pg.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY C.SPT ASC
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO dds_d_wq(
+			stcd,
+			stnm,
+			spt,
+			wt,
+			ph,
+			codcr;
+			nh3n,
+			codmn,
+			tp,
+			cond,
+			turb,
+			dox,
+			tn,
+			no2,
+			no3,
+			toc,
+			vlph,
+			chla,
+			f ,
+			ars,
+			hg ,
+			cr6,
+			cu ,
+			pb ,
+			cd ,
+			zn ,
+			sb 
+		) VALUES (
+			#{stcd},
+			#{stNm},
+			#{spt},
+			#{wt},
+			#{ph},
+			#{codcr},
+			#{nh3n},
+			#{codmn},
+			#{tp},
+			#{cond},
+			#{turb},
+			#{dox},
+			#{tn},
+			#{no2},
+			#{no3},
+			#{toc},
+			#{vlph},
+			#{chla},
+			#{f},
+			#{ars},
+			#{hg},
+			#{cr6},
+			#{cu},
+			#{ph},
+			#{cd},
+			#{zn},
+			#{sb}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE dds_d_wq SET 	
+			stnm = #{stNm},
+			wt = #{wt},
+			ph = #{ph},
+			codcr = #{codcr},
+			nh3n = #{nh3n},
+			codmn = #{codmn},
+			tp = #{tp},
+			cond = #{cond},
+			turb = #{turb},
+			dox = #{dox},
+			tn = #{tn},
+			no2 = #{no2},
+			no3 = #{no3},
+			toc = #{toc},
+			vlph = #{vlph},
+			chla = #{chla},
+			f = #{f},
+			ars = #{ars},
+			hg = #{hg},
+			cr6 = #{cr6},
+			cu = #{cu},
+			ph = #{ph},
+			cd = #{cd},
+			zn = #{zn},
+			sb = #{sb}
+		WHERE stcd = #{stcd} and spt = #{spt}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM dds_d_wq
+		WHERE stcd = #{stcd} and spt = #{spt}
+	</update>
+	
+	<select id="listByStcd" resultType="DdsDrWq">
+		SELECT 
+			<include refid="ddsDrWqColumns"/>
+		FROM dds_d_wq a
+		<where>
+			1=1 
+			<if test="stcd != null and stcd != ''">
+				and	a.stcd = #{stcd}
+			</if>
+			<if test=" startTm != null and startTm != '' and endTm != null and endTm != '' ">
+				and a.spt between to_date(#{startTm},'yyyy-mm-dd hh24:mi:ss') and to_date(#{endTm},'yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+		ORDER BY a.spt asc
+	</select>
+	
+</mapper>

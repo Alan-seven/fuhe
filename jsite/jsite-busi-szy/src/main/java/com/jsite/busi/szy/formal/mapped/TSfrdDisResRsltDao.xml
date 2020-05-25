@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfrdDisResRsltDao">
+    
+	<sql id="tSfrdDisResRsltColumns">
+		a.pro_cd AS "proCd",
+		a.en_cd AS "enCd",
+		a.rslt_tp AS "rsltTp",
+		a.st_dt AS "stDt",
+		a.ed_dt AS "edDt",
+		a.st_z AS "stZ",
+		a.ed_z AS "edZ",
+		a.st_w AS "stW",
+		a.ed_w AS "edW",
+		a.inq AS "inq",
+		a.outq AS "outq",
+		a.egq AS "egq",
+		a.dq AS "dq",
+		a.eg AS "eg",
+		a.wcr AS "wcr",
+		a.n AS "n",
+		a.gh AS "gh",
+		a.nh AS "nh",
+		a.lh AS "lh",
+		a.ts AS "ts",
+		a.nt AS "nt"
+	</sql>
+	
+	<sql id="tSfrdDisResRsltJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfrdDisResRslt">
+		SELECT 
+			<include refid="tSfrdDisResRsltColumns"/>
+		FROM t_sfrd_dis_res_rslt a
+		<include refid="tSfrdDisResRsltJoins"/>
+		WHERE a.region_cd = #{regionCd} and a.en_cd = #{enCd} and a.st_dt =#{stDt} and a.ed_dt = #{edDt} and a.rslt_tp = #{rsltTp}
+	</select>
+	
+	<select id="list" resultType="TSfrdDisResRslt">
+		SELECT 
+			<include refid="tSfrdDisResRsltColumns"/>
+		FROM t_sfrd_dis_res_rslt a
+		<include refid="tSfrdDisResRsltJoins"/>
+		<where>
+			1 = 1 
+			<if test="proCd != null and proCd != ''">
+				and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="save">
+		INSERT INTO t_sfrd_dis_res_rslt(
+			pro_cd,
+			en_cd,
+			rslt_tp,
+			st_dt,
+			ed_dt,
+			st_z,
+			ed_z,
+			st_w,
+			ed_w,
+			inq,
+			outq,
+			egq,
+			dq,
+			eg,
+			wcr,
+			n,
+			gh,
+			nh,
+			lh,
+			ts,
+			nt
+		) VALUES (
+			#{proCd},
+			#{enCd},
+			#{rsltTp},
+			#{stDt},
+			#{edDt},
+			#{stZ},
+			#{edZ},
+			#{stW},
+			#{edW},
+			#{inq},
+			#{outq},
+			#{egq},
+			#{dq},
+			#{eg},
+			#{wcr},
+			#{n},
+			#{gh},
+			#{nh},
+			#{lh},
+			#{ts},
+			#{nt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE t_sfrd_dis_res_rslt SET 	
+			st_z = #{stZ},
+			ed_z = #{edZ},
+			st_w = #{stW},
+			ed_w = #{edW},
+			inq = #{inq},
+			outq = #{outq},
+			egq = #{egq},
+			dq = #{dq},
+			eg = #{eg},
+			wcr = #{wcr},
+			n = #{n},
+			gh = #{gh},
+			nh = #{nh},
+			lh = #{lh},
+			nt = #{nt}
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} and st_dt =#{stDt} and ed_dt = #{edDt} and rslt_tp = #{rsltTp}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM t_sfrd_dis_res_rslt
+		WHERE region_cd = #{regionCd} and en_cd = #{enCd} and st_dt =#{stDt} and ed_dt = #{edDt} and rslt_tp = #{rsltTp}
+	</update>
+	
+</mapper>
