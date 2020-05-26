@@ -1,7 +1,6 @@
 package com.jsite.szy.dispatch.formal.web;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +36,7 @@ import com.jsite.szy.dispatch.formal.vo.TSfrdProVO;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import waterDispatch.controller.modelController;
+import waterDispatch.controller.ModelController;
 import waterDispatch.entity.InputEntity;
 import waterDispatch.entity.ResultEntity;
 
@@ -106,7 +105,7 @@ public class RsvrController extends BaseController{
 		//模型分水系数、回归系数输入
 		input = initModelRatio(dislist, input);
 		input = setRsvr(input);
-		modelController mc = new modelController();
+		ModelController mc = new ModelController();
 		try {
 			ResultEntity result = mc.newBuiltPlanController(input);
 			saveData(result, pro);
