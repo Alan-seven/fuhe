@@ -1,7 +1,6 @@
 package com.jsite.szy.dispatch.formal.utils;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -72,6 +71,12 @@ public class ModelUtils {
 		return list;
 	}
 
+	/**
+	 * 获取数据精度处理数据
+	 * @param newScale
+	 * @param target
+	 * @return
+	 */
 	public static double getRslt(int newScale,double target){
 		BigDecimal b = new BigDecimal(target);
 		return b.setScale(newScale, BigDecimal.ROUND_HALF_UP).doubleValue();        

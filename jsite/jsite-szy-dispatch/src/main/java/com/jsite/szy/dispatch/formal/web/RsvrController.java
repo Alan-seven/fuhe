@@ -343,29 +343,29 @@ public class RsvrController extends BaseController{
 		Double[] selfFlow = new Double[12];
 		for(int index = 0 ;index < initcondlist.size();index++ ){
 			if(initcondlist.get(index)!=null && "112000023".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[0] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[0] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000024".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[1] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[1] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000025".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[6] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[6] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000026".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[5] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[5] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000027".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[7] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[7] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000028".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[8] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[8] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000029".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[9] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[9] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000030".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[4] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[4] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000031".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[3] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[3] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000032".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[2] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[2] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000033".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[10] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[10] =  ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}else if(initcondlist.get(index)!=null && "112000034".equals(initcondlist.get(index).getEnCd())){
-				selfFlow[11] = Double.valueOf(initcondlist.get(index).getWw());
+				selfFlow[11] = ModelUtils.getRslt(3, initcondlist.get(index).getWw());
 			}
 		}
 		input.setWaterRequirement(Arrays.asList(selfFlow));
@@ -522,14 +522,14 @@ public class RsvrController extends BaseController{
 	public Double[][] getArrayValue(List<TSfrdDisWu> list){
 		Double[][] ratio = new Double[8][list.size()];
 		for(int index = 0 ; index < list.size() ;index++){
-			ratio[0][index] = Double.valueOf(list.get(index).getIndWusWt());
-			ratio[1][index] = Double.valueOf(list.get(index).getAgrWusWt());
-			ratio[2][index] = Double.valueOf(list.get(index).getLifWusWt());
-			ratio[3][index] = Double.valueOf(list.get(index).getFafrWusWt());
-			ratio[4][index] = Double.valueOf(list.get(index).getIndReWt());
-			ratio[5][index] = Double.valueOf(list.get(index).getAgrReWt());
-			ratio[6][index] = Double.valueOf(list.get(index).getLifReWt());
-			ratio[7][index] = Double.valueOf(list.get(index).getFafrReWt());
+			ratio[0][index] = ModelUtils.getRslt(3, list.get(index).getIndWusWt()); //Double.valueOf(list.get(index).getIndWusWt());
+			ratio[1][index] = ModelUtils.getRslt(3, list.get(index).getAgrWusWt());//Double.valueOf(list.get(index).getAgrWusWt());
+			ratio[2][index] = ModelUtils.getRslt(3, list.get(index).getLifWusWt());//Double.valueOf(list.get(index).getLifWusWt());
+			ratio[3][index] = ModelUtils.getRslt(3, list.get(index).getFafrWusWt());//Double.valueOf(list.get(index).getFafrWusWt());
+			ratio[4][index] = ModelUtils.getRslt(3, list.get(index).getIndReWt());//Double.valueOf(list.get(index).getIndReWt());
+			ratio[5][index] = ModelUtils.getRslt(3, list.get(index).getAgrReWt());//Double.valueOf(list.get(index).getAgrReWt());
+			ratio[6][index] = ModelUtils.getRslt(3, list.get(index).getLifReWt());//Double.valueOf(list.get(index).getLifReWt());
+			ratio[7][index] = ModelUtils.getRslt(3, list.get(index).getFafrReWt());//Double.valueOf(list.get(index).getFafrReWt());
 		}
 		return ratio;
 	}
@@ -541,10 +541,10 @@ public class RsvrController extends BaseController{
 	 * @return
 	 */
 	public Double[][] getArrayWt(Double[][] wt, TSfrdWsaWt entity,int index){
-		wt[0][index] = Double.valueOf(entity.getIndWt());
-		wt[1][index] = Double.valueOf(entity.getAgrWt());
-		wt[2][index] = Double.valueOf(entity.getLifWt());
-		wt[3][index] = Double.valueOf(entity.getFafrWt());
+		wt[0][index] = ModelUtils.getRslt(3, entity.getIndWt()); //Double.valueOf(entity.getIndWt());
+		wt[1][index] = ModelUtils.getRslt(3, entity.getAgrWt());//Double.valueOf(entity.getAgrWt());
+		wt[2][index] = ModelUtils.getRslt(3, entity.getLifWt());//Double.valueOf(entity.getLifWt());
+		wt[3][index] = ModelUtils.getRslt(3, entity.getFafrWt());//Double.valueOf(entity.getFafrWt());
 		return wt;
 	}
 	

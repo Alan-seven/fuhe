@@ -12,13 +12,10 @@ import com.jsite.busi.szy.formal.po.TSfmmDisWu;
 import com.jsite.busi.szy.formal.po.TSfmmEnB;
 import com.jsite.busi.szy.formal.po.TSfrdDisWu;
 import com.jsite.busi.szy.formal.po.TSfrdPro;
-import com.jsite.core.mapper.BeanMapper;
 import com.jsite.core.service.RespCode;
 import com.jsite.core.service.ServiceResp;
-import com.jsite.core.utils.DateUtils;
 import com.jsite.manager.AbstractCrudService;
 
-import net.sf.cglib.beans.BeanMap;
 
 /**
  * 水量分配用水系数Service

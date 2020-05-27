@@ -148,22 +148,23 @@ public class RunController extends BaseController{
 	}
 	
 	public static void main(String[] args){
-			String url = "http://122.112.181.229:5000/runoffForecasting";
-			//设置参数
-			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
-			params.add("prediction_time", "2014年");
-			params.add("scale", "年");
-	    	//服务访问密钥
-			params.add("modelName", "0"=="0"?"lstm":"bp_lstm");
-			params.add("stationName", "南城");
-			params.add("lvding", "False");
-	    	//设置header信息
-			HttpHeaders headers = new HttpHeaders(); 
-	    	headers.set("Accept-Charset", "utf-8");
-	    	RestTemplate restTemplate = new RestTemplate();   
-	        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, headers); 
-	        JSONArray json =  restTemplate.postForObject(url, requestEntity, JSONArray.class);
-	        System.out.println(json);
+//			String url = "http://122.112.181.229:5000/runoffForecasting";
+//			//设置参数
+//			MultiValueMap<String, String> params = new LinkedMultiValueMap<String, String>();
+//			params.add("prediction_time", "2014年");
+//			params.add("scale", "年");
+//	    	//服务访问密钥
+//			params.add("modelName", "0"=="0"?"lstm":"bp_lstm");
+//			params.add("stationName", "南城");
+//			params.add("lvding", "False");
+//	    	//设置header信息
+//			HttpHeaders headers = new HttpHeaders(); 
+//	    	headers.set("Accept-Charset", "utf-8");
+//	    	RestTemplate restTemplate = new RestTemplate();   
+//	        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(params, headers); 
+//	        JSONArray json =  restTemplate.postForObject(url, requestEntity, JSONArray.class);
+//	        System.out.println(json);
 	        System.out.println(System.getProperty("user.dir"));
+	        System.out.println(RunController.class.getClassLoader().getResource("/").getPath());
 	}
 }
