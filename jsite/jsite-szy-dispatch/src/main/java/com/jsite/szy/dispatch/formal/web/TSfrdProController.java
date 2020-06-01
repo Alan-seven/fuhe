@@ -34,29 +34,18 @@ public class TSfrdProController extends BaseController{
 	@Autowired
 	private TSfrdProService tSfrdProService;
 	
+	
 	@ResponseBody
 	@RequestMapping(value = {"get", ""})
-    @ApiOperation(value = "根据id获取常规方案信息", notes = "根据id获取常规调度方案信息",httpMethod = "GET")
-	 public String get(@RequestParam  String proCd, HttpServletResponse response) {
+    @ApiOperation(value = "根据id获取常规方案信息", notes = "根据id获取常规调度方案信息",httpMethod = "POST")
+	 public String get(@RequestBody TSfrdProVO tSfrdProVO, HttpServletResponse response) {
 		TSfrdPro tSfrdPro = new  TSfrdPro();
-		if (StringUtils.isNotBlank(proCd)) {
-			tSfrdPro = tSfrdProService.get(proCd);
+		if (StringUtils.isNotBlank(tSfrdProVO.getProCd())) {
+			tSfrdPro = tSfrdProService.get(tSfrdProVO.getProCd());
 		}
          //return ResponseEntity.ok(user);
 	    return renderString(response, tSfrdPro);
    }
-	
-//	@ResponseBody
-//	@RequestMapping(value = {"get", ""})
-//    @ApiOperation(value = "根据id获取常规方案信息", notes = "根据id获取常规调度方案信息",httpMethod = "POST")
-//	 public String get(@RequestBody TSfrdProVO tSfrdProVO, HttpServletResponse response) {
-//		TSfrdPro tSfrdPro = new  TSfrdPro();
-//		if (StringUtils.isNotBlank(tSfrdProVO.getProCd())) {
-//			tSfrdPro = tSfrdProService.get(tSfrdProVO.getProCd());
-//		}
-//         //return ResponseEntity.ok(user);
-//	    return renderString(response, tSfrdPro);
-//   }
 	
 	@RequestMapping(value = "/list")
     @ApiOperation(value = "查询常规调度方案", notes = "查询常规调度方案", httpMethod = "POST")

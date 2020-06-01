@@ -581,41 +581,41 @@ public class RsvrController extends BaseController{
 		//清楚方案所有的计算结果，重新保存结果
 		tSfrdDisWusRsltService.remove(wus);
 		//保存广昌县数据
-		List<TSfrdDisWusRslt> gcxList = ModelUtils.getParamList(result, pro, 0);
-		gcxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> gcxList = ModelUtils.getParamList(result, pro, 0,"112000023");
+		resp = tSfrdDisWusRsltService.saveAll(gcxList);
 		//保存南丰数据
-		List<TSfrdDisWusRslt> nfxList = ModelUtils.getParamList(result, pro, 1);
-		nfxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> nfxList = ModelUtils.getParamList(result, pro, 1,"112000024");
+		resp = tSfrdDisWusRsltService.saveAll(nfxList);
 		//保存南城数据
-		List<TSfrdDisWusRslt> ncxList = ModelUtils.getParamList(result, pro, 6);
-		ncxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> ncxList = ModelUtils.getParamList(result, pro, 6,"112000025");
+		resp = tSfrdDisWusRsltService.saveAll(ncxList);
 		//保存黎川数据
-		List<TSfrdDisWusRslt> lcxList = ModelUtils.getParamList(result, pro, 5);
-		lcxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> lcxList = ModelUtils.getParamList(result, pro, 5,"112000026");
+		resp = tSfrdDisWusRsltService.saveAll(lcxList);
 		//保存资溪数据
-		List<TSfrdDisWusRslt> zxxList = ModelUtils.getParamList(result, pro, 7);
-		zxxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> zxxList = ModelUtils.getParamList(result, pro, 7,"112000027");
+		resp = tSfrdDisWusRsltService.saveAll(zxxList);
 		//保存金溪数据
-		List<TSfrdDisWusRslt> jxxList = ModelUtils.getParamList(result, pro, 8);
-		jxxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> jxxList = ModelUtils.getParamList(result, pro, 8,"112000028");
+		resp = tSfrdDisWusRsltService.saveAll(jxxList);
 		//保存临川数据
-		List<TSfrdDisWusRslt> lcqList = ModelUtils.getParamList(result, pro, 9);
-		lcqList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> lcqList = ModelUtils.getParamList(result, pro, 9,"112000029");
+		resp = tSfrdDisWusRsltService.saveAll(lcqList);
 		//保存宜黄数据
-		List<TSfrdDisWusRslt> yhxList = ModelUtils.getParamList(result, pro, 4);
-		yhxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> yhxList = ModelUtils.getParamList(result, pro, 4,"112000030");
+		resp = tSfrdDisWusRsltService.saveAll(yhxList);
 		//保存崇仁数据
-		List<TSfrdDisWusRslt> crxList = ModelUtils.getParamList(result, pro, 3);
-		crxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> crxList = ModelUtils.getParamList(result, pro, 3,"112000031");
+		resp = tSfrdDisWusRsltService.saveAll(crxList);
 		//保存乐安数据
-		List<TSfrdDisWusRslt> laxList = ModelUtils.getParamList(result, pro, 2);
-		laxList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> laxList = ModelUtils.getParamList(result, pro, 2,"112000032");
+		resp = tSfrdDisWusRsltService.saveAll(laxList);
 		//保存东乡数据
-		List<TSfrdDisWusRslt> dxxList = ModelUtils.getParamList(result, pro, 10);
-		dxxList.forEach(item -> tSfrdDisWusRsltService.save(item));
-		//保存东乡数据
-		List<TSfrdDisWusRslt> gfpyList = ModelUtils.getParamList(result, pro, 11);
-		gfpyList.forEach(item -> tSfrdDisWusRsltService.save(item));
+		List<TSfrdDisWusRslt> dxxList = ModelUtils.getParamList(result, pro, 10,"112000033");
+		resp = tSfrdDisWusRsltService.saveAll(dxxList);
+		//保存赣抚平原灌区数据
+		List<TSfrdDisWusRslt> gfpyList = ModelUtils.getParamList(result, pro, 11,"112000034");
+		resp = tSfrdDisWusRsltService.saveAll(gfpyList);
 		//保存方案进度
 		resp = tSfrdProService.updateStat(pro.getProCd(), "3");
 		return resp;

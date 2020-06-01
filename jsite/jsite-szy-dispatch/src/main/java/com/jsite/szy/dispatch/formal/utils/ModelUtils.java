@@ -45,28 +45,33 @@ public class ModelUtils {
 	 * @param index
 	 * @return
 	 */
-	public static List<TSfrdDisWusRslt> getParamList(ResultEntity result,TSfrdPro pro,int index){
+	public static List<TSfrdDisWusRslt> getParamList(ResultEntity result,TSfrdPro pro,int index,String enCd){
 		List<TSfrdDisWusRslt> list = Lists.newArrayList();
-		for(int i = 0 ; i < 12;i++){
-			TSfrdDisWusRslt wus = new TSfrdDisWusRslt();
-			wus.setProCd(pro.getProCd());
-			wus.setEnCd("112000023");
-			wus.setStDt(getMonthDay(pro.getBgDt(), index, pro.getProTp()));
-			wus.setInw(result.getInflowTotal().get(index)[i]);
-			wus.setWu(result.getConsumptionTotal().get(index)[i]);
-			wus.setDchgw(result.getOutflowTotal().get(index)[i]);
-			wus.setWat(result.getWaterRequirement().get(index)[i]);
-			wus.setPlanw(result.getWaterRequirementPlan().get(index)[i]);
-			wus.setDwR(result.getWaterRequirementFillRates().get(index)[i]);
-			wus.setIndw(result.getIndustrialWaterRequirement().get(index)[i]);
-			wus.setAgrw(result.getAgriculturalWaterRequirement().get(index)[i]);
-			wus.setLifw(result.getDomesticWaterRequirement().get(index)[i]);
-			wus.setFafrw(result.getForestryWaterRequirement().get(index)[i]);
-			wus.setPlanindw(result.getIndustrialWaterRequirementPlan().get(index)[i]);
-			wus.setPlanagrw(result.getAgriculturalWaterRequirementPlan().get(index)[i]);
-			wus.setLifw(result.getDomesticWaterRequirementPlan().get(index)[i]);
-			wus.setFafrw(result.getForestryWaterRequirementPlan().get(index)[i]);
-			list.add(wus);
+		try{
+			for(int i = 0 ; i < 12;i++){
+				TSfrdDisWusRslt wus = new TSfrdDisWusRslt();
+				wus.setProCd(pro.getProCd());
+				wus.setEnCd(enCd);
+				wus.setRsltTp("1");
+				wus.setStDt(getMonthDay(pro.getBgDt(), i, pro.getProTp()));
+				wus.setInw(result.getInflowTotal()!=null ? result.getInflowTotal().get(index)[i]:null);
+				wus.setWu(result.getConsumptionTotal()!=null ? result.getConsumptionTotal().get(index)[i]:null);
+				wus.setDchgw(result.getOutflowTotal() !=null? result.getOutflowTotal().get(index)[i]:null);
+				wus.setWat(result.getWaterRequirement()!=null ?result.getWaterRequirement().get(index)[i]:null);
+				wus.setPlanw(result.getWaterRequirementPlan() !=null ? result.getWaterRequirementPlan().get(index)[i]:null);
+				wus.setDwR(result.getWaterRequirementFillRates() !=null ? result.getWaterRequirementFillRates().get(index)[i]:null);
+				wus.setIndw(result.getIndustrialWaterRequirement() !=null ? result.getIndustrialWaterRequirement().get(index)[i]:null);
+				wus.setAgrw(result.getAgriculturalWaterRequirement() !=null ? result.getAgriculturalWaterRequirement().get(index)[i]:null);
+				wus.setLifw(result.getDomesticWaterRequirement() !=null ? result.getDomesticWaterRequirement().get(index)[i]:null);
+				wus.setFafrw(result.getForestryWaterRequirement() !=null ? result.getForestryWaterRequirement().get(index)[i]:null);
+				wus.setPlanindw(result.getIndustrialWaterRequirementPlan() !=null ? result.getIndustrialWaterRequirementPlan().get(index)[i]:null);
+				wus.setPlanagrw(result.getAgriculturalWaterRequirementPlan() !=null ? result.getAgriculturalWaterRequirementPlan().get(index)[i]:null);
+				wus.setLifw(result.getDomesticWaterRequirementPlan() !=null ? result.getDomesticWaterRequirementPlan().get(index)[i]:null);
+				wus.setFafrw(result.getForestryWaterRequirementPlan()!=null ? result.getForestryWaterRequirementPlan().get(index)[i]:null);
+				list.add(wus);
+			}
+		}catch(Exception e){
+			e.printStackTrace();
 		}
 		return list;
 	}
