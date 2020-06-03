@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jsite.busi.szy.formal.dao.TSfmmWsaWtDao">
+    
+	<sql id="tSfmmWsaWtColumns">
+		a.en_cd AS "enCd"
+		a.yr AS "yr",
+		a.rate AS "rate"
+		a.lifw AS "lifw",
+		a.agrw AS "agrw",
+		a.indw AS "indw",
+		a.fafrw AS "fafrw",
+		a.totalw AS "totalw",
+		a.indwt AS "indwt",
+		a.agrwt AS "agrwt",
+		a.fafrwt AS "fafrwt",
+		a.lifwt AS "lifwt"
+	</sql>
+	
+	<sql id="tSfmmWsaWtJoins">
+	</sql>
+    
+	<select id="get" resultType="TSfmmWsaWt">
+		SELECT 
+			<include refid="tSfmmWsaWtColumns"/>
+		FROM T_SFMM_WSA_WT a
+		<include refid="tSfmmWsaWtJoins"/>
+		WHERE  en_cd  = #{enCd} and yr = #{yr} and rate = #{rate}
+	</select>
+	
+	<select id="list" resultType="TSfmmWsaWt">
+		SELECT 
+			<include refid="tSfmmWsaWtColumns"/>
+		FROM T_SFMM_WSA_WT a
+		<include refid="tSfmmWsaWtJoins"/>
+		<where>
+			1 = 1
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
+			</if>
+			<if test="rate != null ">
+			 	and rate = #{rate}
+			</if>
+		</where>
+		<choose>
+			<when test="page !=null and page.orderBy != null and page.orderBy != ''">
+				ORDER BY ${page.orderBy}
+			</when>
+			<otherwise>
+				ORDER BY A.en_cd 
+			</otherwise>
+		</choose>
+	</select>
+	
+	
+	<insert id="save">
+		INSERT INTO T_SFMM_WSA_WT(
+			EN_CD ,
+			YR ,
+			RATE,
+			LIFW,
+			AGRW,
+			INDW,
+			FAFRW,
+			TOTALW,
+			INDWT,
+			LIFWT,
+			AGRWT,
+			FAFRWT
+		) VALUES (
+			#{enCd},
+			#{yr},
+			#{rate},
+			#{lifw},
+			#{agrw},
+			#{indw},
+			#{fafrw},
+			#{totalw},
+			#{indwt},
+			#{lifwt},
+			#{agrwt},
+			#{fafrwt}
+		)
+	</insert>
+	
+	<update id="update">
+		UPDATE T_SFMM_WSA_WT SET 	
+			lifw = #{lifw} ,
+			agrw = #{agrw} ,
+			indw = #{indw} ,
+			fafrw = #{fafrw} ,
+			totalw = #{totalw} ,
+			indwt = #{indwt} ,
+			lifwt = #{lifwt} ,
+			agrwt = #{agrwt} ,
+			fafrwt = #{fafrwt}
+		WHERE en_cd  = #{enCd} and yr = #{yr} and rate = #{rate}
+	</update>
+	
+	<update id="remove">
+		DELETE FROM T_SFMM_WSA_WT
+		WHERE en_cd  = #{enCd} and yr = #{yr} and rate = #{rate}
+	</update>
+	
+</mapper>

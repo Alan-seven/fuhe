@@ -19,7 +19,9 @@ public class TSfrdRsvrRslt extends AbstractData<TSfrdRsvrRslt>{
 	private String proCd;
 	private String enCd;
 	private Date tm;
-	private Float z ;
+	private Double inflow;
+	private Double outflow;
+	private Double z ;
 	
 	public String getProCd() {
 		return proCd;
@@ -39,15 +41,23 @@ public class TSfrdRsvrRslt extends AbstractData<TSfrdRsvrRslt>{
 	public void setTm(Date tm) {
 		this.tm = tm;
 	}
-	public Float getZ() {
+	public Double getZ() {
 		return z;
 	}
-	public void setZ(Float z) {
+	public void setZ(Double z) {
 		this.z = z;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public Double getInflow() {
+		return inflow;
 	}
-	
+	public void setInflow(Double inflow) {
+		this.inflow = inflow;
+	}
+	public Double getOutflow() {
+		return outflow;
+	}
+	public void setOutflow(Double outflow) {
+		this.outflow = outflow;
+	}
 	
 }

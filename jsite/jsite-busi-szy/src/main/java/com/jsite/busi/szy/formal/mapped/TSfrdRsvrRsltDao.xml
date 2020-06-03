@@ -6,6 +6,8 @@
 		a.pro_cd AS "proCd",
 		a.en_cd AS "enCd",
 		a.tm AS "tm",
+		a.inflow AS "inflow",
+		a.outflow AS "outflow",
 		a.z AS "z"
 	</sql>
 	
@@ -23,12 +25,15 @@
 	<select id="list" resultType="TSfrdRsvrRslt">
 		SELECT 
 			<include refid="tSfrdRsvrRsltColumns"/>
-		FROM T_SFRD_RSVR_Rslt a
+		FROM T_SFRD_RSVR_RSLT a
 		<include refid="tSfrdRsvrRsltJoins"/>
 		<where>
 			1 = 1 
 			<if test="proCd != null and proCd != ''">
 			 	and pro_cd = #{proCd}
+			</if>
+			<if test="enCd != null and enCd != ''">
+			 	and en_cd = #{enCd}
 			</if>
 		</where>
 		<choose>
@@ -42,27 +47,33 @@
 	</select>
 	
 	<insert id="save">
-		INSERT INTO T_SFRD_RSVR_Rslt(
+		INSERT INTO T_SFRD_RSVR_RSLT(
 			pro_cd ,
 			en_cd ,
 			tm ,
+			inflow,
+			outflow,
 			z 
 		) VALUES (
 			#{proCd},
 			#{enCd},
 			#{tm},
+			#{inflow},
+			#{outflow},
 			#{z}
 		)
 	</insert>
 	
 	<update id="update">
-		UPDATE T_SFRD_RSVR_Rslt SET 	
+		UPDATE T_SFRD_RSVR_RSLT SET 	
+			inflow = #{inflow},
+			outflow = #{outflow},
 			z = #{z} 
 		WHERE pro_cd = #{proCd} and en_cd = #{enCd}  and tm = #{tm}
 	</update>
 	
 	<update id="remove">
-		DELETE FROM T_SFRD_Rslt_INIT
+		DELETE FROM T_SFRD_RSVR_RSLT
 		WHERE pro_cd = #{proCd} and en_cd = #{enCd} 
 	</update>
 	

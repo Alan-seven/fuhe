@@ -7,12 +7,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.jsite.busi.szy.formal.dao.TSfrdDisWusRsltDao;
 import com.jsite.busi.szy.formal.po.TSfrdDisWusRslt;
-import com.jsite.core.mapper.JsonMapper;
 import com.jsite.core.service.RespCode;
 import com.jsite.core.service.ServiceResp;
 import com.jsite.manager.AbstractCrudService;
-import com.jsite.manager.constraints.ValidateUtils;
-import com.jsite.manager.constraints.Violation;
 
 /**
  * 水量调节计算用水单元结果Service
@@ -31,6 +28,8 @@ public class TSfrdDisWusRsltService extends AbstractCrudService<TSfrdDisWusRsltD
 				serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_1);
 				serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_1_MSG);
 			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error(e.getMessage());
 				serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_0);
 				serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_0_MSG);
 			}
@@ -45,6 +44,8 @@ public class TSfrdDisWusRsltService extends AbstractCrudService<TSfrdDisWusRsltD
 			serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_1);
 			serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_1_MSG);
 		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e.getMessage());
 			serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_0);
 			serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_0_MSG);
 		}

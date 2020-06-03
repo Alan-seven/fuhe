@@ -42,7 +42,7 @@
 		FROM T_SFRD_PRO a
 		<include refid="tSfrdProJoins"/>
 		<where>
-			1 = 1 
+			a.del_flag = #{DEL_FLAG_NORMAL}
 			<if test="proCd != null and proCd != ''">
 				and pro_cd = #{proCd}
 			</if>
@@ -108,6 +108,7 @@
 			usr_nm,
 			pub_tm,
 			pro_desc,
+			del_flag,
 			nt
 		) VALUES (
 			#{proCd},
@@ -128,6 +129,7 @@
 			#{usrNm},
 			#{pubTm},
 			#{proDesc},
+			#{DEL_FLAG_NORMAL},
 			#{nt}
 		)
 	</insert>
@@ -151,6 +153,7 @@
 			usr_nm = #{usrNm},
 			pub_tm = #{pubTm},
 			pro_desc = #{proDesc},
+			del_flag = #{delFlag},
 			nt = #{nt}
 		WHERE PRO_CD = #{proCd}
 	</update>

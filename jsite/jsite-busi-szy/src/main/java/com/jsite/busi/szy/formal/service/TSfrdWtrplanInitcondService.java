@@ -7,7 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jsite.busi.szy.formal.dao.TSfrdWtrplanInitcondDao;
-import com.jsite.busi.szy.formal.po.TSfmmEnB;
+import com.jsite.busi.szy.formal.po.TSfmmWsaWt;
+import com.jsite.busi.szy.formal.po.TSfrdPro;
 import com.jsite.busi.szy.formal.po.TSfrdWtrplanInitcond;
 import com.jsite.core.service.RespCode;
 import com.jsite.core.service.ServiceResp;
@@ -23,7 +24,9 @@ import com.jsite.manager.AbstractCrudService;
 public class TSfrdWtrplanInitcondService extends AbstractCrudService<TSfrdWtrplanInitcondDao, TSfrdWtrplanInitcond> {
 
 	@Autowired
-	private TSfmmEnBService tSfmmEnBService;
+	private TSfmmWsaWtService tSfmmWsaWtService;
+	@Autowired
+	private TSfrdProService tSfrdProService;
 	
 	/**
 	 * 查询实体对应的申报水量
@@ -56,42 +59,19 @@ public class TSfrdWtrplanInitcondService extends AbstractCrudService<TSfrdWtrpla
 	
 	public ServiceResp initSave(String proCd){
 		ServiceResp serviceResp = new ServiceResp();
-		TSfmmEnB enb = new TSfmmEnB();
-		enb.setRegionCd("000000F090500001");
-		enb.setEnTp("12");
-		List<TSfmmEnB> enbList = tSfmmEnBService.list(enb);
 		TSfrdWtrplanInitcond initcond = new TSfrdWtrplanInitcond();
 		initcond.setProCd(proCd);
 		initcond.setPlaSrc("3");
 		initcond.setIsFnsh("0");
+		TSfrdPro pro = tSfrdProService.get(proCd);
+		TSfmmWsaWt wsawt = new TSfmmWsaWt();
+		wsawt.setYr(Integer.parseInt(pro.getYear()));
+		wsawt.setRate(0.95f);
+		List<TSfmmWsaWt> list = tSfmmWsaWtService.list(wsawt);
 		try {
-			for(TSfmmEnB entity : enbList){
+			for(TSfmmWsaWt entity : list){
 				initcond.setEnCd(entity.getEnCd());
-				if("112000023".equals(entity.getEnCd())){
-					initcond.setWw(14435.5f);
-				}else if("112000024".equals(entity.getEnCd())){
-					initcond.setWw(21857.2f);
-				}else if("112000025".equals(entity.getEnCd())){
-					initcond.setWw(23343.7f);
-				}else if("112000026".equals(entity.getEnCd())){
-					initcond.setWw(14143f);
-				}else if("112000027".equals(entity.getEnCd())){
-					initcond.setWw(3054.3f);
-				}else if("112000028".equals(entity.getEnCd())){
-					initcond.setWw(17585.7f);
-				}else if("112000029".equals(entity.getEnCd())){
-					initcond.setWw(67575.4f);
-				}else if("112000030".equals(entity.getEnCd())){
-					initcond.setWw(15641.7f);
-				}else if("112000031".equals(entity.getEnCd())){
-					initcond.setWw(20817.7f);
-				}else if("112000032".equals(entity.getEnCd())){
-					initcond.setWw(9416.1f);
-				}else if("112000033".equals(entity.getEnCd())){
-					initcond.setWw(18354.2f);
-				}else if("112000034".equals(entity.getEnCd())){
-					initcond.setWw(121427.1f);
-				}
+				initcond.setWw(entity.getTotalw());
 				dao.save(initcond);
 			}
 			serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_1);

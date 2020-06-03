@@ -19,6 +19,7 @@ import com.jsite.busi.szy.formal.po.TSfrdDisWusRslt;
 import com.jsite.busi.szy.formal.po.TSfrdIfRslt;
 import com.jsite.busi.szy.formal.po.TSfrdPro;
 import com.jsite.busi.szy.formal.po.TSfrdRsvrInit;
+import com.jsite.busi.szy.formal.po.TSfrdRsvrRslt;
 import com.jsite.busi.szy.formal.po.TSfrdWsaWt;
 import com.jsite.busi.szy.formal.po.TSfrdWtrplanInitcond;
 import com.jsite.busi.szy.formal.service.TSfrdDisWuService;
@@ -26,6 +27,7 @@ import com.jsite.busi.szy.formal.service.TSfrdDisWusRsltService;
 import com.jsite.busi.szy.formal.service.TSfrdIfRsltService;
 import com.jsite.busi.szy.formal.service.TSfrdProService;
 import com.jsite.busi.szy.formal.service.TSfrdRsvrInitService;
+import com.jsite.busi.szy.formal.service.TSfrdRsvrRsltService;
 import com.jsite.busi.szy.formal.service.TSfrdWsaWtService;
 import com.jsite.busi.szy.formal.service.TSfrdWtrplanInitcondService;
 import com.jsite.core.service.RespCode;
@@ -59,6 +61,8 @@ public class RsvrController extends BaseController{
 	private TSfrdWsaWtService tSfrdWsaWtService;
 	@Autowired
 	private TSfrdIfRsltService tSfrdIfRsltService;
+	@Autowired
+	private TSfrdRsvrRsltService tSfrdRsvrRsltService;
 	
 	@RequestMapping(value = "/getNext")
     @ApiOperation(value = "水量分配初始化数据", notes = "水量分配初始化数据", httpMethod = "POST")
@@ -77,6 +81,7 @@ public class RsvrController extends BaseController{
 	@RequestMapping(value = "/getResult")
     @ApiOperation(value = "水量分配计算", notes = "水量分配计算", httpMethod = "POST")
 	public String getResult(@RequestBody TSfrdProVO tSfrdProVO, HttpServletResponse response) {
+		ServiceResp resp = new ServiceResp();
 		String proCd = tSfrdProVO.getProCd();
 		TSfrdPro pro = tSfrdProService.get(proCd);
 		//得到水库的初始化数据
@@ -108,13 +113,17 @@ public class RsvrController extends BaseController{
 		ModelController mc = new ModelController();
 		try {
 			ResultEntity result = mc.newBuiltPlanController(input);
-			saveData(result, pro);
+			resp = saveData(result, pro);
+			resp = saveRsvrRslt(result,pro);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			logger.error(e.getMessage());
 			e.printStackTrace();
+			resp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_0);
+			resp.setMsg("模型计算结果出错,请查看日志");
 		}
 		
-		return renderString(response, "");
+		return renderString(response,resp);
     }
 	
 	/**
@@ -161,7 +170,7 @@ public class RsvrController extends BaseController{
 	     //广昌
 	     Double[] gcFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 gcFlow[index] = item.getRelW();
 	     });
 	     //南丰
@@ -169,66 +178,66 @@ public class RsvrController extends BaseController{
 	     rslt.setEnCd("105000051");//南城
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 nfFlow[index] = ModelUtils.getRslt(2, item.getRelW()*0.72);
 	     });
 	    
 	     //南城县
 	     Double[] ncFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 ncFlow[index] = ModelUtils.getRslt(3, item.getRelW()*0.258);
 	     });
 	     
 	     //宜黄
 	     Double[] yhFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 yhFlow[index] = ModelUtils.getRslt(3, item.getRelW()*0.009);
 	     });
 	     rslt.setEnCd("105000001");  //娄家村
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 yhFlow[index] = yhFlow[index]+ ModelUtils.getRslt(3, item.getRelW()*0.367);
 	     });
 	     //乐安
 	     Double[] laFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 laFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.197);
 	     });
 	     
 	     //崇仁
 	     Double[] crFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 crFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.295);
 	     });
 	    
 	     //临川
 	     Double[] lcFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 lcFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.141);
 	     });
 	     rslt.setEnCd("105000054");		//李家渡
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 lcFlow[index] = lcFlow[index]+ ModelUtils.getRslt(3, item.getRelW()*0.633);
 	     });
 	     //东乡
 	     Double[] dxFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 dxFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.335);
 	     });
 	    
 	     //赣抚平原
 	     Double[] gfFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 gfFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.032);
 	     });
 	    
@@ -237,13 +246,13 @@ public class RsvrController extends BaseController{
 	     rslt.setEnCd("105000052");//洪门
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 lchuanFlow[index] = ModelUtils.getRslt(3, item.getRelW());
 	     });
 	     rslt.setEnCd("105000051");  //南城
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 lchuanFlow[index] = lchuanFlow[index]+ ModelUtils.getRslt(3, item.getRelW()*0.011);
 	     });
 	     
@@ -252,14 +261,14 @@ public class RsvrController extends BaseController{
 	     rslt.setEnCd("105000053");		//廖家湾
 	     rsltList = tSfrdIfRsltService.list(rslt);
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 zxFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.378);
 	     });
 	    
 	     //金溪
 	     Double[] jxFlow = new Double[12];
 	     rsltList.stream().forEach(item -> {
-	    	 int index = item.getStDt().getMonth();
+	    	 int index = ModelUtils.getMonth(item.getStDt()) ; //item.getStDt().getMonth();
 	    	 jxFlow[index] =  ModelUtils.getRslt(3, item.getRelW()*0.62);
 	     });
 	     inflow.add(0, gcFlow);
@@ -618,6 +627,20 @@ public class RsvrController extends BaseController{
 		resp = tSfrdDisWusRsltService.saveAll(gfpyList);
 		//保存方案进度
 		resp = tSfrdProService.updateStat(pro.getProCd(), "3");
+		return resp;
+	}
+	/**
+	 * 保存洪门 、廖坊水库计算结果数据
+	 * @param result
+	 * @param pro
+	 * @return
+	 */
+	public ServiceResp saveRsvrRslt(ResultEntity result,TSfrdPro pro){
+		ServiceResp resp = new ServiceResp();
+		List<TSfrdRsvrRslt> lfList = ModelUtils.getLFRsvrList(result, pro, "102000002");
+		List<TSfrdRsvrRslt> hmList = ModelUtils.getHMRsvrList(result, pro, "102000000");
+		resp = tSfrdRsvrRsltService.saveAll(lfList);
+		resp = tSfrdRsvrRsltService.saveAll(hmList);
 		return resp;
 	}
 	

@@ -5,10 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jsite.busi.szy.formal.po.TSfrdPro;
@@ -19,8 +17,6 @@ import com.jsite.core.service.RespCode;
 import com.jsite.core.service.ServiceResp;
 import com.jsite.core.utils.IdGen;
 import com.jsite.core.web.BaseController;
-import com.jsite.dao.sys.po.User;
-import com.jsite.szy.dispatch.formal.vo.TSfmmEnBVO;
 import com.jsite.szy.dispatch.formal.vo.TSfrdProVO;
 
 import io.swagger.annotations.Api;
@@ -84,12 +80,20 @@ public class TSfrdProController extends BaseController{
 	    return renderString(response, resp);
     }
 	
+	/**
+	 * 因关联数据过多，只做逻辑删除
+	 * @param tSfrdPro
+	 * @param response
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "remove")
     // 方法上加ApiOpreation注解
     @ApiOperation(value = "删除常规调度方案", notes = "删除常规调度方案", httpMethod = "POST")
 	public String remove(@RequestBody TSfrdPro tSfrdPro, HttpServletResponse response){
-		ServiceResp resp = tSfrdProService.remove(tSfrdPro);
+		tSfrdPro = tSfrdProService.get(tSfrdPro.getProCd());
+		tSfrdPro.setDelFlag("1");
+		ServiceResp resp = tSfrdProService.update(tSfrdPro);
 		return renderString(response, resp);
 	}
 	
