@@ -117,7 +117,7 @@ public class RsvrController extends BaseController{
 			resp = saveRsvrRslt(result,pro);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			logger.error(e.getMessage());
+			logger.error(e.getCause().getMessage());
 			e.printStackTrace();
 			resp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_0);
 			resp.setMsg("模型计算结果出错,请查看日志");

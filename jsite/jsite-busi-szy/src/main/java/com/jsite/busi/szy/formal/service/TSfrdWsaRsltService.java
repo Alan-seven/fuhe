@@ -54,6 +54,8 @@ public class TSfrdWsaRsltService extends AbstractCrudService<TSfrdWsaRsltDao, TS
 				serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_1);
 				serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_1_MSG);
 			} catch (Exception e) {
+				logger.error(e.getCause().getMessage());
+				e.printStackTrace();
 				serviceResp.setCode(RespCode.SERVICE_RESP_ERROR_CODE_0);
 				serviceResp.setMsg(RespCode.SERVICE_RESP_ERROR_CODE_0_MSG);
 			}
